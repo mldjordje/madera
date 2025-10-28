@@ -1,0 +1,52 @@
+{
+    "items": [
+        {
+            "url": "/img/gallery/1.jpg",
+            "orientation": "h"
+        },
+        {
+            "url": "/img/gallery/2.jpg",
+            "orientation": "v"
+        },
+        {
+            "url": "/img/gallery/3.jpg",
+            "orientation": "h"
+        },
+        {
+            "url": "/img/gallery/4.jpg",
+            "orientation": "v"
+        },
+        {
+            "url": "/img/gallery/5.jpg",
+            "orientation": "v"
+        },
+        {
+            "url": "/img/gallery/6.jpg",
+            "orientation": "h"
+        },
+        {
+            "url": "/img/gallery/7.jpg",
+            "orientation": "h"
+        },
+        {
+            "url": "/img/gallery/8.jpg",
+            "orientation": "v"
+        },
+        {
+            "url": "/img/gallery/9.jpg",
+            "orientation": "h"
+        },
+        {
+            "url": "/img/gallery/10.jpg",
+            "orientation": "v"
+        },
+        {
+            "url": "/img/gallery/11.jpg",
+            "orientation": "v"
+        },
+        {
+            "url": "/img/gallery/12.jpg",
+            "orientation": "h"
+        }
+    ]
+}

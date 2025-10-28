@@ -1,0 +1,16 @@
+{
+    "title": "Download our mobile app.",
+    "subtitle": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+    "image": {
+        "url": "/img/illustrations/phones.png",
+        "alt": "phones"
+    },
+    "link1": {
+        "url": "https://google.com/",
+        "title": "Google Play Market"
+    },
+    "link2": {
+        "url": "https://apple.com/",
+        "title": "App Store"
+    }
+}

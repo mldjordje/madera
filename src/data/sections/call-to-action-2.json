@@ -1,0 +1,18 @@
+{
+    "title": "Free delivery service.",
+    "description": "*Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+    "button1": {
+        "label": "Order delivery",
+        "icon": "/img/ui/icons/cart.svg",
+        "link": "/shop"
+    },
+    "button2": {
+        "label": "Menu",
+        "icon": "/img/ui/icons/menu.svg",
+        "link": "/menu"
+    },
+    "image": {
+        "url": "/img/illustrations/delivery.png",
+        "alt": "reserved"
+    }
+}

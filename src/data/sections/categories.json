@@ -1,0 +1,34 @@
+{
+    "title": "What do you <span>like today?</span>",
+    "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+    "button": {
+        "link": "/shop",
+        "label": "Go shopping now"
+    },
+    "items": [
+        {
+            "image": "/img/categories/1.png",
+            "title": "Starters",
+            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing.",
+            "link": "/products"
+        },
+        {
+            "image": "/img/categories/2.png",
+            "title": "Main dishes",
+            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing.",
+            "link": "/products"
+        },
+        {
+            "image": "/img/categories/3.png",
+            "title": "Drinks",
+            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing.",
+            "link": "/products"
+        },
+        {
+            "image": "/img/categories/4.png",
+            "title": "Desserts",
+            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing.",
+            "link": "/products"
+        }
+    ]
+}

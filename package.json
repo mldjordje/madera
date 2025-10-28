@@ -1,0 +1,28 @@
+{
+  "name": "starbelly-nextjs",
+  "version": "1.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "date-fns": "^3.2.0",
+    "formik": "^2.4.5",
+    "gray-matter": "^4.0.3",
+    "isotope-layout": "^3.0.6",
+    "mapbox-gl": "^3.1.0",
+    "next": "14.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-modal-video": "^2.0.1",
+    "remark": "^15.0.1",
+    "remark-html": "^16.0.1",
+    "sass": "^1.70.0",
+    "sticky-js": "^1.3.0",
+    "swiper": "^9.0.0",
+    "yet-another-react-lightbox": "^3.16.0"
+  }
+}

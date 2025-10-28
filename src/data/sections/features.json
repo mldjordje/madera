@@ -1,0 +1,29 @@
+{
+    "items": [
+        {
+            "num": "01",
+            "title": "We are located in the city center",
+            "text": "Porro nemo veniam necessitatibus praesentium eligendi rem temporibus adipisci quo modi numquam."
+        },
+        {
+            "num": "02",
+            "title": "Fresh ingredients from organic farms",
+            "text": "Porro nemo veniam necessitatibus praesentium eligendi rem temporibus adipisci quo modi numquam."
+        },
+        {
+            "num": "03",
+            "title": "Own fast delivery. 30 min Maximum",
+            "text": "Porro nemo veniam necessitatibus praesentium eligendi rem temporibus adipisci quo modi numquam."
+        },
+        {
+            "num": "04",
+            "title": "Professional, experienced chefs",
+            "text": "Porro nemo veniam necessitatibus praesentium eligendi rem temporibus adipisci quo modi numquam."
+        },
+        {
+            "num": "05",
+            "title": "The highest standards of service",
+            "text": "Porro nemo veniam necessitatibus praesentium eligendi rem temporibus adipisci quo modi numquam."
+        }
+    ]
+}

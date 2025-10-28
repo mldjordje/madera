@@ -1,0 +1,28 @@
+{
+    "image": { 
+        "url": "/img/illustrations/interior.jpg",
+        "alt": "interior"
+    },
+    "number": {
+        "value": "17",
+        "label": "Years Experiense"
+    },
+    "title": "We are doing more than <br>you expect",
+    "items": [
+        {
+            "num": "01",
+            "title": "We are located in the city center",
+            "text": "Porro nemo veniam necessitatibus praesentium eligendi rem temporibus adipisci quo modi numquam."
+        },
+        {
+            "num": "02",
+            "title": "Fresh, organic ingredients",
+            "text": "Consectetur numquam porro nemo veniam necessitatibus praesentium eligendi rem temporibus adipisci quo modi."
+        },
+        {
+            "num": "03",
+            "title": "Own fast delivery",
+            "text": "Necessitatibus praesentium eligendi rem temporibus adipisci quo modi. Lorem ipsum dolor sit."
+        }
+    ]
+}
