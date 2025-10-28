@@ -31,7 +31,7 @@ const Hero = ( { type } ) => {
                         {/* button */}
                         <Link href={Data.button1.link} className="sb-btn">
                             <span className="sb-icon">
-                                <img src={Data.button1.icon} alt={Data.button1.label || 'icon'} loading="lazy" />
+                                <img src={Data.button1.icon} alt="icon" />
                             </span>
                             <span>{Data.button1.label}</span>
                         </Link>
@@ -39,7 +39,7 @@ const Hero = ( { type } ) => {
                         {/* button */}
                         <Link href={Data.button2.link} className="sb-btn sb-btn-2 sb-btn-gray">
                             <span className="sb-icon">
-                                <img src={Data.button2.icon} alt={Data.button2.label || 'icon'} loading="lazy" />
+                                <img src={Data.button2.icon} alt="icon" />
                             </span>
                             <span>{Data.button2.label}</span>
                         </Link>
@@ -60,16 +60,16 @@ const Hero = ( { type } ) => {
                             <div className="sb-cirkle-4"></div>
                             <div className="sb-cirkle-5"></div>
 
-                            <img src="/img/illustrations/3.svg" alt="dekorativna ilustracija" className="sb-pik-1" loading="lazy" />
-                            <img src="/img/illustrations/1.svg" alt="dekorativna ilustracija" className="sb-pik-2" loading="lazy" />
-                            <img src="/img/illustrations/2.svg" alt="dekorativna ilustracija" className="sb-pik-3" loading="lazy" />
+                            <img src="/img/illustrations/3.svg" alt="phones" className="sb-pik-1" />
+                            <img src="/img/illustrations/1.svg" alt="phones" className="sb-pik-2" />
+                            <img src="/img/illustrations/2.svg" alt="phones" className="sb-pik-3" />
                         </div>
                         ) : (
                         <div className="sb-ilustration-fix">
                             <div className="sb-illustration-1-2">
-                                <img src="/img/illustrations/1.png" alt="food" className="sb-food-1" loading="lazy" />
-                                <img src="/img/illustrations/2.png" alt="food" className="sb-food-2" loading="lazy" />
-                                <img src="/img/illustrations/3.png" alt="food" className="sb-food-3" loading="lazy" />
+                                <img src="/img/illustrations/1.png" alt="food" className="sb-food-1" />
+                                <img src="/img/illustrations/2.png" alt="food" className="sb-food-2" />
+                                <img src="/img/illustrations/3.png" alt="food" className="sb-food-3" />
 
                                 <div className="sb-illu-dialog-1"><span>😋</span> Om-nom-nom...</div>
                                 <div className="sb-illu-dialog-2"><span>🥰</span> Sooooo delicious!</div>
@@ -80,9 +80,9 @@ const Hero = ( { type } ) => {
                                 <div className="sb-cirkle-4"></div>
                                 <div className="sb-cirkle-5"></div>
                                 
-                                <img src="/img/illustrations/3.svg" alt="dekorativna ilustracija" className="sb-pik-1" loading="lazy" />
-                                <img src="/img/illustrations/1.svg" alt="dekorativna ilustracija" className="sb-pik-2" loading="lazy" />
-                                <img src="/img/illustrations/2.svg" alt="dekorativna ilustracija" className="sb-pik-3" loading="lazy" />
+                                <img src="/img/illustrations/3.svg" alt="phones" className="sb-pik-1" />
+                                <img src="/img/illustrations/1.svg" alt="phones" className="sb-pik-2" />
+                                <img src="/img/illustrations/2.svg" alt="phones" className="sb-pik-3" />
                             </div>
                         </div>
                         )}
