@@ -1,28 +1,28 @@
 {
     "image": { 
-        "url": "/img/illustrations/interior.jpg",
-        "alt": "interior"
+        "url": "/img/1.jpg",
+        "alt": "Restoran Madera"
     },
     "number": {
-        "value": "17",
-        "label": "Years Experiense"
+        "value": "198",
+        "label": "Sedeća mesta"
     },
-    "title": "We are doing more than <br>you expect",
+    "title": "O nama — tradicija ukusa",
     "items": [
         {
             "num": "01",
-            "title": "We are located in the city center",
-            "text": "Porro nemo veniam necessitatibus praesentium eligendi rem temporibus adipisci quo modi numquam."
+            "title": "Nalazimo se u srcu grada",
+            "text": "Mirna lokacija sa parkingom i prelepim ambijentom za porodične i poslovne prilike."
         },
         {
             "num": "02",
-            "title": "Fresh, organic ingredients",
-            "text": "Consectetur numquam porro nemo veniam necessitatibus praesentium eligendi rem temporibus adipisci quo modi."
+            "title": "Sveži sastojci",
+            "text": "Biramo lokalne namirnice i pripremamo jela po proverenim receptima kuće."
         },
         {
             "num": "03",
-            "title": "Own fast delivery",
-            "text": "Necessitatibus praesentium eligendi rem temporibus adipisci quo modi. Lorem ipsum dolor sit."
+            "title": "Događaji i proslave",
+            "text": "Organizujemo rođendane, krštenja i poslovne skupove uz kompletnu uslugu."
         }
     ]
 }

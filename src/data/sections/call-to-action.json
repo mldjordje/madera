@@ -1,16 +1,16 @@
 {
-    "title": "Download our mobile app.",
-    "subtitle": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+    "title": "Rezervišite sto online",
+    "subtitle": "Brzo i jednostavno — potvrdite termin u nekoliko klikova.",
     "image": {
-        "url": "/img/illustrations/phones.png",
-        "alt": "phones"
+        "url": "/img/7.jpg",
+        "alt": "Rezervacija Madera"
     },
     "link1": {
-        "url": "https://google.com/",
-        "title": "Google Play Market"
+        "url": "/reservation",
+        "title": "Rezerviši sto"
     },
     "link2": {
-        "url": "https://apple.com/",
-        "title": "App Store"
+        "url": "/contact",
+        "title": "Kontakt"
     }
 }

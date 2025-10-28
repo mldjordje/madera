@@ -15,12 +15,23 @@ const Hero = ( { type } ) => {
         <>
             {/* banner */}
             <section className="sb-banner">
+                {/* mobile video background (YouTube) */}
+                <div className="sb-hero-mobile-video" aria-hidden="true">
+                    <iframe
+                        className="sb-hero-video"
+                        src="https://www.youtube.com/embed/05MQ4uFPUAA?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=05MQ4uFPUAA&playsinline=1&modestbranding=1&iv_load_policy=3"
+                        title="Madera hero background"
+                        frameBorder="0"
+                        allow="autoplay; encrypted-media; picture-in-picture; clipboard-write"
+                        allowFullScreen={false}
+                    />
+                </div>
                 <div className="sb-bg-1">
                 <div></div>
                 </div>
                 <div className="container">
                 <div className="row">
-                    <div className="col-lg-6">
+                    <div className="col-lg-12">
                     {/* main title */}
                     <div className="sb-main-title-frame">
                         <div className="sb-main-title">
@@ -48,44 +59,6 @@ const Hero = ( { type } ) => {
                         </div>
                     </div>
                     {/* main title end */}
-                    </div>
-                    <div className="col-lg-6">
-                        {type == 1 ? (
-                        <div className="sb-illustration-1">
-                            <img src={Data.image.url} alt={Data.image.alt} className="sb-girl" /> 
-                            
-                            <div className="sb-cirkle-1"></div>
-                            <div className="sb-cirkle-2"></div>
-                            <div className="sb-cirkle-3"></div>
-                            <div className="sb-cirkle-4"></div>
-                            <div className="sb-cirkle-5"></div>
-
-                            <img src="/img/illustrations/3.svg" alt="phones" className="sb-pik-1" />
-                            <img src="/img/illustrations/1.svg" alt="phones" className="sb-pik-2" />
-                            <img src="/img/illustrations/2.svg" alt="phones" className="sb-pik-3" />
-                        </div>
-                        ) : (
-                        <div className="sb-ilustration-fix">
-                            <div className="sb-illustration-1-2">
-                                <img src="/img/illustrations/1.png" alt="food" className="sb-food-1" />
-                                <img src="/img/illustrations/2.png" alt="food" className="sb-food-2" />
-                                <img src="/img/illustrations/3.png" alt="food" className="sb-food-3" />
-
-                                <div className="sb-illu-dialog-1"><span>😋</span> Om-nom-nom...</div>
-                                <div className="sb-illu-dialog-2"><span>🥰</span> Sooooo delicious!</div>
-
-                                <div className="sb-cirkle-1"></div>
-                                <div className="sb-cirkle-2"></div>
-                                <div className="sb-cirkle-3"></div>
-                                <div className="sb-cirkle-4"></div>
-                                <div className="sb-cirkle-5"></div>
-                                
-                                <img src="/img/illustrations/3.svg" alt="phones" className="sb-pik-1" />
-                                <img src="/img/illustrations/1.svg" alt="phones" className="sb-pik-2" />
-                                <img src="/img/illustrations/2.svg" alt="phones" className="sb-pik-3" />
-                            </div>
-                        </div>
-                        )}
                     </div>
                 </div>
                 </div>

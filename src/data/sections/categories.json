@@ -1,34 +1,14 @@
 {
-    "title": "What do you <span>like today?</span>",
-    "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+    "title": "Šta biste <span>danas</span> probali?",
+    "description": "Izaberite kategoriju i otkrijte specijalitete kuće.",
     "button": {
         "link": "/shop",
         "label": "Go shopping now"
     },
     "items": [
-        {
-            "image": "/img/categories/1.png",
-            "title": "Starters",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing.",
-            "link": "/products"
-        },
-        {
-            "image": "/img/categories/2.png",
-            "title": "Main dishes",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing.",
-            "link": "/products"
-        },
-        {
-            "image": "/img/categories/3.png",
-            "title": "Drinks",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing.",
-            "link": "/products"
-        },
-        {
-            "image": "/img/categories/4.png",
-            "title": "Desserts",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing.",
-            "link": "/products"
-        }
+        { "image": "/img/3.jpg", "title": "Predjela", "text": "Hladna i topla predjela iz naše kuhinje.", "link": "/menu" },
+        { "image": "/img/4.jpg", "title": "Glavna jela", "text": "Specijaliteti od mesa, ribe i pasta.", "link": "/menu" },
+        { "image": "/img/5.jpg", "title": "Pića", "text": "Vinska karta i pažljivo odabran izbor pića.", "link": "/menu" },
+        { "image": "/img/6.jpg", "title": "Dezerti", "text": "Kućne poslastice i klasici.", "link": "/menu" }
     ]
 }

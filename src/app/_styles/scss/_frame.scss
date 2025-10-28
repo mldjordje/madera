@@ -61,6 +61,11 @@ top bar
         width: 100%;
       }
 
+      & img.madera-logo {
+        /* If uploaded PNG has svetla slova, uključi ispodnju liniju da budu crna */
+        /* filter: brightness(0) saturate(100%); */
+      }
+
       &:hover {
         filter: brightness(110%);
       }

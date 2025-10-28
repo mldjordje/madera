@@ -4,6 +4,9 @@ banner
 
 ***************************/
 .sb-banner {
+  position: relative;
+  /* remove highlight background inside headings */
+  & .sb-main-title span { background: transparent !important; }
   &.sb-banner-with-bg {
     position: relative;
     overflow: hidden;
@@ -62,6 +65,68 @@ banner
     background-color: $c6;
     border-left: solid 30px $c4;
     border-right: solid 30px $c4;
+  }
+}
+/* Mobile hero video background */
+.sb-hero-mobile-video {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sb-hero-mobile-video {
+    display: block;
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    overflow: hidden;
+
+    &:after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.25);
+    }
+
+    & .sb-hero-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100vw;
+      height: 56.25vw; /* 16:9 */
+      min-width: 177.78vh; /* cover when taller */
+      min-height: 100vh;
+      filter: brightness(65%);
+      pointer-events: none;
+    }
+  }
+
+  /* ensure text is above video */
+  .sb-banner .container,
+  .sb-banner .sb-main-title-frame {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* white text over mobile video */
+  .sb-banner .sb-main-title,
+  .sb-banner .sb-main-title * {
+    color: #fff !important;
+  }
+  .sb-banner .sb-suptitle {
+    background-color: rgba(0,0,0,.35);
+    color: #fff !important;
+  }
+  .sb-banner .sb-btn,
+  .sb-banner .sb-btn.sb-btn-gray,
+  .sb-banner .sb-btn.sb-btn-2 {
+    color: #fff !important;
+    border: 1px solid rgba(255,255,255,.75) !important;
+    background-color: transparent;
   }
 }
 @media (max-width: 992px) {

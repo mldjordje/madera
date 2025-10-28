@@ -15,7 +15,7 @@ const DefaultFooter = () => {
                 <div className="sb-footer-frame">
                     <Link href="/" className="sb-logo-frame">
                         {/* logo img */}
-                        <img src={AppData.header.logo.image} alt={AppData.header.logo.alt} />
+                        <img className="madera-logo" src={AppData.header.logo.image} alt={AppData.header.logo.alt} />
                     </Link>
                     <ul className="sb-social">
                         {AppData.social.map((item, key) => (

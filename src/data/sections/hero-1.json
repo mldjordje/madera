@@ -1,19 +1,19 @@
 {
     "image": {
-       "url": "/img/illustrations/girl.png",
-       "alt": "girl"
+       "url": "",
+       "alt": ""
     },
-    "subtitle": "Hi, new friend!",
-    "title": "We do not <span>cook</span>, <br>we <span>create</span> your <br>emotions!",
-    "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+    "subtitle": "Dobrodošli u Maderu",
+    "title": "Mesto gde se <span>ukus</span><br/>spaja sa <span>tradicionalnim</span> gostoprimstvom",
+    "description": "Hotel–Restoran Madera • vrhunska hrana, prijatna atmosfera i usluga koju pamtite.",
     "button1": {
         "link": "/menu",
         "icon": "/img/ui/icons/menu.svg",
-        "label": "Our menu"
+        "label": "Pogledaj meni"
     },
     "button2": {
-        "link": "/about",
+        "link": "/reservation",
         "icon": "/img/ui/icons/arrow.svg",
-        "label": "About us"
+        "label": "Rezerviši sto"
     }
 }

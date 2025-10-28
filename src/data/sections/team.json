@@ -1,9 +1,9 @@
 {
-    "title": "They will <span>cook</span> for you",
-    "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+    "title": "Naš <span>tim</span>",
+    "description": "Posvećeni ljudi koji stoje iza ukusa Madere.",
     "button": {
         "link": "/about",
-        "label": "More about us"
+        "label": "O nama"
     },
     "items": [
         {

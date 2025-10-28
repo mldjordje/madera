@@ -64,15 +64,7 @@ background
 }
 @media (max-width: 768px) {
   .sb-bg-1 {
-    border-left: solid 15px $c4;
-    border-right: solid 15px $c4;
-
-    & div {
-      &:after {
-        height: 50vh;
-        top: 450px;
-      }
-    }
+    display: none; /* hide angled background on mobile to show video */
   }
 
   .sb-bg-3 {
