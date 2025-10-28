@@ -1,6 +1,6 @@
 {
   "/(pages)/page": "app/(pages)/page.js",
   "/(pages)/menu/page": "app/(pages)/menu/page.js",
-  "/(pages)/gallery/page": "app/(pages)/gallery/page.js",
-  "/(pages)/about/page": "app/(pages)/about/page.js"
+  "/(pages)/about/page": "app/(pages)/about/page.js",
+  "/(pages)/gallery/page": "app/(pages)/gallery/page.js"
 }

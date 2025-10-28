@@ -31,7 +31,7 @@ const Hero = ( { type } ) => {
                 </div>
                 <div className="container">
                 <div className="row">
-                    <div className="col-lg-12">
+                    <div className="col-lg-6">
                     {/* main title */}
                     <div className="sb-main-title-frame">
                         <div className="sb-main-title">
@@ -59,6 +59,12 @@ const Hero = ( { type } ) => {
                         </div>
                     </div>
                     {/* main title end */}
+                    </div>
+                    {/* desktop side image */}
+                    <div className="col-lg-6 d-none d-lg-block">
+                        <div className="sb-hero-image-frame">
+                            <img src={Data.image.url || '/img/1.jpg'} alt={Data.image.alt || 'Madera'} />
+                        </div>
                     </div>
                 </div>
                 </div>
