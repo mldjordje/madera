@@ -18,10 +18,20 @@ export function requireAdmin(request) {
   return { ok: true };
 }
 
-export function getDbClient() {
-  const connectionString = process.env.DATABASE_URL;
-  if (!connectionString) {
-    throw new Error("DATABASE_URL is missing");
+export function resolveDbConnectionString() {
+  const primary = process.env.DATABASE_URL?.trim();
+  const fallback = process.env.DATABASE_URL_PUBLIC?.trim();
+
+  if (primary && primary.includes("railway.internal") && fallback) {
+    return fallback;
   }
-  return new Client({ connectionString });
+
+  if (primary) return primary;
+  if (fallback) return fallback;
+
+  throw new Error("DATABASE_URL is missing. Set Railway connection string.");
+}
+
+export function getDbClient() {
+  return new Client({ connectionString: resolveDbConnectionString() });
 }

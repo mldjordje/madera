@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { addMonths, startOfDay } from "date-fns";
 import { Client } from "pg";
 
+import { resolveDbConnectionString } from "../../admin/_utils";
+
 const HALL_TYPES = ["velika", "mala"];
 const DEFAULT_MONTHS = 6;
 
@@ -34,10 +36,10 @@ const mapBlackoutRow = (row) => ({
   reason: row.reason,
 });
 
-async function fetchFromDatabase({ windowStart, windowEnd, halls }) {
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-  });
+async function fetchFromDatabase({ windowStart, windowEnd, halls, connectionString }) {
+  const conn = connectionString || resolveDbConnectionString();
+
+  const client = new Client({ connectionString: conn });
 
   await client.connect();
 
@@ -73,9 +75,9 @@ async function fetchFromDatabase({ windowStart, windowEnd, halls }) {
   }
 }
 
-const buildEmptyData = (windowStart, months) => ({
+const buildEmptyData = (windowStart, months, reason) => ({
   source: "fallback",
-  reason: "Nema podataka ili baza nije dostupna.",
+  reason: reason || "Nema podataka ili baza nije dostupna.",
   range: {
     from: windowStart.toISOString(),
     to: addMonths(windowStart, months).toISOString(),
@@ -97,12 +99,15 @@ export async function GET(request) {
   const windowStart = startOfDay(new Date());
   const windowEnd = addMonths(windowStart, months);
 
-  if (!process.env.DATABASE_URL) {
-    return NextResponse.json(buildEmptyData(windowStart, months));
+  let connectionString;
+  try {
+    connectionString = resolveDbConnectionString();
+  } catch (error) {
+    return NextResponse.json(buildEmptyData(windowStart, months, error.message));
   }
 
   try {
-    const data = await fetchFromDatabase({ windowStart, windowEnd, halls });
+    const data = await fetchFromDatabase({ windowStart, windowEnd, halls, connectionString });
     return NextResponse.json({
       source: "database",
       range: {
@@ -114,14 +119,23 @@ export async function GET(request) {
     });
   } catch (error) {
     console.error("Failed to load hall availability:", error);
-    return NextResponse.json(buildEmptyData(windowStart, months), { status: 200 });
+    const isConnectionIssue = ["ECONNREFUSED", "ENOTFOUND", "EHOSTUNREACH", "ECONNRESET", "ETIMEDOUT"].includes(
+      error.code || ""
+    );
+    const reason = isConnectionIssue
+      ? "Baza nije dostupna. Proveri DATABASE_URL (koristi Railway public connection string na Vercel-u)."
+      : error.message;
+    return NextResponse.json(buildEmptyData(windowStart, months, reason), { status: 200 });
   }
 }
 
 export async function POST(request) {
-  if (!process.env.DATABASE_URL) {
+  let connectionString;
+  try {
+    connectionString = resolveDbConnectionString();
+  } catch (error) {
     return NextResponse.json(
-      { error: "DATABASE_URL is missing. Save to Railway/PostgreSQL to enable zakazivanje." },
+      { error: error.message, hint: "Postavi DATABASE_URL (Railway public connection string za Vercel) i ponovi." },
       { status: 503 }
     );
   }
@@ -156,9 +170,7 @@ export async function POST(request) {
     return NextResponse.json({ error: "Ime gosta je obavezno." }, { status: 400 });
   }
 
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-  });
+  const client = new Client({ connectionString });
 
   try {
     await client.connect();
@@ -193,14 +205,19 @@ export async function POST(request) {
   } catch (error) {
     console.error("Failed to save hall reservation:", error);
     const isOverlap = error.code === "23P01";
+    const isConnectionIssue = ["ECONNREFUSED", "ENOTFOUND", "EHOSTUNREACH", "ECONNRESET", "ETIMEDOUT"].includes(
+      error.code || ""
+    );
     return NextResponse.json(
       {
-        error: isOverlap
-          ? "Termin se preklapa sa postojecim rezervacijama."
-          : "Nije moguce sacuvati rezervaciju.",
-        details: error.message,
+        error: isConnectionIssue
+          ? "Baza nije dostupna. Proveri DATABASE_URL (Railway public connection string na Vercel-u)."
+          : isOverlap
+            ? "Termin se preklapa sa postojecim rezervacijama."
+            : "Nije moguce sacuvati rezervaciju.",
+        details: isConnectionIssue ? undefined : error.message,
       },
-      { status: isOverlap ? 409 : 500 }
+      { status: isConnectionIssue ? 503 : isOverlap ? 409 : 500 }
     );
   } finally {
     await client.end();

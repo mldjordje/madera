@@ -9,13 +9,18 @@ async function fetchJson(url, token, options = {}) {
   if (token) headers["x-admin-token"] = token;
   const res = await fetch(url, { ...options, headers, cache: "no-store" });
   const body = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(body.error || "Request failed");
+  if (!res.ok) {
+    const error = new Error(body.error || "Request failed");
+    error.status = res.status;
+    throw error;
+  }
   return body;
 }
 
 const AdminPanel = () => {
   const [token, setToken] = useState("");
   const [status, setStatus] = useState("");
+  const [authStatus, setAuthStatus] = useState("");
   const [gallery, setGallery] = useState({ categories: [], items: [] });
   const [halls, setHalls] = useState({ reservations: [], blackouts: [] });
   const [selectedCategory, setSelectedCategory] = useState("new");
@@ -30,6 +35,13 @@ const AdminPanel = () => {
     sort: 0,
   });
 
+  const logout = (message = "") => {
+    setToken("");
+    localStorage.removeItem(STORAGE_KEY);
+    setStatus("");
+    setAuthStatus(message);
+  };
+
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) setToken(stored);
@@ -42,6 +54,8 @@ const AdminPanel = () => {
   }, [token]);
 
   const loadData = async () => {
+    setStatus("Ucitavanje podataka...");
+    setAuthStatus("");
     try {
       const [g, h] = await Promise.all([
         fetchJson("/api/admin/gallery", token),
@@ -60,6 +74,10 @@ const AdminPanel = () => {
       setHalls(h);
       setStatus("");
     } catch (error) {
+      if (error.status === 401) {
+        logout("Token nije prihvacen. Unesi isti ADMIN_TOKEN koji je postavljen na serveru (.env).");
+        return;
+      }
       setStatus(error.message);
     }
   };
@@ -138,7 +156,8 @@ const AdminPanel = () => {
         <div className="container">
           <div className="sb-card sb-admin-auth">
             <h3>Admin login</h3>
-            <p className="sb-text">Unesi ADMIN_TOKEN.</p>
+            <p className="sb-text">Unesi ADMIN_TOKEN (isti string koji si postavio u .env / Vercel varijabli).</p>
+            <p className="sb-label sb-mb-5">Ako vidis "Unauthorized", token ne odgovara env vrednosti.</p>
             <input
               type="password"
               className="sb-admin-input"
@@ -149,6 +168,7 @@ const AdminPanel = () => {
             <button className="sb-btn sb-btn-2" onClick={() => token && setToken(token.trim())}>
               Udji
             </button>
+            {authStatus && <div className="sb-alert sb-alert-error sb-mt-10">{authStatus}</div>}
             {status && <div className="sb-alert sb-alert-error sb-mt-10">{status}</div>}
           </div>
         </div>
@@ -166,6 +186,9 @@ const AdminPanel = () => {
             <span className="sb-chip sb-chip--ghost">Sale</span>
             <button className="sb-chip sb-chip--ghost" type="button" onClick={loadData}>
               Osvezi
+            </button>
+            <button className="sb-chip sb-chip--ghost" type="button" onClick={() => logout()}>
+              Odjavi se
             </button>
           </div>
           {status && <div className="sb-alert sb-alert-error sb-mt-10">{status}</div>}
