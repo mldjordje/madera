@@ -344,7 +344,9 @@ const AdminPanel = () => {
                     <div key={r.id} className="sb-admin-reservation-row">
                       <div>
                         <p className="sb-label">
-                          {new Date(r.startAt).toLocaleString()} -> {new Date(r.endAt).toLocaleString()}
+                          {new Date(r.startAt).toLocaleString()}
+                          {" -> "}
+                          {new Date(r.endAt).toLocaleString()}
                         </p>
                         <p className="sb-m-0">{r.guestName || "?"}</p>
                         {r.notes && <p className="sb-text-sm">{r.notes}</p>}
@@ -366,7 +368,9 @@ const AdminPanel = () => {
                     <div key={b.id} className="sb-admin-reservation-row">
                       <div>
                         <p className="sb-label">
-                          {new Date(b.startDate).toLocaleDateString()} -> {new Date(b.endDate).toLocaleDateString()}
+                          {new Date(b.startDate).toLocaleDateString()}
+                          {" -> "}
+                          {new Date(b.endDate).toLocaleDateString()}
                         </p>
                         <p className="sb-m-0">{b.reason || "Blokirano"}</p>
                       </div>
