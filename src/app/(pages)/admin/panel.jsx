@@ -61,7 +61,7 @@ const AdminPanel = () => {
         method: "POST",
         body: JSON.stringify({ ...form, sort: Number(form.sort) || 0 }),
       });
-      setStatus("Sačuvano.");
+      setStatus("Sacuvano.");
       setForm((prev) => ({ ...prev, url: "", alt: "", sort: 0 }));
       await loadData();
     } catch (error) {
@@ -119,7 +119,9 @@ const AdminPanel = () => {
               value={token}
               onChange={(e) => setToken(e.target.value)}
             />
-            <button className="sb-btn sb-btn-2" onClick={() => token && setToken(token.trim())}>Uđi</button>
+            <button className="sb-btn sb-btn-2" onClick={() => token && setToken(token.trim())}>
+              Udji
+            </button>
             {status && <div className="sb-alert sb-alert-error sb-mt-10">{status}</div>}
           </div>
         </div>
@@ -136,7 +138,7 @@ const AdminPanel = () => {
             <span className="sb-chip">Galerija</span>
             <span className="sb-chip sb-chip--ghost">Sale</span>
             <button className="sb-chip sb-chip--ghost" type="button" onClick={loadData}>
-              Osveži
+              Osvezi
             </button>
           </div>
           {status && <div className="sb-alert sb-alert-error sb-mt-10">{status}</div>}
@@ -182,12 +184,7 @@ const AdminPanel = () => {
             <div className="sb-form-row">
               <label>
                 Slika URL
-                <input
-                  name="url"
-                  value={form.url}
-                  onChange={(e) => setForm({ ...form, url: e.target.value })}
-                  required
-                />
+                <input name="url" value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })} required />
               </label>
               <label>
                 Orientation
@@ -202,29 +199,20 @@ const AdminPanel = () => {
               </label>
               <label>
                 Sort
-                <input
-                  type="number"
-                  name="sort"
-                  value={form.sort}
-                  onChange={(e) => setForm({ ...form, sort: e.target.value })}
-                />
+                <input type="number" name="sort" value={form.sort} onChange={(e) => setForm({ ...form, sort: e.target.value })} />
               </label>
             </div>
             <div className="sb-form-row">
               <label>
                 Alt text
-                <input
-                  name="alt"
-                  value={form.alt}
-                  onChange={(e) => setForm({ ...form, alt: e.target.value })}
-                />
+                <input name="alt" value={form.alt} onChange={(e) => setForm({ ...form, alt: e.target.value })} />
               </label>
             </div>
             <button type="submit" className="sb-btn sb-btn-2">
               <span className="sb-icon">
                 <img src="/img/ui/icons/arrow-2.svg" alt="icon" />
               </span>
-              <span>Sačuvaj</span>
+              <span>Sacuvaj</span>
             </button>
           </form>
 
@@ -249,7 +237,7 @@ const AdminPanel = () => {
                         <p className="sb-label">
                           {item.orientation === "h" ? "Horizontal" : "Vertical"} · sort {item.sort}
                         </p>
-                        <p className="sb-m-0">{item.alt || "—"}</p>
+                        <p className="sb-m-0">{item.alt || "-"}</p>
                       </div>
                     </div>
                   ))}
@@ -271,7 +259,7 @@ const AdminPanel = () => {
               <div key={hall} className="sb-admin-hall-column">
                 <div className="sb-admin-list-header">
                   <div>
-                    <p className="sb-label">{hall === "velika" ? "Svečana" : "Mala"}</p>
+                    <p className="sb-label">{hall === "velika" ? "Svecana" : "Mala"}</p>
                     <h5 className="sb-m-0">Rezervacije</h5>
                   </div>
                   <span className="sb-chip sb-chip--ghost">{reservationsByHall[hall]?.length || 0}</span>
@@ -290,4 +278,34 @@ const AdminPanel = () => {
                     </div>
                   ))}
                 </div>
-\n                <div className=\"sb-admin-list-header\">\n                  <div>\n                    <p className=\"sb-label\">Blokade</p>\n                    <h5 className=\"sb-m-0\">Datumi</h5>\n                  </div>\n                  <span className=\"sb-chip sb-chip--ghost\">{blockoutsByHall[hall]?.length || 0}</span>\n                </div>\n                <div className=\"sb-admin-reservations\">\n                  {(blockoutsByHall[hall] || []).map((b) => (\n                    <div key={b.id} className=\"sb-admin-reservation-row\">\n                      <div>\n                        <p className=\"sb-label\">\n                          {new Date(b.startDate).toLocaleDateString()} → {new Date(b.endDate).toLocaleDateString()}\n                        </p>\n                        <p className=\"sb-m-0\">{b.reason || \"Blokirano\"}</p>\n                      </div>\n                    </div>\n                  ))}\n                </div>\n              </div>\n            ))}\n          </div>\n        </div>\n+      </div>\n+    </div>\n+  );\n+};\n+\n+export default AdminPanel;\n*** End Patch
+
+                <div className="sb-admin-list-header">
+                  <div>
+                    <p className="sb-label">Blokade</p>
+                    <h5 className="sb-m-0">Datumi</h5>
+                  </div>
+                  <span className="sb-chip sb-chip--ghost">{blockoutsByHall[hall]?.length || 0}</span>
+                </div>
+                <div className="sb-admin-reservations">
+                  {(blockoutsByHall[hall] || []).map((b) => (
+                    <div key={b.id} className="sb-admin-reservation-row">
+                      <div>
+                        <p className="sb-label">
+                          {new Date(b.startDate).toLocaleDateString()} → {new Date(b.endDate).toLocaleDateString()}
+                        </p>
+                        <p className="sb-m-0">{b.reason || "Blokirano"}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdminPanel;
+
