@@ -1,0 +1,13 @@
+{
+    "title": "Restaurant is like a theater. <br>Our task is to amaze you!",
+    "subtitle": "Promo video",
+    "description": "Repellat, dolorem a. Qui ipsam quos, obcaecati mollitia consectetur ad vero minus neque sit architecto totam distineserunt pariatur adipisci rem aspernatur illum ex!",
+    "button": {
+        "label": "Promo video",
+        "link": "https://www.youtube.com/watch?v=F3zw1Gvn4Mk"
+    },
+    "image": {
+        "url": "/img/illustrations/interior-2.jpg",
+        "alt": "interior"
+    }
+}

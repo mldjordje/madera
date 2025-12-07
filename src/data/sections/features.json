@@ -1,0 +1,9 @@
+{
+    "items": [
+        { "num": "01", "title": "Ambijent sa stilom", "text": "Uređen prostor idealan za ručak, večeru i proslave." },
+        { "num": "02", "title": "Sveže namirnice", "text": "Radimo sa lokalnim dobavljačima i sezonskim proizvodima." },
+        { "num": "03", "title": "Vrhunska usluga", "text": "Ljubazno osoblje i profesionalna organizacija događaja." },
+        { "num": "04", "title": "Iskusni kuvari", "text": "Kreativna kuhinja koja neguje tradiciju." },
+        { "num": "05", "title": "Porodična atmosfera", "text": "Mesto gde se gosti rado vraćaju." }
+    ]
+}

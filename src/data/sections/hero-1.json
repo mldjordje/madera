@@ -1,0 +1,19 @@
+{
+    "image": {
+       "url": "/img/1.jpg",
+       "alt": "Restoran Madera"
+    },
+    "subtitle": "Dobrodošli u Maderu",
+    "title": "Mesto gde se <span>ukus</span><br/>spaja sa <span>tradicionalnim</span> gostoprimstvom",
+    "description": "Hotel–Restoran Madera • vrhunska hrana, prijatna atmosfera i usluga koju pamtite.",
+    "button1": {
+        "link": "/menu",
+        "icon": "/img/ui/icons/menu.svg",
+        "label": "Pogledaj meni"
+    },
+    "button2": {
+        "link": "/reservation",
+        "icon": "/img/ui/icons/arrow.svg",
+        "label": "Rezerviši sto"
+    }
+}

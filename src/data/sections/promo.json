@@ -1,0 +1,30 @@
+{
+    "banner1": {
+        "image": {
+            "url": "/img/illustrations/burger.png",
+            "alt": "burger"
+        },
+        "title_before": "-",
+        "title": "50",
+        "title_after": "%",
+        "subtitle": "Discount for all* burgers!",
+        "text": "*Et modi itaque praesentium.",
+        "button": {
+            "link": "/shop",
+            "label": "Get it now"
+        }
+    },
+    "banner2": {
+        "image": {
+            "url": "/img/illustrations/cup.png",
+            "alt": "cup"
+        },
+        "title": "For free!",
+        "subtitle": "Visit Starbelly and get your coffee*",
+        "text": "*Et modi itaque praesentium.",
+        "button": {
+            "link": "/contact",
+            "label": "Get it now"
+        }
+    }
+}

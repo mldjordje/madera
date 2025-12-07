@@ -1,0 +1,334 @@
+{
+    "categories": [
+        {
+            "name": "Starters",
+            "slug": "starters",
+            "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+            "items": [
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Chevrefrit au miel",
+                    "price": "14",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/2.jpg",
+                    "title": "Saumon Gravlax",
+                    "price": "9",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/3.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "14",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Stracciatella",
+                    "price": "11",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/5.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "6",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/6.jpg",
+                    "title": "Chevrefrit au miel",
+                    "price": "14",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/7.jpg",
+                    "title": "Stracciatella",
+                    "price": "11",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/8.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "6",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/9.jpg",
+                    "title": "Croustillant de poisson",
+                    "price": "4",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-hot'><i class='fas fa-pepper-hot'></i> Hot</div>"
+                },
+                {
+                    "image": "/img/menu/10.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "6",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/11.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "7",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/12.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "12",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                }
+            ]
+        },
+        {
+            "name": "Main Dishes",
+            "slug": "main-dishes",
+            "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+            "items": [
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Chevrefrit au miel",
+                    "price": "14",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/2.jpg",
+                    "title": "Saumon Gravlax",
+                    "price": "9",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/3.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "14",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Stracciatella",
+                    "price": "11",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/5.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "6",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/6.jpg",
+                    "title": "Chevrefrit au miel",
+                    "price": "14",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/7.jpg",
+                    "title": "Stracciatella",
+                    "price": "11",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/8.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "6",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/9.jpg",
+                    "title": "Croustillant de poisson",
+                    "price": "4",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-hot'><i class='fas fa-pepper-hot'></i> Hot</div>"
+                },
+                {
+                    "image": "/img/menu/10.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "6",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/11.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "7",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/12.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "12",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                }
+            ]
+        },
+        {
+            "name": "Drinks",
+            "slug": "drinks",
+            "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+            "items": [
+                {
+                    "image": "/img/menu/15.jpg",
+                    "title": "Chevrefrit au miel",
+                    "price": "14",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "13",
+                    "currency": "$",
+                    "rating": 4,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/6.jpg",
+                    "title": "Saumon Gravlax",
+                    "price": "9",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/10.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "14",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/14.jpg",
+                    "title": "Stracciatella",
+                    "price": "11",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                }
+            ]
+        },
+        {
+            "name": "Desserts",
+            "slug": "desserts",
+            "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+            "items": [
+                {
+                    "image": "/img/menu/6.jpg",
+                    "title": "Chevrefrit au miel",
+                    "price": "14",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/7.jpg",
+                    "title": "Stracciatella",
+                    "price": "11",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/8.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "6",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/9.jpg",
+                    "title": "Croustillant de poisson",
+                    "price": "4",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-hot'><i class='fas fa-pepper-hot'></i> Hot</div>"
+                },
+                {
+                    "image": "/img/menu/10.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "6",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp.",
+                    "badge": "<div class='sb-badge sb-vegan'><i class='fas fa-leaf'></i> Vegan</div>"
+                },
+                {
+                    "image": "/img/menu/11.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "7",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                },
+                {
+                    "image": "/img/menu/12.jpg",
+                    "title": "Carpaccio de daurade",
+                    "price": "12",
+                    "currency": "$",
+                    "rating": 5,
+                    "text": "tomatoes, nori, feta cheese, mushrooms, rice noodles, corn, shrimp."
+                }
+            ]
+        }
+    ]
+}

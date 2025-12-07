@@ -1,0 +1,18 @@
+{
+    "title": "<sup>-</sup><span class='sb-title-lg'>50</span><sup>%</sup> Discount <br>for all* burgers!",
+    "description": "*Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+    "button1": {
+        "label": "Get it now!",
+        "icon": "/img/ui/icons/cart.svg",
+        "link": "/shop"
+    },
+    "button2": {
+        "label": "Menu",
+        "icon": "/img/ui/icons/menu.svg",
+        "link": "/menu"
+    },
+    "image": {
+        "url": "/img/illustrations/burger-2.png",
+        "alt": "burger"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "title": "Madera — više od restorana",
+    "description": "<p>Od prvog dana do danas negujemo gostoprimstvo i posvećenost detaljima. Naš tim spaja tradicionalne ukuse i savremene kulinarske tehnike kako bismo vam pružili iskustvo zbog kog se gosti rado vraćaju.</p><p>Bilo da dolazite na porodični ručak, romantičnu večeru ili organizujete proslavu, u Maderi vas dočekuje prijatan ambijent i topla atmosfera.</p>",
+    "image": {
+        "url": "/img/2.jpg",
+        "alt": "Restoran Madera"
+    },
+    "number": {
+        "value": "200+",
+        "label": "Događaja godišnje"
+    },
+    "signature": "/img/ui/signature.png"
+}

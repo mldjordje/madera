@@ -1,0 +1,75 @@
+{
+  "intro": {
+    "title": "Galerija",
+    "description": "Fotografije naših prostora, specijaliteta i sadržaja hotela-restorana Madera."
+  },
+  "categories": [
+    {
+      "slug": "svecana-sala",
+      "title": "Svečana sala",
+      "description": "Prostrana sala za svečanosti, venčanja i korporativne događaje.",
+      "items": [
+        { "url": "/img/gallery/1.jpg", "orientation": "h", "alt": "Svečana sala sa dekoracijom" },
+        { "url": "/img/gallery/2.jpg", "orientation": "v", "alt": "Sto u svečanoj sali" },
+        { "url": "/img/gallery/3.jpg", "orientation": "h", "alt": "Raspored stolova u svečanoj sali" },
+        { "url": "/img/gallery/4.jpg", "orientation": "v", "alt": "Detalji dekoracije u svečanoj sali" }
+      ]
+    },
+    {
+      "slug": "mala-sala",
+      "title": "Mala sala",
+      "description": "Intimni prostor za manja okupljanja i privatne proslave.",
+      "items": [
+        { "url": "/img/gallery/5.jpg", "orientation": "h", "alt": "Mala sala sa prirodnim svetlom" },
+        { "url": "/img/gallery/6.jpg", "orientation": "v", "alt": "Postavka stola u maloj sali" },
+        { "url": "/img/gallery/7.jpg", "orientation": "h", "alt": "Priprema za privatnu večeru" },
+        { "url": "/img/gallery/8.jpg", "orientation": "v", "alt": "Dekorativni detalji u maloj sali" }
+      ]
+    },
+    {
+      "slug": "sobe-prenociste",
+      "title": "Sobe i prenoćište",
+      "description": "Udobne sobe za opuštajuće noćenje nakon svečanosti.",
+      "items": [
+        { "url": "/img/gallery/9.jpg", "orientation": "h", "alt": "Hotelska soba sa bračnim krevetom" },
+        { "url": "/img/gallery/10.jpg", "orientation": "v", "alt": "Detalji sobe i dekoracije" },
+        { "url": "/img/gallery/11.jpg", "orientation": "h", "alt": "Pogled na sobu i radni sto" },
+        { "url": "/img/gallery/12.jpg", "orientation": "v", "alt": "Kupatilo u sobi" }
+      ]
+    },
+    {
+      "slug": "hrana",
+      "title": "Hrana",
+      "description": "Specijaliteti kuće i omiljena jela naših gostiju.",
+      "items": [
+        { "url": "/img/menu/1.jpg", "orientation": "h", "alt": "Predjelo na tanjiru" },
+        { "url": "/img/menu/2.jpg", "orientation": "v", "alt": "Gurmansko glavno jelo" },
+        { "url": "/img/menu/5.jpg", "orientation": "h", "alt": "Selekcija dezerta" },
+        { "url": "/img/menu/6.jpg", "orientation": "v", "alt": "Porcija paste" },
+        { "url": "/img/menu/9.jpg", "orientation": "h", "alt": "Servirano meso sa prilozima" }
+      ]
+    },
+    {
+      "slug": "bazen",
+      "title": "Bazen",
+      "description": "Relaks zona sa bazenom i mestom za osveženje.",
+      "items": [
+        { "url": "/img/gallery/3.jpg", "orientation": "h", "alt": "Pogled na bazenski deo" },
+        { "url": "/img/gallery/6.jpg", "orientation": "v", "alt": "Ležaljke pored bazena" },
+        { "url": "/img/gallery/2.jpg", "orientation": "v", "alt": "Osvetljeni bazen uveče" },
+        { "url": "/img/gallery/7.jpg", "orientation": "h", "alt": "Bazen i okolina" }
+      ]
+    },
+    {
+      "slug": "a-la-carte",
+      "title": "A la Carte restoran",
+      "description": "Elegantni restoran sa pažljivo odabranim jelima.",
+      "items": [
+        { "url": "/img/gallery/4.jpg", "orientation": "v", "alt": "A la Carte postavka stola" },
+        { "url": "/img/gallery/8.jpg", "orientation": "v", "alt": "Restoranski ambijent" },
+        { "url": "/img/gallery/1.jpg", "orientation": "h", "alt": "Glavno jelo u A la Carte restoranu" },
+        { "url": "/img/gallery/5.jpg", "orientation": "h", "alt": "Atmosfera restorana" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+    "title": "Rezervišite sto online",
+    "subtitle": "Brzo i jednostavno — potvrdite termin u nekoliko klikova.",
+    "image": {
+        "url": "/img/7.jpg",
+        "alt": "Rezervacija Madera"
+    },
+    "link1": {
+        "url": "/reservation",
+        "title": "Rezerviši sto"
+    },
+    "link2": {
+        "url": "/contact",
+        "title": "Kontakt"
+    }
+}
