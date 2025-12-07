@@ -6,6 +6,7 @@
 3. (Opcionalno) Pokrenite razvojni server: `npm run dev`
 4. (Opcionalno) Proverite da CMS endpoint radi: `npm run check:gallery` uz podešene promenljive okruženja.
 5. (Opcionalno) Kreirajte tabele na Railway bazi direktno iz projekta: `npm run db:setup` (koristi `DATABASE_URL`).
+6. (Opcionalno) Potvrdite da su tabele kreirane i da je veza dobra: `npm run check:db`.
 
 ## Podešavanje galerije (CMS)
 - Postavite `CMS_GALLERY_ENDPOINT` na URL koji vraća JSON payload oblika `{ intro, categories: [{ slug, title, description, items: [{ url, orientation, alt, sort }] }] }`.
@@ -36,6 +37,12 @@ Za automatizovanu primenu iz projekta (npr. lokalno ili u CI), možete pokrenuti
 npm run db:setup
 ```
 Skripta koristi `DATABASE_URL` iz okruženja i izvršava `scripts/railway-schema.sql` preko Node `pg` klijenta.
+
+Ako želite samo da proverite vezu i da li postoje tabele, pokrenite:
+```bash
+npm run check:db
+```
+Skripta se spaja na bazu koristeći `DATABASE_URL` i ispisuje tabele u `public` šemi.
 
 Skripta pravi sledeće tabele:
 - `gallery_categories` i `gallery_items` — odgovaraju strukturi iz `src/data/gallery.json` i CMS payload-u (slug, title, description, url, orientation `h|v`, alt, sort, FK veza).

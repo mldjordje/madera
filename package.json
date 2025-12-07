@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "check:gallery": "node scripts/check-gallery.js",
+    "check:db": "node scripts/check-db.js",
     "db:setup": "node scripts/apply-railway-schema.js"
   },
   "dependencies": {

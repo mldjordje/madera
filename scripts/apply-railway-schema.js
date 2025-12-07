@@ -1,6 +1,7 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { Client } from 'pg';
+#!/usr/bin/env node
+const fs = require('node:fs');
+const path = require('node:path');
+const { Client } = require('pg');
 
 async function main() {
   const connectionString = process.env.DATABASE_URL;
