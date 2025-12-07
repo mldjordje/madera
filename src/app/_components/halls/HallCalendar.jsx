@@ -97,7 +97,7 @@ const HallCalendar = ({
             aria-label="Prethodni mesec"
             disabled={isLoading}
           >
-            <
+            &lt;
           </button>
           <button
             type="button"
@@ -115,7 +115,7 @@ const HallCalendar = ({
             aria-label="Sledeci mesec"
             disabled={isLoading}
           >
-            >
+            &gt;
           </button>
         </div>
       </div>
