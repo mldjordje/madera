@@ -6,7 +6,7 @@ export function requireAdmin(request) {
   const header = request.headers.get("x-admin-token") || request.headers.get("authorization");
 
   if (!token) {
-    return { ok: false, response: NextResponse.json({ error: "ADMIN_TOKEN is missing on server." }, { status: 500 }) };
+    return { ok: false, response: NextResponse.json({ error: "Admin token not configured." }, { status: 401 }) };
   }
 
   const provided = header?.replace(/^Bearer\s+/i, "").trim();
@@ -25,4 +25,3 @@ export function getDbClient() {
   }
   return new Client({ connectionString });
 }
-
