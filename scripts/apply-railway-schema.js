@@ -1,0 +1,31 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { Client } from 'pg';
+
+async function main() {
+  const connectionString = process.env.DATABASE_URL;
+
+  if (!connectionString) {
+    console.error('Missing DATABASE_URL. Set it to your Railway PostgreSQL connection string.');
+    process.exit(1);
+  }
+
+  const schemaPath = path.join(process.cwd(), 'scripts', 'railway-schema.sql');
+  const sql = fs.readFileSync(schemaPath, 'utf8');
+
+  const client = new Client({ connectionString });
+
+  try {
+    await client.connect();
+    console.log(`Connected to database. Applying schema from ${schemaPath}...`);
+    await client.query(sql);
+    console.log('Schema applied successfully.');
+  } catch (error) {
+    console.error('Failed to apply schema:', error.message);
+    process.exitCode = 1;
+  } finally {
+    await client.end();
+  }
+}
+
+main();

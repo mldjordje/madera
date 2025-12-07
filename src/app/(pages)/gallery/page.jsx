@@ -2,41 +2,49 @@ import React from "react";
 import dynamic from "next/dynamic";
 
 import AppData from "@data/app.json";
-import GalleryData from "@data/gallery.json";
+import { fetchGalleryData } from "@library/gallery";
 
 import PageBanner from "@components/PageBanner";
 import CallToActionSection from "@components/sections/CallToAction";
 
-const GalleryMasonry = dynamic( () => import("@components/gallery/GalleryMasonry"), { ssr: false } );
+const GalleryMasonry = dynamic(() => import("@components/gallery/GalleryMasonry"), { ssr: false });
 
 export const metadata = {
   title: {
-		default: "Gallery",
-	},
+    default: "Gallery",
+  },
   description: AppData.settings.siteDescription,
-}
+};
 
-const Gallery1 = () => {
+const Gallery1 = async () => {
+  const { intro, categories } = await fetchGalleryData();
+
   return (
     <>
-      <PageBanner pageTitle={"Gallery."} breadTitle={"Gallery"} type={1} />
-      
+      <PageBanner
+        pageTitle={intro?.title || "Galerija"}
+        breadTitle={"Gallery"}
+        description={intro?.description}
+        type={1}
+      />
+
       {/* gallery */}
       <div className="sb-p-90-60">
         <div className="container">
-          <GalleryMasonry items={GalleryData.items} layout={1} />
+          {categories.map((category) => (
+            <div className="sb-mb-60" key={category.slug}>
+              <div className="sb-main-title-frame sb-mb-30">
+                <div className="sb-main-title">
+                  <span className="sb-suptitle sb-mb-15">Galerija</span>
+                  <h2 className="sb-mb-10">{category.title}</h2>
+                  {category.description && <p className="sb-text">{category.description}</p>}
+                </div>
+              </div>
 
-          <div>
-            <ul className="sb-pagination">
-              <li className="sb-active"><a href="#.">1</a></li>
-              <li><a href="#.">2</a></li>
-              <li><a href="#.">3</a></li>
-              <li><a href="#.">4</a></li>
-              <li><a href="#.">...</a></li>
-            </ul>
-          </div>
+              <GalleryMasonry items={category.items} layout={1} />
+            </div>
+          ))}
         </div>
-        
       </div>
       {/* gallery end */}
 

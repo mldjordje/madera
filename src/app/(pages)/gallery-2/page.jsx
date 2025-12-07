@@ -2,29 +2,37 @@ import React from "react";
 import dynamic from "next/dynamic";
 
 import AppData from "@data/app.json";
-import GalleryData from "@data/gallery.json";
+import { combineGalleryItems, fetchGalleryData } from "@library/gallery";
 
 import PageBanner from "@components/PageBanner";
 import CallToActionTwoSection from "@components/sections/CallToActionTwo";
 
-const GalleryMasonry = dynamic( () => import("@components/gallery/GalleryMasonry"), { ssr: false } );
+const GalleryMasonry = dynamic(() => import("@components/gallery/GalleryMasonry"), { ssr: false });
 
 export const metadata = {
   title: {
-		default: "Gallery 2",
-	},
+    default: "Gallery 2",
+  },
   description: AppData.settings.siteDescription,
-}
+};
 
-const Gallery2 = () => {
+const Gallery2 = async () => {
+  const { categories } = await fetchGalleryData();
+  const items = combineGalleryItems(categories);
+
   return (
     <>
-      <PageBanner pageTitle={"It’s a pity that the photo <br>does not convey the taste!"} breadTitle={"Gallery"} description={"Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi."} type={2} />
-      
+      <PageBanner
+        pageTitle={"It’s a pity that the photo <br>does not convey the taste!"}
+        breadTitle={"Gallery"}
+        description={"Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi."}
+        type={2}
+      />
+
       {/* gallery */}
       <div className="sb-p-90-60">
         <div className="container">
-          <GalleryMasonry items={GalleryData.items} layout={2} />
+          <GalleryMasonry items={items} layout={2} />
 
           <div>
             <ul className="sb-pagination">
@@ -36,7 +44,7 @@ const Gallery2 = () => {
             </ul>
           </div>
         </div>
-        
+
       </div>
       {/* gallery end */}
 
