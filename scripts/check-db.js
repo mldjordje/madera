@@ -19,6 +19,7 @@ async function main() {
 
     if (!rows.length) {
       console.warn('No tables found. Run "npm run db:setup" to apply the schema.');
+      process.exitCode = 1;
       return;
     }
 

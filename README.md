@@ -42,7 +42,7 @@ Ako želite samo da proverite vezu i da li postoje tabele, pokrenite:
 ```bash
 npm run check:db
 ```
-Skripta se spaja na bazu koristeći `DATABASE_URL` i ispisuje tabele u `public` šemi.
+Skripta se spaja na bazu koristeći `DATABASE_URL` i ispisuje tabele u `public` šemi; ako tabele ne postoje, izlazi sa greškom kako bi podsetila da pokrenete `npm run db:setup`.
 
 Skripta pravi sledeće tabele:
 - `gallery_categories` i `gallery_items` — odgovaraju strukturi iz `src/data/gallery.json` i CMS payload-u (slug, title, description, url, orientation `h|v`, alt, sort, FK veza).
