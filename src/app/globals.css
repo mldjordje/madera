@@ -427,3 +427,131 @@
     padding: 20px;
   }
 }
+
+/* Admin area */
+.sb-admin-wrapper {
+  padding: 120px 0 60px;
+  background: #f7f3eb;
+}
+
+.sb-admin-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.sb-admin-header h2 {
+  margin-bottom: 6px;
+}
+
+.sb-admin-card {
+  border: 1px solid #e6ddcf;
+  border-radius: 16px;
+  padding: 18px;
+  background: #fff;
+  box-shadow: 0 18px 36px rgba(43, 26, 18, 0.06);
+}
+
+.sb-admin-auth {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.sb-admin-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #e6ddcf;
+  background: #fbf7f1;
+  margin: 10px 0 14px;
+}
+
+.sb-admin-form .sb-form-row label select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ede6dd;
+  background: #fbf7f1;
+}
+
+.sb-admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sb-admin-list-item {
+  border: 1px solid #ede6dd;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.sb-admin-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.sb-admin-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.sb-admin-item-card {
+  border: 1px solid #ede6dd;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fbf7f1;
+}
+
+.sb-admin-thumb {
+  height: 120px;
+  overflow: hidden;
+}
+
+.sb-admin-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sb-admin-item-body {
+  padding: 8px 10px 12px;
+}
+
+.sb-admin-halls {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 992px) {
+  .sb-admin-halls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sb-admin-hall-column {
+  border: 1px solid #ede6dd;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fbf7f1;
+}
+
+.sb-admin-reservations {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sb-admin-reservation-row {
+  border: 1px solid #e6ddcf;
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
