@@ -96,7 +96,7 @@ const HallPlanner = ({ halls }) => {
               <p className="sb-m-0">
                 {availability.source === "database"
                   ? "Railway PostgreSQL (tabele hall_reservations / hall_blackouts)"
-                  : "Demo vrednosti dok ne podesimo bazu"}
+                  : availability.reason || "Nema podataka"}
               </p>
               {error && <div className="sb-alert sb-alert-error sb-mt-10">{error}</div>}
             </div>
@@ -136,6 +136,10 @@ const HallPlanner = ({ halls }) => {
               <div className="sb-legend-dot state-reserved" /> Rezervisano
               <div className="sb-legend-dot state-blocked" /> Blokirano
             </div>
+
+            {hallReservations.length === 0 && hallBlackouts.length === 0 && (
+              <div className="sb-alert sb-alert-error sb-mt-10">Trenutno nema unosa za ovu salu.</div>
+            )}
 
             <HallBookingForm activeHall={activeHall} selectedDate={selectedDate} onSubmitted={loadAvailability} />
           </div>

@@ -6,6 +6,7 @@ import { fetchGalleryData } from "@library/gallery";
 
 import PageBanner from "@components/PageBanner";
 import CallToActionSection from "@components/sections/CallToAction";
+import Link from "next/link";
 
 const GalleryMasonry = dynamic(() => import("@components/gallery/GalleryMasonry"), { ssr: false });
 
@@ -38,6 +39,12 @@ const Gallery1 = async () => {
                   <span className="sb-suptitle sb-mb-15">Galerija</span>
                   <h2 className="sb-mb-10">{category.title}</h2>
                   {category.description && <p className="sb-text">{category.description}</p>}
+                  <Link href={`/gallery/${category.slug}`} className="sb-btn sb-btn-2 sb-mt-15">
+                    <span className="sb-icon">
+                      <img src="/img/ui/icons/arrow-2.svg" alt="icon" />
+                    </span>
+                    <span>Otvori kategoriju</span>
+                  </Link>
                 </div>
               </div>
 

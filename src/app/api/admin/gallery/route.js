@@ -59,8 +59,8 @@ export async function POST(request) {
     sort = 0,
   } = payload || {};
 
-  if (!categorySlug || !url) {
-    return NextResponse.json({ error: "categorySlug and url are required" }, { status: 400 });
+  if (!categorySlug || (!url)) {
+    return NextResponse.json({ error: "categorySlug and url (ili fajl) su obavezni" }, { status: 400 });
   }
 
   const client = getDbClient();
@@ -101,4 +101,3 @@ export async function POST(request) {
     await client.end();
   }
 }
-

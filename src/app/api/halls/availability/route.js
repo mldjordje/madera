@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { addDays, addHours, addMonths, startOfDay } from "date-fns";
+import { addMonths, startOfDay } from "date-fns";
 import { Client } from "pg";
 
 const HALL_TYPES = ["velika", "mala"];
@@ -73,67 +73,16 @@ async function fetchFromDatabase({ windowStart, windowEnd, halls }) {
   }
 }
 
-const buildFallbackData = (windowStart, months, halls) => {
-  const windowEnd = addMonths(windowStart, months);
-  const day = (offset) => addDays(windowStart, offset);
-
-  const sample = {
-    reservations: [
-      {
-        id: "demo-velika-1",
-        hallType: "velika",
-        startAt: addHours(day(4), 17).toISOString(),
-        endAt: addHours(day(4), 23).toISOString(),
-        status: "confirmed",
-        guestName: "Primer dogadjaja",
-        notes: "Primer termina dok ne povezete bazu.",
-      },
-      {
-        id: "demo-velika-2",
-        hallType: "velika",
-        startAt: addHours(day(11), 11).toISOString(),
-        endAt: addHours(day(11), 15).toISOString(),
-        status: "pending",
-        guestName: "Porodicni rucak",
-      },
-      {
-        id: "demo-mala-1",
-        hallType: "mala",
-        startAt: addHours(day(6), 18).toISOString(),
-        endAt: addHours(day(6), 22).toISOString(),
-        status: "confirmed",
-        guestName: "Team building",
-      },
-    ],
-    blackouts: [
-      {
-        id: "demo-velika-maintenance",
-        hallType: "velika",
-        startDate: day(1).toISOString(),
-        endDate: day(2).toISOString(),
-        reason: "Redovno odrzavanje",
-      },
-      {
-        id: "demo-mala-closed",
-        hallType: "mala",
-        startDate: day(13).toISOString(),
-        endDate: day(13).toISOString(),
-        reason: "Privatni dogadjaj",
-      },
-    ],
-  };
-
-  return {
-    source: "fallback",
-    reason: "DATABASE_URL is missing or database is empty. Prikazujemo demo podatke.",
-    range: {
-      from: windowStart.toISOString(),
-      to: windowEnd.toISOString(),
-    },
-    reservations: sample.reservations.filter((item) => halls.includes(item.hallType)),
-    blackouts: sample.blackouts.filter((item) => halls.includes(item.hallType)),
-  };
-};
+const buildEmptyData = (windowStart, months) => ({
+  source: "fallback",
+  reason: "Nema podataka ili baza nije dostupna.",
+  range: {
+    from: windowStart.toISOString(),
+    to: addMonths(windowStart, months).toISOString(),
+  },
+  reservations: [],
+  blackouts: [],
+});
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -149,7 +98,7 @@ export async function GET(request) {
   const windowEnd = addMonths(windowStart, months);
 
   if (!process.env.DATABASE_URL) {
-    return NextResponse.json(buildFallbackData(windowStart, months, halls));
+    return NextResponse.json(buildEmptyData(windowStart, months));
   }
 
   try {
@@ -165,7 +114,7 @@ export async function GET(request) {
     });
   } catch (error) {
     console.error("Failed to load hall availability:", error);
-    return NextResponse.json(buildFallbackData(windowStart, months, halls), { status: 200 });
+    return NextResponse.json(buildEmptyData(windowStart, months), { status: 200 });
   }
 }
 

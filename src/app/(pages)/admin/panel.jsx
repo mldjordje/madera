@@ -18,6 +18,8 @@ const AdminPanel = () => {
   const [status, setStatus] = useState("");
   const [gallery, setGallery] = useState({ categories: [], items: [] });
   const [halls, setHalls] = useState({ reservations: [], blackouts: [] });
+  const [selectedCategory, setSelectedCategory] = useState("new");
+  const [file, setFile] = useState(null);
   const [form, setForm] = useState({
     categorySlug: "",
     categoryTitle: "",
@@ -46,6 +48,15 @@ const AdminPanel = () => {
         fetchJson("/api/admin/halls", token),
       ]);
       setGallery(g);
+      if (g.categories?.length && selectedCategory === "new") {
+        setSelectedCategory(g.categories[0].slug);
+        setForm((prev) => ({
+          ...prev,
+          categorySlug: g.categories[0].slug,
+          categoryTitle: g.categories[0].title,
+          categoryDescription: g.categories[0].description || "",
+        }));
+      }
       setHalls(h);
       setStatus("");
     } catch (error) {
@@ -53,16 +64,32 @@ const AdminPanel = () => {
     }
   };
 
+  const fileToDataUrl = (selectedFile) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(selectedFile);
+    });
+
   const submit = async (e) => {
     e.preventDefault();
     setStatus("Snima se...");
     try {
+      let finalUrl = form.url;
+      if (!finalUrl && file) {
+        finalUrl = await fileToDataUrl(file);
+      }
+      if (!finalUrl) {
+        throw new Error("Unesi URL ili izaberi fajl.");
+      }
       await fetchJson("/api/admin/gallery", token, {
         method: "POST",
-        body: JSON.stringify({ ...form, sort: Number(form.sort) || 0 }),
+        body: JSON.stringify({ ...form, url: finalUrl, sort: Number(form.sort) || 0 }),
       });
       setStatus("Sacuvano.");
       setForm((prev) => ({ ...prev, url: "", alt: "", sort: 0 }));
+      setFile(null);
       await loadData();
     } catch (error) {
       setStatus(error.message);
@@ -154,12 +181,50 @@ const AdminPanel = () => {
           <form className="sb-form sb-admin-form" onSubmit={submit}>
             <div className="sb-form-row">
               <label>
+                Kategorija
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSelectedCategory(value);
+                    if (value === "new") {
+                      setForm((prev) => ({
+                        ...prev,
+                        categorySlug: "",
+                        categoryTitle: "",
+                        categoryDescription: "",
+                      }));
+                    } else {
+                      const cat = gallery.categories.find((c) => c.slug === value);
+                      if (cat) {
+                        setForm((prev) => ({
+                          ...prev,
+                          categorySlug: cat.slug,
+                          categoryTitle: cat.title,
+                          categoryDescription: cat.description || "",
+                        }));
+                      }
+                    }
+                  }}
+                >
+                  {gallery.categories.map((cat) => (
+                    <option key={cat.slug} value={cat.slug}>
+                      {cat.title || cat.slug}
+                    </option>
+                  ))}
+                  <option value="new">+ Nova kategorija</option>
+                </select>
+              </label>
+            </div>
+            <div className="sb-form-row">
+              <label>
                 Category slug
                 <input
                   name="categorySlug"
                   value={form.categorySlug}
                   onChange={(e) => setForm({ ...form, categorySlug: e.target.value })}
                   required
+                  disabled={selectedCategory !== "new"}
                 />
               </label>
               <label>
@@ -168,6 +233,7 @@ const AdminPanel = () => {
                   name="categoryTitle"
                   value={form.categoryTitle}
                   onChange={(e) => setForm({ ...form, categoryTitle: e.target.value })}
+                  disabled={selectedCategory !== "new"}
                 />
               </label>
             </div>
@@ -178,13 +244,22 @@ const AdminPanel = () => {
                   name="categoryDescription"
                   value={form.categoryDescription}
                   onChange={(e) => setForm({ ...form, categoryDescription: e.target.value })}
+                  disabled={selectedCategory !== "new"}
                 />
               </label>
             </div>
             <div className="sb-form-row">
               <label>
-                Slika URL
-                <input name="url" value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })} required />
+                Slika URL (opciono ako upload)
+                <input name="url" value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })} />
+              </label>
+              <label>
+                Upload fajl
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                />
               </label>
               <label>
                 Orientation
@@ -235,7 +310,7 @@ const AdminPanel = () => {
                       </div>
                       <div className="sb-admin-item-body">
                         <p className="sb-label">
-                          {item.orientation === "h" ? "Horizontal" : "Vertical"} · sort {item.sort}
+                          {item.orientation === "h" ? "Horizontal" : "Vertical"} - sort {item.sort}
                         </p>
                         <p className="sb-m-0">{item.alt || "-"}</p>
                       </div>
@@ -269,7 +344,7 @@ const AdminPanel = () => {
                     <div key={r.id} className="sb-admin-reservation-row">
                       <div>
                         <p className="sb-label">
-                          {new Date(r.startAt).toLocaleString()} → {new Date(r.endAt).toLocaleString()}
+                          {new Date(r.startAt).toLocaleString()} -> {new Date(r.endAt).toLocaleString()}
                         </p>
                         <p className="sb-m-0">{r.guestName || "?"}</p>
                         {r.notes && <p className="sb-text-sm">{r.notes}</p>}
@@ -291,7 +366,7 @@ const AdminPanel = () => {
                     <div key={b.id} className="sb-admin-reservation-row">
                       <div>
                         <p className="sb-label">
-                          {new Date(b.startDate).toLocaleDateString()} → {new Date(b.endDate).toLocaleDateString()}
+                          {new Date(b.startDate).toLocaleDateString()} -> {new Date(b.endDate).toLocaleDateString()}
                         </p>
                         <p className="sb-m-0">{b.reason || "Blokirano"}</p>
                       </div>
@@ -308,4 +383,3 @@ const AdminPanel = () => {
 };
 
 export default AdminPanel;
-
