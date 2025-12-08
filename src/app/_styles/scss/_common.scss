@@ -668,6 +668,7 @@ buttons
   margin-bottom: 10px;
   background-color: $c5;
   transition: $tr;
+  color: $c4;
 
   & .sb-icon {
     border-radius: 50%;
@@ -691,6 +692,7 @@ buttons
     display: inline-block;
     padding: 0 20px 0 0;
     font-weight: 500;
+    color: inherit;
   }
 
   &:hover {
@@ -698,6 +700,7 @@ buttons
   }
 
   &.sb-btn-gray {
+    color: $c1;
     background-color: $c6;
     box-shadow: 0 0 0 2px $c4;
 
@@ -710,6 +713,7 @@ buttons
     padding: 0;
     background-color: transparent;
     box-shadow: none;
+    color: $c1;
 
     & .sb-icon {
       background-color: $c5;

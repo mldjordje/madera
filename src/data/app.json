@@ -5,7 +5,7 @@
     "formspreeURL": "https://formspree.io/f/your_api_key",
     "mapbox": {
       "AccessToken": "*",
-      "style": "mapbox://styles/mapbox/light-v11",
+      "style": "mapbox://styles/mapbox/dark-v11",
       "zoom": 15,
       "long": -79.3949,
       "lat": 43.643102
