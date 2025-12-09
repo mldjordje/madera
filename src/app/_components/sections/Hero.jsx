@@ -26,6 +26,7 @@ const Hero = ( { type } ) => {
                             allowFullScreen={false}
                         />
                         <div className="sb-hero-video-gradient"></div>
+                        <div className="sb-hero-overlay"></div>
                     </div>
                 </div>
                 <div className="sb-hero-media sb-hero-media--desktop" aria-hidden="true">

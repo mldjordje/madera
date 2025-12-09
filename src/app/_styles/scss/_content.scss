@@ -16,6 +16,7 @@ banner
 
 .sb-lux-hero {
   padding: 140px 0 110px;
+  min-height: 100vh;
 }
 
 .sb-main-title-frame {
@@ -63,6 +64,12 @@ banner
   border-radius: 28px;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.sb-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.65) 70%, rgba(0,0,0,0.75) 100%);
 }
 
 .sb-hero-media--desktop .sb-hero-video-wrap {
@@ -127,13 +134,23 @@ banner
 
   .sb-hero-media--mobile {
     display: block;
-    position: relative;
-    height: 320px;
-    margin-bottom: 30px;
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .sb-banner {
+    background: transparent;
   }
 
   .sb-banner .sb-main-title {
     text-align: left;
+    color: $c4;
+
+    h1, p, span {
+      color: $c4;
+    }
   }
 }
 
@@ -143,8 +160,7 @@ banner
   }
 
   .sb-hero-media--mobile {
-    height: 260px;
-    margin-bottom: 20px;
+    height: 100%;
   }
 }
 /***************************
