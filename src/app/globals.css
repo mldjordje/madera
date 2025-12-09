@@ -1,13 +1,13 @@
 /* Custom hall booking UI */
 :root {
-  --madera-bg: #0f1318;
-  --madera-surface: #18100c;
+  --madera-bg: #0e0906;
+  --madera-surface: #1a100b;
   --madera-surface-alt: #22140d;
-  --madera-border: #3b2a1f;
-  --madera-accent: #d2ad6b;
-  --madera-accent-soft: rgba(210, 173, 107, 0.16);
-  --madera-text: #f2e7d9;
-  --madera-text-muted: #c7b29f;
+  --madera-border: #3a2416;
+  --madera-accent: #b37a2a;
+  --madera-accent-soft: rgba(179, 122, 42, 0.18);
+  --madera-text: #f5efe4;
+  --madera-text-muted: #d6c8b8;
 }
 
 .sb-hall-hero {
