@@ -1,10 +1,16 @@
-import { Rubik, Monoton } from 'next/font/google'
+import { Inter, Playfair_Display, Monoton } from 'next/font/google'
 
-const rubik = Rubik({
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
-  style: ['normal', 'italic'],
+const inter = Inter({
+  weight: ['300', '400', '500', '600', '700', '800'],
   subsets: ['latin'],
-  variable: '--font-rubik',
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+const playfair = Playfair_Display({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-serif',
   display: 'swap',
 })
 
@@ -42,7 +48,7 @@ const Layouts = ({
   children
 }) => {
   return (
-    <html lang="en" className={`${rubik.variable} ${monoton.variable}`}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable} ${monoton.variable}`}>
       <body>
         {/* app wrapper */}
         <div className="sb-app">

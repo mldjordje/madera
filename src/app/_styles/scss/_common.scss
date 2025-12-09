@@ -82,9 +82,10 @@ body {
   background-color: $c6;
   padding: 0;
   margin: 0;
-  font-family: var(--font-rubik), sans-serif;
-  letter-spacing: 0.03em;
+  font-family: var(--font-sans), sans-serif;
+  letter-spacing: 0.01em;
   font-size: 16px;
+  line-height: 1.6;
   color: $c1;
 }
 
@@ -120,6 +121,7 @@ ul {
   color: $c2;
   margin: 0;
   font-size: 15px;
+  line-height: 1.7;
 
   &.sb-text-xs {
     font-size: 12px;
@@ -136,11 +138,14 @@ ul {
 
 .sb-suptitle {
   display: inline-block;
-  padding: 2px 5px;
-  background-color: $c3;
+  padding: 6px 10px;
+  background-color: rgba($c7, .06);
+  border: 1px solid rgba($c7, .12);
+  border-radius: 999px;
   font-size: 12px;
-  font-weight: 400;
-  color: $c1;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: $c7;
 }
 
 .sb-h1,
@@ -158,24 +163,25 @@ h6 {
   font-weight: 600;
   margin: 0;
   padding: 0;
+  font-family: var(--font-serif), serif;
 }
 
 .sb-h1,
 h1 {
-  line-height: 100%;
-  font-size: 72px;
-  letter-spacing: -3px;
+  line-height: 110%;
+  font-size: 64px;
+  letter-spacing: -1px;
 
   & span {
-    background-color: $c6;
+    background-color: transparent;
   }
 }
 
 .sb-h2,
 h2 {
-  line-height: 110%;
+  line-height: 115%;
   font-size: 40px;
-  letter-spacing: -2px;
+  letter-spacing: -0.5px;
 
   & span {
     background-color: $c6;
@@ -184,14 +190,14 @@ h2 {
 
 .sb-h3,
 h3 {
-  line-height: 120%;
+  line-height: 125%;
   font-size: 22px;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
 }
 
 .sb-h4,
 h4 {
-  line-height: 120%;
+  line-height: 130%;
   font-size: 16px;
   letter-spacing: 0;
 }
@@ -220,20 +226,20 @@ h5 {
 @media (max-width: 768px) {
   .sb-h1,
   h1 {
-    font-size: 54px;
-    letter-spacing: -2px;
+    font-size: 46px;
+    letter-spacing: -1px;
   }
 
   .sb-h2,
   h2 {
-    font-size: 36px;
-    letter-spacing: -1px;
+    font-size: 32px;
+    letter-spacing: -0.5px;
   }
 
   .sb-h3,
   h3 {
-    font-size: 20px;
-    letter-spacing: -1px;
+    font-size: 19px;
+    letter-spacing: -0.5px;
   }
 
   .sb-title-lg {
@@ -243,12 +249,12 @@ h5 {
 @media (max-width: 450px) {
   .sb-h1,
   h1 {
-    font-size: 46px;
+    font-size: 40px;
   }
 
   .sb-h2,
   h2 {
-    font-size: 28px;
+    font-size: 26px;
   }
 
   .sb-h3,
@@ -654,86 +660,93 @@ buttons
 ***************************/
 .sb-btn {
   opacity: 1;
-  border: none;
-  padding: 0 5px;
+  border: 1px solid $c5;
+  padding: 0 18px;
   cursor: pointer;
   position: relative;
   display: inline-flex;
   align-items: center;
-  transform: scale(1);
-  height: 55px;
-  letter-spacing: 0;
+  height: 52px;
+  letter-spacing: 0.01em;
   font-size: 14px;
-  margin-right: 15px;
+  font-weight: 600;
+  margin-right: 12px;
   margin-bottom: 10px;
   background-color: $c5;
+  color: $c7;
+  border-radius: 999px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
   transition: $tr;
-  color: $c4;
 
   & .sb-icon {
-    border-radius: 50%;
+    border-radius: 999px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     position: relative;
     padding: 0 !important;
     margin: 0;
-    width: 55px;
-    height: 55px;
+    width: 42px;
+    height: 42px;
+    background: rgba($c7, 0.06);
 
     & img {
-      width: 22px;
+      width: 18px;
     }
   }
 
   & span {
     white-space: nowrap;
-    line-height: 55px;
+    line-height: 52px;
     display: inline-block;
-    padding: 0 20px 0 0;
-    font-weight: 500;
+    padding: 0 14px 0 8px;
+    font-weight: 600;
     color: inherit;
   }
 
   &:hover {
-    filter: brightness(110%);
+    filter: brightness(105%);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.12);
   }
 
   &.sb-btn-gray {
-    color: $c1;
-    background-color: $c6;
-    box-shadow: 0 0 0 2px $c4;
+    color: $c7;
+    background-color: transparent;
+    box-shadow: none;
+    border: 1px solid $c5;
 
     &:hover {
-      filter: brightness(102%);
+      background-color: rgba($c5, 0.15);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
     }
   }
 
   &.sb-btn-2 {
-    padding: 0;
+    padding: 0 18px;
     background-color: transparent;
     box-shadow: none;
-    color: $c1;
+    color: $c7;
 
     & .sb-icon {
-      background-color: $c5;
-      transform: scale(.95);
+      background-color: transparent;
+      width: 38px;
+      height: 38px;
     }
 
     & span {
-      padding: 0 0 0 15px;
+      padding: 0 10px 0 8px;
     }
 
     &.sb-btn-gray {
       background-color: transparent;
 
       & .sb-icon {
-        background-color: $c3;
-        box-shadow: 0 0 0 2px $c4;
+        background-color: transparent;
       }
 
       &:hover {
-        filter: brightness(102%);
+        background-color: rgba($c5, 0.1);
       }
     }
   }
@@ -761,8 +774,7 @@ buttons
     background-color: $c5;
 
     & .sb-icon {
-      background-color: $c5;
-      transform: scale(.95);
+      background-color: transparent;
     }
 
     & span {
@@ -770,10 +782,10 @@ buttons
     }
 
     &.sb-btn-gray {
-      background-color: $c3;
+      background-color: transparent;
 
       & .sb-icon {
-        background-color: $c3;
+        background-color: transparent;
       }
 
       &:hover {
@@ -1058,6 +1070,25 @@ settings
 animations
 
 ***************************/
+.sb-soft-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeSlideUp 0.8s ease forwards;
+  animation-delay: 0.1s;
+}
+
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes addToCart {
   0% {
     transform: scale(1);

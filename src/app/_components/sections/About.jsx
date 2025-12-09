@@ -6,15 +6,18 @@ const AboutSection = () => {
     return (
         <>
             {/* features */}
-            <section className="sb-p-60-0">
+            <section className="sb-p-60-0 sb-about-light sb-soft-reveal">
                 <div className="container">
                 <div className="row flex-md-row-reverse">
                     <div className="col-lg-6 align-self-center sb-mb-30">
-                    <h2 className="sb-mb-60" dangerouslySetInnerHTML={{__html : Data.title}} />
+                    <div className="sb-about-header">
+                        <h2 className="sb-mb-20" dangerouslySetInnerHTML={{__html : Data.title}} />
+                        <div className="sb-divider-line sb-mb-30"></div>
+                    </div>
 
                     <ul className="sb-features">
                         {Data.items.map((item, key) => (
-                        <li className="sb-features-item sb-mb-60" key={`about-list-item-${key}`}>
+                        <li className="sb-features-item sb-mb-40" key={`about-list-item-${key}`}>
                         <div className="sb-number">{item.num}</div>
                         <div className="sb-feature-text">
                             <h3 className="sb-mb-15">{item.title}</h3>

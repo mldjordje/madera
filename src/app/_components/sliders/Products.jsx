@@ -12,7 +12,7 @@ import ProductItem from "@components/products/ProductItem";
 const FeaturedDishCard = ({ item }) => {
   const image = item.imageUrl || item.image;
   return (
-    <div className="sb-featured-card">
+    <article className="sb-featured-card sb-featured-card--light sb-soft-reveal">
       {image && (
         <div className="sb-featured-thumb">
           <img src={image} alt={item.title || "Izdvojeno jelo"} />
@@ -20,12 +20,14 @@ const FeaturedDishCard = ({ item }) => {
       )}
       <div className="sb-featured-body">
         <div className="sb-featured-top">
-          <h4 className="sb-card-title sb-m-0">{item.title}</h4>
-          {item.price && <span className="sb-chip sb-chip--ghost">{item.price}</span>}
+          <div className="sb-featured-copy">
+            <h4 className="sb-card-title sb-m-0">{item.title}</h4>
+            {item.description && <p className="sb-text sb-m-0">{item.description}</p>}
+          </div>
+          {item.price && <span className="sb-price-badge">{item.price}</span>}
         </div>
-        {item.description && <p className="sb-text sb-m-0">{item.description}</p>}
       </div>
-    </div>
+    </article>
   );
 };
 
@@ -49,7 +51,7 @@ const ProductsSlider = ( {items, title, description, button = {}, slidesPerView,
   return (
     <>
     {/* short menu */}
-    <section className={`sb-short-menu sb-p-${paddingTop}-90`}>
+    <section className={`sb-short-menu sb-short-menu--light sb-soft-reveal sb-p-${paddingTop}-90`}>
         {bgType == 2 ? (
         <div className="sb-bg-1" style={{"marginTop": "-120px"}}>
             <div></div>

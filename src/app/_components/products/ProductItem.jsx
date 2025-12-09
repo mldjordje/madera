@@ -29,46 +29,43 @@ const ProductItem = ({ item, index, marginBottom, moreType }) => {
   
   return (
     <>   
-      <div className={`sb-menu-item sb-mb-${marginBottom}`}>
-        <Link href={`/product`} className="sb-cover-frame">
+      <div className={`sb-menu-card sb-mb-${marginBottom}`}>
+        <Link href={`/product`} className="sb-menu-card__media">
             <img src={item.image} alt={item.title} />
-            <div dangerouslySetInnerHTML={{__html : item.badge}} />
         </Link>
-        <div className="sb-card-tp">
-            <h4 className="sb-card-title"><Link href={`/product`}>{item.title}</Link></h4>
-            <div className="sb-price"><sub>{item.currency}</sub> {item.price}</div>
-        </div>
-        <div className="sb-description">
+        <div className="sb-menu-card__body">
+            <div className="sb-menu-card__header">
+                <h4 className="sb-card-title"><Link href={`/product`}>{item.title}</Link></h4>
+                <span className="sb-price-badge">
+                  {item.currency} {item.price}
+                </span>
+            </div>
             <p className="sb-text sb-mb-15">
                 {item.text}
             </p>
-        </div>
-        <div className="sb-card-buttons-frame">
-          {/* button */}
-          {moreType != 2 ? (
-          <Link href="/product" className="sb-btn sb-btn-2 sb-btn-gray sb-btn-icon sb-m-0">
-            <span className="sb-icon">
-              <img src="/img/ui/icons/arrow.svg" alt="icon" />
-            </span>
-          </Link>
-          ) : (
-          <Link href="/product" className="sb-btn sb-btn-gray">
-            <span className="sb-icon">
-              <img src="/img/ui/icons/arrow.svg" alt="icon" />
-            </span>
-            <span>Details</span>
-          </Link>
-          )}
-          {/* button end */}
-          {/* button */}
-          <a href="#." className="sb-btn sb-atc" onClick={(e) => addToCart(e) }>
-            <span className="sb-icon">
-              <img src="/img/ui/icons/cart.svg" alt="icon" />
-            </span>
-            <span className="sb-add-to-cart-text">Add to cart</span>
-            <span className="sb-added-text">Added</span>
-          </a>
-          {/* button end */}
+            <div className="sb-menu-card__actions">
+              {moreType != 2 ? (
+              <Link href="/product" className="sb-btn sb-btn-2 sb-btn-gray sb-btn-icon sb-m-0">
+                <span className="sb-icon">
+                  <img src="/img/ui/icons/arrow.svg" alt="icon" />
+                </span>
+              </Link>
+              ) : (
+              <Link href="/product" className="sb-btn sb-btn-gray">
+                <span className="sb-icon">
+                  <img src="/img/ui/icons/arrow.svg" alt="icon" />
+                </span>
+                <span>Details</span>
+              </Link>
+              )}
+              <a href="#." className="sb-btn sb-atc" onClick={(e) => addToCart(e) }>
+                <span className="sb-icon">
+                  <img src="/img/ui/icons/cart.svg" alt="icon" />
+                </span>
+                <span className="sb-add-to-cart-text">Add to cart</span>
+                <span className="sb-added-text">Added</span>
+              </a>
+            </div>
         </div>
       </div>
     </>

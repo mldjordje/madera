@@ -6,7 +6,7 @@ wrapper
 .sb-app {
   position: relative;
   overflow: hidden;
-  background-color: $c4;
+  background-color: $c6;
 }
 /***************************
 
@@ -21,7 +21,7 @@ top bar
   left: 0;
   right: 0;
   border-bottom: solid 1px $c3;
-  border-top: solid 1px $c3;
+  border-top: solid 1px transparent;
 
   & .container {
     padding: 0 !important;
@@ -35,9 +35,9 @@ top bar
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: $c4t;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   & .sb-top-bar {
@@ -84,7 +84,7 @@ top bar
   }
 
   &.sb-scroll {
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,.05);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 
     & .sb-top-bar {
       height: 90px;
@@ -162,7 +162,7 @@ navigation
         }
 
         &:hover {
-          color: $c5;
+          color: $c7;
         }
       }
 
@@ -176,21 +176,20 @@ navigation
       }
 
       & ul {
-        min-width: 120px;
+        min-width: 160px;
         transform: translateY(10px);
         opacity: 0;
         pointer-events: none;
-        padding: 30px 0 10px;
+        padding: 24px 0 16px;
         position: absolute;
         top: 70.5px;
         left: 0;
         border: solid 1px $c3;
-        background-color: $c4t;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background-color: $c4;
+        box-shadow: 0 18px 40px rgba(0,0,0,0.08);
         transition: $tr;
         display: grid;
-        grid-template-columns: repeat(2, 1pr);
+        grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(4, auto);
         grid-auto-flow: column;
 
@@ -257,7 +256,7 @@ navigation
   .sb-nav {
     & .sb-navigation {
       padding-top: 30px;
-      box-shadow: -1px 1px 3px 0 rgba(0,0,0,.05);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.08);
       border-top: solid 1px $c3;
       position: absolute;
       top: 90px;
@@ -269,10 +268,10 @@ navigation
       display: block;
       height: calc(100vh - 80px);
       overflow: scroll;
-      background-color: $c4t;
+      background-color: rgba(255,255,255,0.95);
       transition: $tr;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
 
       & li {
         text-align: center;
@@ -349,9 +348,9 @@ footer
 footer {
   border-top: solid 1px $c3;
   position: relative;
-  background-color: $c4t;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: $c6;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 
   & .sb-footer-frame {
     display: flex;
@@ -421,10 +420,10 @@ info bar
   max-width: 403px;
   position: absolute;
   transform: translateX(100%);
-  background-color: $c4t;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: -1px 1px 3px 0 rgba(0,0,0,.05);
+  background-color: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: -1px 10px 30px rgba(0,0,0,0.08);
   border-left: solid 1px $c3;
   transition: $tr-lg;
 
@@ -484,10 +483,10 @@ minicart
   max-width: 403px;
   position: absolute;
   transform: translateX(100%);
-  background-color: $c4t;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: -1px 1px 3px 0 rgba(0,0,0,.05);
+  background-color: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: -1px 10px 30px rgba(0,0,0,0.08);
   border-left: solid 1px $c3;
   transition: $tr-lg;
 

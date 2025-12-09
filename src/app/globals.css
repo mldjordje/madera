@@ -1,13 +1,14 @@
 /* Custom hall booking UI */
 :root {
-  --madera-bg: #0e0906;
-  --madera-surface: #1a100b;
-  --madera-surface-alt: #22140d;
-  --madera-border: #3a2416;
-  --madera-accent: #b37a2a;
-  --madera-accent-soft: rgba(179, 122, 42, 0.18);
-  --madera-text: #f5efe4;
-  --madera-text-muted: #d6c8b8;
+  --madera-bg: #f2efe9;
+  --madera-surface: #fbf8f2;
+  --madera-surface-alt: #f7f3ec;
+  --madera-border: #e2d9cd;
+  --madera-accent: #d2b48c;
+  --madera-accent-soft: rgba(210, 180, 140, 0.18);
+  --madera-text: #101010;
+  --madera-text-muted: #3e433a;
+  --madera-accent-strong: #0f2620;
 }
 
 .sb-hall-hero {
@@ -33,9 +34,9 @@
   gap: 8px;
   padding: 6px 12px;
   border-radius: 999px;
-  border: 1px solid #d7b46a;
-  background: #d7b46a;
-  color: #2b1a12;
+  border: 1px solid var(--madera-accent);
+  background: var(--madera-accent-soft);
+  color: var(--madera-text);
   font-size: 12px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -44,6 +45,7 @@
 
 .sb-chip--ghost {
   background: transparent;
+  color: var(--madera-text);
 }
 
 .sb-label {
@@ -443,17 +445,23 @@
 .sb-featured-card {
   background: var(--madera-surface);
   border: 1px solid var(--madera-border);
-  border-radius: 14px;
+  border-radius: 18px;
   overflow: hidden;
   height: 100%;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+  transition: all 0.25s ease;
+}
+
+.sb-featured-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.14);
 }
 
 .sb-featured-thumb {
   height: 190px;
-  background: linear-gradient(135deg, #25160e, #0f0c0a);
+  background: var(--madera-surface-alt);
 }
 
 .sb-featured-thumb img {
@@ -469,7 +477,7 @@
   flex-direction: column;
   gap: 10px;
   color: var(--madera-text);
-  background: linear-gradient(180deg, rgba(24, 16, 12, 0.9) 0%, rgba(16, 12, 9, 0.96) 100%);
+  background: var(--madera-surface);
 }
 
 .sb-featured-body .sb-text {
