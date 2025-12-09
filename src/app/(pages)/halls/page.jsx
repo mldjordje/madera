@@ -2,6 +2,7 @@ import React from "react";
 
 import AppData from "@data/app.json";
 import halls from "@data/halls.json";
+import hallSettings from "@data/hall-settings.json";
 
 import ContactInfoSection from "@components/sections/ContactInfo";
 import ContactMapSection from "@components/sections/ContactMap";
@@ -57,7 +58,7 @@ const HallsPage = () => {
 
       <section className="sb-halls-wrapper">
         <div className="container">
-          <HallPlanner halls={halls.halls} />
+          <HallPlanner halls={halls.halls} initialSettings={hallSettings} />
         </div>
       </section>
 

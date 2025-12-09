@@ -6,13 +6,16 @@ import React, { useEffect, useMemo, useState } from "react";
 import HallBookingForm from "./HallBookingForm";
 import HallCalendar from "./HallCalendar";
 
-const HallPlanner = ({ halls }) => {
+const HallPlanner = ({ halls, initialSettings }) => {
   const [activeHall, setActiveHall] = useState(halls[0]?.slug || "velika");
   const [month, setMonth] = useState(startOfMonth(new Date()));
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
   const [availability, setAvailability] = useState({ reservations: [], blackouts: [], source: "loading" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [settings, setSettings] = useState(
+    initialSettings || { allowReservations: true, contactPhone: "+38163000000" }
+  );
 
   const loadAvailability = async () => {
     setLoading(true);
@@ -33,6 +36,18 @@ const HallPlanner = ({ halls }) => {
 
   useEffect(() => {
     loadAvailability();
+    (async () => {
+      try {
+        const resp = await fetch("/api/halls/settings", { cache: "no-store" });
+        const data = await resp.json();
+        setSettings({
+          allowReservations: data.allowReservations !== false,
+          contactPhone: data.contactPhone || settings.contactPhone,
+        });
+      } catch (err) {
+        // keep default
+      }
+    })();
   }, []);
 
   const hallReservations = useMemo(
@@ -47,6 +62,8 @@ const HallPlanner = ({ halls }) => {
 
   const hallMeta = halls.find((hall) => hall.slug === activeHall) || halls[0];
 
+  const telHref = settings.contactPhone ? `tel:${settings.contactPhone.replace(/[^+\\d]/g, "")}` : "tel:+38163000000";
+
   return (
     <div className="sb-halls-board sb-card sb-mb-60">
       <div className="row g-4">
@@ -55,11 +72,15 @@ const HallPlanner = ({ halls }) => {
             <div className="sb-panel-heading">
               <div>
                 <p className="sb-label">Odaberi salu</p>
-                <h4 className="sb-m-0">Direktan pregled kalendara</h4>
+                <h4 className="sb-m-0">
+                  {settings.allowReservations ? "Direktan pregled kalendara" : "Zakazivanje je iskljuceno"}
+                </h4>
               </div>
-              <button type="button" className="sb-chip sb-chip--ghost" onClick={loadAvailability} disabled={loading}>
-                Osvezi
-              </button>
+              {settings.allowReservations && (
+                <button type="button" className="sb-chip sb-chip--ghost" onClick={loadAvailability} disabled={loading}>
+                  Osvezi
+                </button>
+              )}
             </div>
 
             {halls.map((hall) => (
@@ -91,15 +112,28 @@ const HallPlanner = ({ halls }) => {
               </button>
             ))}
 
-            <div className="sb-meta-box">
-              <p className="sb-label">Izvor podataka</p>
-              <p className="sb-m-0">
-                {availability.source === "database"
-                  ? "Railway PostgreSQL (tabele hall_reservations / hall_blackouts)"
-                  : availability.reason || "Nema podataka"}
-              </p>
-              {error && <div className="sb-alert sb-alert-error sb-mt-10">{error}</div>}
-            </div>
+            {settings.allowReservations ? (
+              <div className="sb-meta-box">
+                <p className="sb-label">Izvor podataka</p>
+                <p className="sb-m-0">
+                  {availability.source === "database"
+                    ? "Railway PostgreSQL (tabele hall_reservations / hall_blackouts)"
+                    : availability.reason || "Nema podataka"}
+                </p>
+                {error && <div className="sb-alert sb-alert-error sb-mt-10">{error}</div>}
+              </div>
+            ) : (
+              <div className="sb-meta-box">
+                <p className="sb-label">Kontakt</p>
+                <p className="sb-m-0">Pozovi za rezervaciju sala.</p>
+                <a className="sb-btn sb-btn-2 sb-mt-10" href={telHref}>
+                  <span className="sb-icon">
+                    <img src="/img/ui/icons/arrow.svg" alt="phone" />
+                  </span>
+                  <span>{settings.contactPhone || "Pozovi"}</span>
+                </a>
+              </div>
+            )}
           </div>
         </div>
 
@@ -108,40 +142,58 @@ const HallPlanner = ({ halls }) => {
             <div className="sb-hall-panel__top">
               <div>
                 <p className="sb-label">{hallMeta?.name}</p>
-                <h4 className="sb-m-0">Pregled termina i zakazivanje</h4>
-                <p className="sb-label sb-label-muted">
-                  Poslednje azuriranje: {format(selectedDate, "dd.MM.yyyy.")}
-                </p>
+                <h4 className="sb-m-0">
+                  {settings.allowReservations ? "Pregled termina i zakazivanje" : "Kontakt za dogadjaje"}
+                </h4>
+                {settings.allowReservations ? (
+                  <p className="sb-label sb-label-muted">Poslednje azuriranje: {format(selectedDate, "dd.MM.yyyy.")}</p>
+                ) : (
+                  <p className="sb-label sb-label-muted">Pozovi {settings.contactPhone || "kontakt telefon"} za termine.</p>
+                )}
               </div>
               <div className="sb-chip">{hallMeta?.capacity}</div>
             </div>
 
-            <HallCalendar
-              month={month}
-              onMonthChange={(value) => {
-                setMonth(startOfMonth(value));
-                setSelectedDate(startOfDay(value));
-              }}
-              reservations={hallReservations}
-              blackouts={hallBlackouts}
-              selectedDate={selectedDate}
-              onSelectDate={(date) => setSelectedDate(startOfDay(date))}
-              isLoading={loading}
-              source={availability.source}
-            />
+            {settings.allowReservations ? (
+              <>
+                <HallCalendar
+                  month={month}
+                  onMonthChange={(value) => {
+                    setMonth(startOfMonth(value));
+                    setSelectedDate(startOfDay(value));
+                  }}
+                  reservations={hallReservations}
+                  blackouts={hallBlackouts}
+                  selectedDate={selectedDate}
+                  onSelectDate={(date) => setSelectedDate(startOfDay(date))}
+                  isLoading={loading}
+                  source={availability.source}
+                />
 
-            <div className="sb-calendar-legend">
-              <div className="sb-legend-dot state-available" /> Slobodno
-              <div className="sb-legend-dot state-pending" /> Upit u obradi
-              <div className="sb-legend-dot state-reserved" /> Rezervisano
-              <div className="sb-legend-dot state-blocked" /> Blokirano
-            </div>
+                <div className="sb-calendar-legend">
+                  <div className="sb-legend-dot state-available" /> Slobodno
+                  <div className="sb-legend-dot state-pending" /> Upit u obradi
+                  <div className="sb-legend-dot state-reserved" /> Rezervisano
+                  <div className="sb-legend-dot state-blocked" /> Blokirano
+                </div>
 
-            {hallReservations.length === 0 && hallBlackouts.length === 0 && (
-              <div className="sb-alert sb-alert-error sb-mt-10">Trenutno nema unosa za ovu salu.</div>
+                {hallReservations.length === 0 && hallBlackouts.length === 0 && (
+                  <div className="sb-alert sb-alert-error sb-mt-10">Trenutno nema unosa za ovu salu.</div>
+                )}
+
+                <HallBookingForm activeHall={activeHall} selectedDate={selectedDate} onSubmitted={loadAvailability} />
+              </>
+            ) : (
+              <div className="sb-contact-cta">
+                <p className="sb-text">Online rezervacije sala su trenutno iskljucene.</p>
+                <a className="sb-btn" href={telHref}>
+                  <span className="sb-icon">
+                    <img src="/img/ui/icons/arrow.svg" alt="phone" />
+                  </span>
+                  <span>Pozovi {settings.contactPhone || ""}</span>
+                </a>
+              </div>
             )}
-
-            <HallBookingForm activeHall={activeHall} selectedDate={selectedDate} onSubmitted={loadAvailability} />
           </div>
         </div>
       </div>

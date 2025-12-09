@@ -140,6 +140,19 @@ banner
     margin-bottom: 0;
   }
 
+  .sb-hero-media--mobile .sb-hero-video-wrap {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .sb-hero-media--mobile .sb-hero-video {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: none;
+  }
+
   .sb-banner {
     background: transparent;
   }

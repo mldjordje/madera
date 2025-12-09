@@ -36,6 +36,7 @@ const AdminPanel = () => {
   const [gallery, setGallery] = useState({ categories: [], items: [] });
   const [featuredDishes, setFeaturedDishes] = useState([]);
   const [halls, setHalls] = useState({ reservations: [], blackouts: [] });
+  const [settings, setSettings] = useState({ allowReservations: true, contactPhone: "+381 63 000 000" });
   const [selectedCategory, setSelectedCategory] = useState("new");
   const [galleryFile, setGalleryFile] = useState(null);
   const [dishFile, setDishFile] = useState(null);
@@ -82,10 +83,11 @@ const AdminPanel = () => {
     setStatus("Ucitavanje podataka...");
     setAuthStatus("");
     try {
-      const [g, h, d] = await Promise.all([
+      const [g, h, d, s] = await Promise.all([
         fetchJson("/api/admin/gallery", token),
         fetchJson("/api/admin/halls", token),
         fetchJson("/api/admin/featured-dishes", token),
+        fetchJson("/api/admin/halls/settings", token),
       ]);
       setGallery(g);
       if (g.categories?.length && selectedCategory === "new") {
@@ -99,6 +101,10 @@ const AdminPanel = () => {
       }
       setFeaturedDishes(d.items || []);
       setHalls(h);
+      setSettings({
+        allowReservations: s.allowReservations !== false,
+        contactPhone: s.contactPhone || "+381 63 000 000",
+      });
       if (activeId) {
         const refreshed = h.reservations?.find((r) => r.id === activeId);
         if (refreshed) {
@@ -287,7 +293,24 @@ const AdminPanel = () => {
   const sectionStats = {
     gallery: `${gallery.items?.length || 0} slika`,
     dishes: `${featuredDishes?.length || 0} jela`,
-    halls: `${halls.reservations?.length || 0} rez.`,
+    halls: settings.allowReservations ? `${halls.reservations?.length || 0} rez.` : "Rezervacije iskljucene",
+  };
+
+  const toggleReservations = async (enabled) => {
+    setStatus("Snima se podesavanje...");
+    try {
+      const next = await fetchJson("/api/admin/halls/settings", token, {
+        method: "PATCH",
+        body: JSON.stringify({ allowReservations: enabled }),
+      });
+      setSettings({
+        allowReservations: next.allowReservations !== false,
+        contactPhone: next.contactPhone || settings.contactPhone,
+      });
+      setStatus(enabled ? "Rezervacije ukljucene." : "Rezervacije iskljucene.");
+    } catch (error) {
+      setStatus(error.message);
+    }
   };
 
   if (!token) {
@@ -630,6 +653,48 @@ const AdminPanel = () => {
               </div>
               <span className="sb-chip sb-chip--ghost">{halls.reservations?.length || 0} rezervacija</span>
             </div>
+            <div className="sb-form sb-admin-form sb-mb-20">
+              <div className="sb-form-row">
+                <label className="sb-toggle">
+                  <input
+                    type="checkbox"
+                    checked={settings.allowReservations}
+                    onChange={(e) => toggleReservations(e.target.checked)}
+                  />
+                  <span className="sb-toggle-slider" />
+                  <span className="sb-toggle-label">
+                    {settings.allowReservations ? "Rezervacije ukljucene" : "Rezervacije iskljucene"}
+                  </span>
+                </label>
+              </div>
+              <div className="sb-form-row">
+                <label>
+                  Kontakt telefon (CTA kada je iskljuceno)
+                  <input
+                    type="text"
+                    value={settings.contactPhone}
+                    onChange={(e) => setSettings((prev) => ({ ...prev, contactPhone: e.target.value }))}
+                    onBlur={async (e) => {
+                      const val = e.target.value.trim();
+                      if (!val) return;
+                      try {
+                        const next = await fetchJson("/api/admin/halls/settings", token, {
+                          method: "PATCH",
+                          body: JSON.stringify({ contactPhone: val }),
+                        });
+                        setSettings({
+                          allowReservations: next.allowReservations !== false,
+                          contactPhone: next.contactPhone || val,
+                        });
+                      } catch (error) {
+                        setStatus(error.message);
+                      }
+                    }}
+                    placeholder="+381 63 000 000"
+                  />
+                </label>
+              </div>
+            </div>
             <div className="sb-admin-halls">
               {["velika", "mala"].map((hall) => (
                 <div key={hall} className="sb-admin-hall-column">
@@ -687,7 +752,7 @@ const AdminPanel = () => {
               ))}
             </div>
 
-            {activeReservation && (
+            {activeReservation && settings.allowReservations && (
               <div className="sb-admin-reservation-detail">
                 <div className="sb-panel-heading">
                   <div>
