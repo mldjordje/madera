@@ -1,7 +1,7 @@
 {
   "settings": {
     "siteName": "Hotel-Restoran Madera",
-    "siteDescription": "Zvanični sajt restorana Madera",
+    "siteDescription": "Zvanični sajt restorana Madera.",
     "formspreeURL": "https://formspree.io/f/your_api_key",
     "mapbox": {
       "AccessToken": "*",
@@ -28,7 +28,7 @@
     ]
   },
   "footer": {
-    "copy": "© 2025 Hotel‑Restoran Madera. Sva prava zadržana."
+    "copy": "(c) 2025 Hotel-Restoran Madera. Sva prava zadržana."
   },
   "social": [
     { "link": "https://twitter.com", "title": "Twitter", "icon": "fab fa-twitter" },

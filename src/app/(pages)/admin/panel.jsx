@@ -3,6 +3,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 const STORAGE_KEY = "madera_admin_token";
+const STATUS_LABELS = {
+  pending: "Na čekanju",
+  confirmed: "Potvrđeno",
+  rejected: "Odbijeno",
+  cancelled: "Otkazano",
+};
 
 async function fetchJson(url, token, options = {}) {
   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
@@ -22,9 +28,11 @@ const AdminPanel = () => {
   const [status, setStatus] = useState("");
   const [authStatus, setAuthStatus] = useState("");
   const [gallery, setGallery] = useState({ categories: [], items: [] });
+  const [featuredDishes, setFeaturedDishes] = useState([]);
   const [halls, setHalls] = useState({ reservations: [], blackouts: [] });
   const [selectedCategory, setSelectedCategory] = useState("new");
-  const [file, setFile] = useState(null);
+  const [galleryFile, setGalleryFile] = useState(null);
+  const [dishFile, setDishFile] = useState(null);
   const [form, setForm] = useState({
     categorySlug: "",
     categoryTitle: "",
@@ -34,6 +42,15 @@ const AdminPanel = () => {
     alt: "",
     sort: 0,
   });
+  const [dishForm, setDishForm] = useState({
+    id: null,
+    title: "",
+    description: "",
+    imageUrl: "",
+    price: "",
+    sort: 0,
+  });
+  const [activeReservation, setActiveReservation] = useState(null);
 
   const logout = (message = "") => {
     setToken("");
@@ -53,13 +70,15 @@ const AdminPanel = () => {
     loadData();
   }, [token]);
 
-  const loadData = async () => {
+  const loadData = async (options = {}) => {
+    const activeId = options.activeReservationId || activeReservation?.id;
     setStatus("Ucitavanje podataka...");
     setAuthStatus("");
     try {
-      const [g, h] = await Promise.all([
+      const [g, h, d] = await Promise.all([
         fetchJson("/api/admin/gallery", token),
         fetchJson("/api/admin/halls", token),
+        fetchJson("/api/admin/featured-dishes", token),
       ]);
       setGallery(g);
       if (g.categories?.length && selectedCategory === "new") {
@@ -71,7 +90,14 @@ const AdminPanel = () => {
           categoryDescription: g.categories[0].description || "",
         }));
       }
+      setFeaturedDishes(d.items || []);
       setHalls(h);
+      if (activeId) {
+        const refreshed = h.reservations?.find((r) => r.id === activeId);
+        if (refreshed) {
+          setActiveReservation(refreshed);
+        }
+      }
       setStatus("");
     } catch (error) {
       if (error.status === 401) {
@@ -95,8 +121,8 @@ const AdminPanel = () => {
     setStatus("Snima se...");
     try {
       let finalUrl = form.url;
-      if (!finalUrl && file) {
-        finalUrl = await fileToDataUrl(file);
+      if (!finalUrl && galleryFile) {
+        finalUrl = await fileToDataUrl(galleryFile);
       }
       if (!finalUrl) {
         throw new Error("Unesi URL ili izaberi fajl.");
@@ -107,7 +133,7 @@ const AdminPanel = () => {
       });
       setStatus("Sacuvano.");
       setForm((prev) => ({ ...prev, url: "", alt: "", sort: 0 }));
-      setFile(null);
+      setGalleryFile(null);
       await loadData();
     } catch (error) {
       setStatus(error.message);
@@ -123,6 +149,107 @@ const AdminPanel = () => {
     });
     return Array.from(map.values());
   }, [gallery]);
+
+  const resetDishForm = () => {
+    setDishForm({ id: null, title: "", description: "", imageUrl: "", price: "", sort: 0 });
+    setDishFile(null);
+  };
+
+  const submitDish = async (e) => {
+    e.preventDefault();
+    setStatus("Snima se jelo...");
+    try {
+      let finalImage = dishForm.imageUrl;
+      if (!finalImage && dishFile) {
+        finalImage = await fileToDataUrl(dishFile);
+      }
+      if (!dishForm.title.trim() || !finalImage) {
+        throw new Error("Naslov i slika su obavezni.");
+      }
+
+      const payload = {
+        ...dishForm,
+        title: dishForm.title.trim(),
+        description: dishForm.description?.trim() || "",
+        imageUrl: finalImage,
+        price: dishForm.price?.trim() || "",
+        sort: Number(dishForm.sort) || 0,
+      };
+
+      const method = dishForm.id ? "PATCH" : "POST";
+
+      await fetchJson("/api/admin/featured-dishes", token, {
+        method,
+        body: JSON.stringify(payload),
+      });
+
+      setStatus("Jelo je sačuvano.");
+      resetDishForm();
+      await loadData();
+    } catch (error) {
+      setStatus(error.message);
+    }
+  };
+
+  const startEditDish = (dish) => {
+    setDishForm({
+      id: dish.id,
+      title: dish.title || "",
+      description: dish.description || "",
+      imageUrl: dish.imageUrl || "",
+      price: dish.price || "",
+      sort: dish.sort ?? 0,
+    });
+    setDishFile(null);
+  };
+
+  const deleteDish = async (dishId) => {
+    if (!dishId) return;
+    if (typeof window !== "undefined" && !window.confirm("Obrisati ovo jelo?")) {
+      return;
+    }
+    setStatus("Brisanje jela...");
+    try {
+      await fetchJson("/api/admin/featured-dishes", token, {
+        method: "DELETE",
+        body: JSON.stringify({ id: dishId }),
+      });
+      if (dishForm.id === dishId) {
+        resetDishForm();
+      }
+      setStatus("Jelo obrisano.");
+      await loadData();
+    } catch (error) {
+      setStatus(error.message);
+    }
+  };
+
+  const updateReservationStatus = async (reservationId, nextStatus) => {
+    if (!reservationId || !nextStatus) return;
+    setStatus("Azuriranje rezervacije...");
+    try {
+      const response = await fetchJson("/api/admin/halls", token, {
+        method: "PATCH",
+        body: JSON.stringify({ id: reservationId, status: nextStatus }),
+      });
+      if (response.reservation) {
+        setActiveReservation(response.reservation);
+      }
+      setStatus("Status ažuriran.");
+      await loadData({ activeReservationId: reservationId });
+    } catch (error) {
+      setStatus(error.message);
+    }
+  };
+
+  const formatDateTime = (value) => {
+    if (!value) return "-";
+    try {
+      return new Date(value).toLocaleString();
+    } catch (err) {
+      return String(value);
+    }
+  };
 
   const reservationsByHall = useMemo(
     () =>
@@ -183,6 +310,7 @@ const AdminPanel = () => {
           <h2>Admin kontrolna tabla</h2>
           <div className="sb-chip-row">
             <span className="sb-chip">Galerija</span>
+            <span className="sb-chip">Izdvojena jela</span>
             <span className="sb-chip sb-chip--ghost">Sale</span>
             <button className="sb-chip sb-chip--ghost" type="button" onClick={loadData}>
               Osvezi
@@ -281,7 +409,7 @@ const AdminPanel = () => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  onChange={(e) => setGalleryFile(e.target.files?.[0] || null)}
                 />
               </label>
               <label>
@@ -348,6 +476,118 @@ const AdminPanel = () => {
         <div className="sb-card sb-admin-card">
           <div className="sb-panel-heading">
             <div>
+              <p className="sb-label">Izdvojena jela</p>
+              <h4 className="sb-m-0">Sekcija "Most popular dishes"</h4>
+            </div>
+            <span className="sb-chip sb-chip--ghost">{featuredDishes.length} jela</span>
+          </div>
+
+          <form className="sb-form sb-admin-form" onSubmit={submitDish}>
+            <div className="sb-form-row">
+              <label>
+                Naslov jela
+                <input
+                  name="title"
+                  value={dishForm.title}
+                  onChange={(e) => setDishForm({ ...dishForm, title: e.target.value })}
+                  required
+                  placeholder="Naziv koji se prikazuje"
+                />
+              </label>
+            </div>
+            <div className="sb-form-row">
+              <label>
+                Kratak opis
+                <textarea
+                  name="description"
+                  rows="2"
+                  value={dishForm.description}
+                  onChange={(e) => setDishForm({ ...dishForm, description: e.target.value })}
+                  placeholder="Tekst ispod naslova (opciono)"
+                />
+              </label>
+            </div>
+            <div className="sb-form-row">
+              <label>
+                Slika URL (ili upload)
+                <input
+                  name="imageUrl"
+                  value={dishForm.imageUrl}
+                  onChange={(e) => setDishForm({ ...dishForm, imageUrl: e.target.value })}
+                  placeholder="https://..."
+                />
+              </label>
+              <label>
+                Upload fajl
+                <input type="file" accept="image/*" onChange={(e) => setDishFile(e.target.files?.[0] || null)} />
+              </label>
+            </div>
+            <div className="sb-form-row">
+              <label>
+                Cena / tag (opciono)
+                <input
+                  name="price"
+                  value={dishForm.price}
+                  onChange={(e) => setDishForm({ ...dishForm, price: e.target.value })}
+                  placeholder="npr. 1200 RSD"
+                />
+              </label>
+              <label>
+                Sort
+                <input
+                  type="number"
+                  name="dishSort"
+                  value={dishForm.sort}
+                  onChange={(e) => setDishForm({ ...dishForm, sort: e.target.value })}
+                />
+              </label>
+            </div>
+            <div className="sb-form-actions">
+              <button type="submit" className="sb-btn sb-btn-2">
+                <span className="sb-icon">
+                  <img src="/img/ui/icons/arrow-2.svg" alt="icon" />
+                </span>
+                <span>{dishForm.id ? "Sacuvaj izmene" : "Dodaj jelo"}</span>
+              </button>
+              {dishForm.id && (
+                <button type="button" className="sb-btn sb-btn-2 sb-btn-gray" onClick={resetDishForm}>
+                  Otkazi izmene
+                </button>
+              )}
+            </div>
+          </form>
+
+          <div className="sb-admin-items-grid sb-admin-dishes">
+            {featuredDishes.map((dish) => (
+              <div key={dish.id} className="sb-admin-item-card sb-admin-dish-card">
+                <div className="sb-admin-thumb">
+                  <img src={dish.imageUrl} alt={dish.title || "jelo"} />
+                </div>
+                <div className="sb-admin-item-body">
+                  <p className="sb-label">Sort {dish.sort}</p>
+                  <h5 className="sb-m-0">{dish.title}</h5>
+                  {dish.description && <p className="sb-text-sm">{dish.description}</p>}
+                  {dish.price && <p className="sb-label sb-label-muted">{dish.price}</p>}
+                </div>
+                <div className="sb-admin-dish-actions">
+                  <button type="button" className="sb-chip" onClick={() => startEditDish(dish)}>
+                    Uredi
+                  </button>
+                  <button type="button" className="sb-chip sb-chip--ghost" onClick={() => deleteDish(dish.id)}>
+                    Obrisi
+                  </button>
+                </div>
+              </div>
+            ))}
+            {featuredDishes.length === 0 && (
+              <div className="sb-alert sb-alert-error">Dodaj jelo da se prikaze na sajtu.</div>
+            )}
+          </div>
+        </div>
+
+        <div className="sb-card sb-admin-card">
+          <div className="sb-panel-heading">
+            <div>
               <p className="sb-label">Sale</p>
               <h4 className="sb-m-0">Rezervacije i blokade</h4>
             </div>
@@ -364,17 +604,22 @@ const AdminPanel = () => {
                 </div>
                 <div className="sb-admin-reservations">
                   {(reservationsByHall[hall] || []).map((r) => (
-                    <div key={r.id} className="sb-admin-reservation-row">
+                    <div
+                      key={r.id}
+                      className={`sb-admin-reservation-row ${activeReservation?.id === r.id ? "is-active" : ""}`}
+                      onClick={() => setActiveReservation(r)}
+                    >
                       <div>
                         <p className="sb-label">
-                          {new Date(r.startAt).toLocaleString()}
+                          {formatDateTime(r.startAt)}
                           {" -> "}
-                          {new Date(r.endAt).toLocaleString()}
+                          {formatDateTime(r.endAt)}
                         </p>
                         <p className="sb-m-0">{r.guestName || "?"}</p>
+                        <p className="sb-text-sm sb-m-0">{r.guestEmail || r.guestPhone || ""}</p>
                         {r.notes && <p className="sb-text-sm">{r.notes}</p>}
                       </div>
-                      <span className="sb-chip sb-chip--ghost">{r.status}</span>
+                      <span className="sb-chip sb-chip--ghost">{STATUS_LABELS[r.status] || r.status}</span>
                     </div>
                   ))}
                 </div>
@@ -388,7 +633,7 @@ const AdminPanel = () => {
                 </div>
                 <div className="sb-admin-reservations">
                   {(blockoutsByHall[hall] || []).map((b) => (
-                    <div key={b.id} className="sb-admin-reservation-row">
+                    <div key={b.id} className="sb-admin-reservation-row is-static">
                       <div>
                         <p className="sb-label">
                           {new Date(b.startDate).toLocaleDateString()}
@@ -403,6 +648,79 @@ const AdminPanel = () => {
               </div>
             ))}
           </div>
+
+          {activeReservation && (
+            <div className="sb-admin-reservation-detail">
+              <div className="sb-panel-heading">
+                <div>
+                  <p className="sb-label">{activeReservation.hallType === "velika" ? "Svecana sala" : "Mala sala"}</p>
+                  <h4 className="sb-m-0">{activeReservation.guestName || "Rezervacija"}</h4>
+                  <p className="sb-label sb-label-muted">
+                    Status: {STATUS_LABELS[activeReservation.status] || activeReservation.status}
+                  </p>
+                  <p className="sb-label sb-label-muted">
+                    Azurirano: {formatDateTime(activeReservation.updatedAt || activeReservation.createdAt)}
+                  </p>
+                </div>
+                <div className="sb-chip sb-chip--ghost">ID #{activeReservation.id}</div>
+              </div>
+
+              <div className="sb-reservation-meta">
+                <div>
+                  <p className="sb-label">Vreme</p>
+                  <p className="sb-m-0">{formatDateTime(activeReservation.startAt)}</p>
+                  <p className="sb-label sb-label-muted">do {formatDateTime(activeReservation.endAt)}</p>
+                </div>
+                <div>
+                  <p className="sb-label">Kontakt</p>
+                  <p className="sb-m-0">{activeReservation.guestEmail || "—"}</p>
+                  {activeReservation.guestPhone && <p className="sb-m-0">{activeReservation.guestPhone}</p>}
+                </div>
+                <div>
+                  <p className="sb-label">Napomena gosta</p>
+                  <p className="sb-m-0">{activeReservation.notes || "Nema napomene."}</p>
+                </div>
+              </div>
+
+              <div className="sb-reservation-actions">
+                <button
+                  type="button"
+                  className="sb-btn sb-btn-2"
+                  onClick={() => updateReservationStatus(activeReservation.id, "confirmed")}
+                >
+                  Potvrdi
+                </button>
+                <button
+                  type="button"
+                  className="sb-btn sb-btn-2 sb-btn-gray"
+                  onClick={() => updateReservationStatus(activeReservation.id, "pending")}
+                >
+                  Vrati na cekanje
+                </button>
+                <button
+                  type="button"
+                  className="sb-btn sb-btn-2 sb-btn-gray"
+                  onClick={() => updateReservationStatus(activeReservation.id, "cancelled")}
+                >
+                  Otkazi
+                </button>
+                <button
+                  type="button"
+                  className="sb-btn sb-btn-2 sb-btn-danger"
+                  onClick={() => updateReservationStatus(activeReservation.id, "rejected")}
+                >
+                  Odbij
+                </button>
+                <button
+                  type="button"
+                  className="sb-btn sb-btn-2 sb-btn-gray"
+                  onClick={() => setActiveReservation(null)}
+                >
+                  Zatvori pregled
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

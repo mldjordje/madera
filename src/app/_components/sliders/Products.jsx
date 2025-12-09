@@ -9,13 +9,43 @@ import Link from "next/link";
 import MenuItem from "@components/menu/MenuItem";
 import ProductItem from "@components/products/ProductItem";
 
-const ProductsSlider = ( {items, title, description, button = {}, slidesPerView, paddingTop = 0, bgType, itemType} ) => {
-  var moreType = '';
+const FeaturedDishCard = ({ item }) => {
+  const image = item.imageUrl || item.image;
+  return (
+    <div className="sb-featured-card">
+      {image && (
+        <div className="sb-featured-thumb">
+          <img src={image} alt={item.title || "Izdvojeno jelo"} />
+        </div>
+      )}
+      <div className="sb-featured-body">
+        <div className="sb-featured-top">
+          <h4 className="sb-card-title sb-m-0">{item.title}</h4>
+          {item.price && <span className="sb-chip sb-chip--ghost">{item.price}</span>}
+        </div>
+        {item.description && <p className="sb-text sb-m-0">{item.description}</p>}
+      </div>
+    </div>
+  );
+};
 
-  if ( slidesPerView == 3 ) {
-    moreType = 2;
-  }
-  
+const ProductsSlider = ( {items, title, description, button = {}, slidesPerView, paddingTop = 0, bgType, itemType} ) => {
+  const moreType = slidesPerView == 3 ? 2 : '';
+  const safeItems = Array.isArray(items) ? items : [];
+  const limitedItems = slidesPerView == 4 ? safeItems.slice(0, 8) : safeItems.slice(0, 6);
+
+  const renderItem = (item, key) => {
+    if (itemType === "product") {
+      return <ProductItem item={item} index={key} marginBottom={0} moreType={moreType} />;
+    }
+
+    if (itemType === "featured") {
+      return <FeaturedDishCard item={item} />;
+    }
+
+    return <MenuItem item={item} index={key} marginBottom={0} />;
+  };
+
   return (
     <>
     {/* short menu */}
@@ -60,13 +90,9 @@ const ProductsSlider = ( {items, title, description, button = {}, slidesPerView,
                 {...SliderProps.shortMenuSlider4}
                 className={`swiper-container sb-short-menu-slider-4i`}
             >
-                {items.slice(0, 8).map((item, key) => (
+                {limitedItems.map((item, key) => (
                 <SwiperSlide className="swiper-slide" key={`products-slider-item-${key}`}>
-                    {itemType == "product" ? (
-                    <ProductItem item={item} index={key} marginBottom={0} moreType={moreType} />
-                    ) : (
-                    <MenuItem item={item} index={key} marginBottom={0} />
-                    )}
+                    {renderItem(item, key)}
                 </SwiperSlide>
                 ))}
             </Swiper>
@@ -77,13 +103,9 @@ const ProductsSlider = ( {items, title, description, button = {}, slidesPerView,
                 {...SliderProps.shortMenuSlider3}
                 className={`swiper-container sb-short-menu-slider-3i`}
             >
-                {items.slice(0, 6).map((item, key) => (
+                {limitedItems.map((item, key) => (
                 <SwiperSlide className="swiper-slide" key={`products-slider-item-${key}`}>
-                    {itemType == "product" ? (
-                    <ProductItem item={item} index={key} marginBottom={0} moreType={moreType} />
-                    ) : (
-                    <MenuItem item={item} index={key} marginBottom={0} />
-                    )}
+                    {renderItem(item, key)}
                 </SwiperSlide>
                 ))}
             </Swiper>

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getDbClient, requireAdmin } from "../_utils";
 
+const ALLOWED_STATUSES = ["pending", "confirmed", "rejected", "cancelled"];
+
 const mapReservation = (row) => ({
   id: row.id,
   hallType: row.hall_type,
@@ -59,3 +61,45 @@ export async function GET(request) {
   }
 }
 
+export async function PATCH(request) {
+  const auth = requireAdmin(request);
+  if (!auth.ok) return auth.response;
+
+  const payload = await request.json();
+  const { id, status } = payload || {};
+  const reservationId = Number(id);
+  const nextStatus = typeof status === "string" ? status.toLowerCase() : "";
+
+  if (!reservationId) {
+    return NextResponse.json({ error: "Reservation ID is required." }, { status: 400 });
+  }
+
+  if (!ALLOWED_STATUSES.includes(nextStatus)) {
+    return NextResponse.json({ error: "Status mora biti pending, confirmed, rejected ili cancelled." }, { status: 400 });
+  }
+
+  const client = getDbClient();
+  await client.connect();
+
+  try {
+    const result = await client.query(
+      `UPDATE hall_reservations
+       SET status = $2,
+           updated_at = NOW()
+       WHERE id = $1
+       RETURNING id, hall_type, start_at, end_at, guest_name, guest_email, guest_phone, status, notes, created_at, updated_at`,
+      [reservationId, nextStatus]
+    );
+
+    if (result.rowCount === 0) {
+      return NextResponse.json({ error: "Rezervacija nije pronadjena." }, { status: 404 });
+    }
+
+    return NextResponse.json({ ok: true, reservation: mapReservation(result.rows[0]) });
+  } catch (error) {
+    console.error("Admin halls PATCH failed:", error);
+    return NextResponse.json({ error: "Nije uspelo azuriranje statusa." }, { status: 500 });
+  } finally {
+    await client.end();
+  }
+}

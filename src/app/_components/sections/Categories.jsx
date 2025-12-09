@@ -45,7 +45,11 @@ const CategoriesSection = ({ heading = 1, paddingTop = 0, type = 1, columns }) =
                         <a href={item.link} className={type == 1 ? "sb-categorie-card sb-categorie-card-2 sb-mb-30" : "sb-categorie-card sb-mb-30"}>
                             <div className="sb-card-body">
                             <div className="sb-category-icon">
-                                <img src={item.image} alt={item.title} />
+                                {item.icon ? (
+                                  <i className={`sb-category-fa ${item.icon}`} aria-hidden="true"></i>
+                                ) : (
+                                  <img src={item.image} alt={item.title} />
+                                )}
                             </div>
                             <div className="sb-card-descr">
                                 <h3 className="sb-mb-10">{item.title}</h3>

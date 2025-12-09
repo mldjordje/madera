@@ -26,6 +26,21 @@ CREATE TABLE IF NOT EXISTS gallery_items (
 CREATE INDEX IF NOT EXISTS idx_gallery_items_category_sort
   ON gallery_items (category_id, sort, id);
 
+-- Featured dishes (homepage "most popular")
+CREATE TABLE IF NOT EXISTS featured_dishes (
+  id BIGSERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  image_url TEXT NOT NULL,
+  price TEXT,
+  sort INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_featured_dishes_sort
+  ON featured_dishes (sort, id);
+
 -- Hall reservations and blackout periods
 CREATE TABLE IF NOT EXISTS hall_blackouts (
   id BIGSERIAL PRIMARY KEY,

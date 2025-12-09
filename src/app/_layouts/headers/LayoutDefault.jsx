@@ -5,15 +5,11 @@ import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 
 import AppData from "@data/app.json";
-import CartData from "@data/cart.json";
-
-import MiniCart from "@layouts/cart/MiniCart";
 import MiniSidebar from "@layouts/sidebar/MiniSidebar";
 
 const DefaultHeader = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [openSubMenu, setOpenSubMenu] = useState(false);
-  const [miniCart, setMiniCart] = useState(false);
   const [miniSidebar, setMiniSidebar] = useState(false);
   const asPath = usePathname();
 
@@ -33,7 +29,6 @@ const DefaultHeader = () => {
   useEffect(() => {
     // close mobile menu
     setMobileMenu(false);
-    setMiniCart(false);
     setMiniSidebar(false);
     setOpenSubMenu(false);
   }, [asPath]);
@@ -74,14 +69,6 @@ const DefaultHeader = () => {
                         </ul>
                     </nav>
                     <div className="sb-buttons-frame">
-                    {/* button */}
-                    <div className={`sb-btn sb-btn-2 sb-btn-gray sb-btn-icon sb-m-0 sb-btn-cart ${miniCart ? "sb-active" : ""}`} onClick={() => setMiniCart(!miniCart)}>
-                        <span className="sb-icon">
-                            <img src="/img/ui/icons/cart.svg" alt="icon" />
-                        </span>
-                        <i className="sb-cart-number">{CartData.total}</i>
-                    </div>
-                    {/* button end */}
                     {/* menu btn */}
                     <div className={`sb-menu-btn ${mobileMenu ? "sb-active" : ""}`} onClick={() => setMobileMenu(!mobileMenu)}><span></span></div>
                     {/* info btn */}
@@ -95,11 +82,6 @@ const DefaultHeader = () => {
                 <MiniSidebar />
             </div>
             {/* info bar end */}
-            {/* minicart */}
-            <div className={`sb-minicart ${miniCart ? "sb-active" : "" }`}>
-                <MiniCart />
-            </div>
-            {/* minicart end */}
         </div>
         {/* top bar end */}
     </>

@@ -1291,6 +1291,19 @@ categories
         width: 90px;
         transition: $tr;
       }
+
+      & .sb-category-fa {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        font-size: 42px;
+        color: $c1;
+        transition: $tr;
+        z-index: 1;
+      }
     }
   }
 
@@ -1304,6 +1317,11 @@ categories
 
         & img {
           transform: translateY(-10px);
+        }
+
+        & .sb-category-fa {
+          transform: translateY(-6px);
+          color: $c5;
         }
       }
     }
@@ -1330,6 +1348,10 @@ categories
 
         & img {
           width: 60px;
+        }
+
+        & .sb-category-fa {
+          font-size: 28px;
         }
       }
 

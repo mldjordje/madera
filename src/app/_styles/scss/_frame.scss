@@ -133,13 +133,14 @@ navigation
 
       & a {
         position: relative;
-        padding: 0 30px;
+        padding: 0 24px;
         display: inline-block;
         font-weight: 400;
         height: 100%;
         color: $c1;
         font-size: 14px;
         transition: $tr;
+        white-space: nowrap;
 
         &:after,
         &:before {
