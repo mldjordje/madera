@@ -16,9 +16,6 @@ const Hero = ( { type } ) => {
             {/* banner */}
             <section className="sb-banner sb-lux-hero sb-soft-reveal">
                 <div className="sb-hero-media sb-hero-media--mobile" aria-hidden="true">
-                    <img src={Data.image.url || "/img/1.jpg"} alt={Data.image.alt || "Madera"} />
-                </div>
-                <div className="sb-hero-media sb-hero-media--desktop" aria-hidden="true">
                     <div className="sb-hero-video-wrap">
                         <iframe
                             className="sb-hero-video"
@@ -29,6 +26,11 @@ const Hero = ( { type } ) => {
                             allowFullScreen={false}
                         />
                         <div className="sb-hero-video-gradient"></div>
+                    </div>
+                </div>
+                <div className="sb-hero-media sb-hero-media--desktop" aria-hidden="true">
+                    <div className="sb-hero-image-wrap">
+                        <img src={Data.image.url || '/img/1.jpg'} alt={Data.image.alt || 'Madera'} />
                     </div>
                 </div>
                 <div className="container">
