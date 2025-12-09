@@ -4,11 +4,17 @@ import React, { useEffect, useMemo, useState } from "react";
 
 const STORAGE_KEY = "madera_admin_token";
 const STATUS_LABELS = {
-  pending: "Na čekanju",
-  confirmed: "Potvrđeno",
+  pending: "Na cekanju",
+  confirmed: "Potvrdjeno",
   rejected: "Odbijeno",
   cancelled: "Otkazano",
 };
+
+const SECTIONS = [
+  { id: "gallery", title: "Galerija", description: "Slike i kategorije" },
+  { id: "dishes", title: "Izdvojena jela", description: "Most popular slider" },
+  { id: "halls", title: "Sale", description: "Rezervacije i blokade" },
+];
 
 async function fetchJson(url, token, options = {}) {
   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
@@ -51,6 +57,7 @@ const AdminPanel = () => {
     sort: 0,
   });
   const [activeReservation, setActiveReservation] = useState(null);
+  const [activeSection, setActiveSection] = useState("gallery");
 
   const logout = (message = "") => {
     setToken("");
@@ -183,7 +190,7 @@ const AdminPanel = () => {
         body: JSON.stringify(payload),
       });
 
-      setStatus("Jelo je sačuvano.");
+      setStatus("Jelo je sacuvano.");
       resetDishForm();
       await loadData();
     } catch (error) {
@@ -235,7 +242,7 @@ const AdminPanel = () => {
       if (response.reservation) {
         setActiveReservation(response.reservation);
       }
-      setStatus("Status ažuriran.");
+      setStatus("Status azuriran.");
       await loadData({ activeReservationId: reservationId });
     } catch (error) {
       setStatus(error.message);
@@ -277,6 +284,12 @@ const AdminPanel = () => {
     [halls]
   );
 
+  const sectionStats = {
+    gallery: `${gallery.items?.length || 0} slika`,
+    dishes: `${featuredDishes?.length || 0} jela`,
+    halls: `${halls.reservations?.length || 0} rez.`,
+  };
+
   if (!token) {
     return (
       <div className="sb-admin-wrapper">
@@ -308,11 +321,24 @@ const AdminPanel = () => {
       <div className="container sb-admin-grid">
         <div className="sb-admin-header">
           <h2>Admin kontrolna tabla</h2>
-          <div className="sb-chip-row">
-            <span className="sb-chip">Galerija</span>
-            <span className="sb-chip">Izdvojena jela</span>
-            <span className="sb-chip sb-chip--ghost">Sale</span>
-            <button className="sb-chip sb-chip--ghost" type="button" onClick={loadData}>
+          <div className="sb-admin-switcher">
+            {SECTIONS.map((section) => (
+              <button
+                type="button"
+                key={section.id}
+                className={`sb-admin-tile ${activeSection === section.id ? "is-active" : ""}`}
+                onClick={() => setActiveSection(section.id)}
+              >
+                <div>
+                  <p className="sb-label">{section.title}</p>
+                  <h4 className="sb-m-0">{section.description}</h4>
+                </div>
+                <span className="sb-chip sb-chip--ghost">{sectionStats[section.id]}</span>
+              </button>
+            ))}
+          </div>
+          <div className="sb-chip-row sb-mt-10">
+            <button className="sb-chip" type="button" onClick={loadData}>
               Osvezi
             </button>
             <button className="sb-chip sb-chip--ghost" type="button" onClick={() => logout()}>
@@ -322,406 +348,419 @@ const AdminPanel = () => {
           {status && <div className="sb-alert sb-alert-error sb-mt-10">{status}</div>}
         </div>
 
-        <div className="sb-card sb-admin-card">
-          <div className="sb-panel-heading">
-            <div>
-              <p className="sb-label">Galerija</p>
-              <h4 className="sb-m-0">Dodaj sliku</h4>
+        {activeSection === "gallery" && (
+          <div className="sb-card sb-admin-card">
+            <div className="sb-panel-heading">
+              <div>
+                <p className="sb-label">Galerija</p>
+                <h4 className="sb-m-0">Dodaj sliku</h4>
+              </div>
+              <span className="sb-chip sb-chip--ghost">{gallery.categories?.length || 0} kategorija</span>
             </div>
-          </div>
-          <form className="sb-form sb-admin-form" onSubmit={submit}>
-            <div className="sb-form-row">
-              <label>
-                Kategorija
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setSelectedCategory(value);
-                    if (value === "new") {
-                      setForm((prev) => ({
-                        ...prev,
-                        categorySlug: "",
-                        categoryTitle: "",
-                        categoryDescription: "",
-                      }));
-                    } else {
-                      const cat = gallery.categories.find((c) => c.slug === value);
-                      if (cat) {
+            <form className="sb-form sb-admin-form" onSubmit={submit}>
+              <div className="sb-form-row">
+                <label>
+                  Kategorija
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setSelectedCategory(value);
+                      if (value === "new") {
                         setForm((prev) => ({
                           ...prev,
-                          categorySlug: cat.slug,
-                          categoryTitle: cat.title,
-                          categoryDescription: cat.description || "",
+                          categorySlug: "",
+                          categoryTitle: "",
+                          categoryDescription: "",
                         }));
+                      } else {
+                        const cat = gallery.categories.find((c) => c.slug === value);
+                        if (cat) {
+                          setForm((prev) => ({
+                            ...prev,
+                            categorySlug: cat.slug,
+                            categoryTitle: cat.title,
+                            categoryDescription: cat.description || "",
+                          }));
+                        }
                       }
-                    }
-                  }}
-                >
-                  {gallery.categories.map((cat) => (
-                    <option key={cat.slug} value={cat.slug}>
-                      {cat.title || cat.slug}
-                    </option>
-                  ))}
-                  <option value="new">+ Nova kategorija</option>
-                </select>
-              </label>
-            </div>
-            <div className="sb-form-row">
-              <label>
-                Category slug
-                <input
-                  name="categorySlug"
-                  value={form.categorySlug}
-                  onChange={(e) => setForm({ ...form, categorySlug: e.target.value })}
-                  required
-                  disabled={selectedCategory !== "new"}
-                />
-              </label>
-              <label>
-                Category title
-                <input
-                  name="categoryTitle"
-                  value={form.categoryTitle}
-                  onChange={(e) => setForm({ ...form, categoryTitle: e.target.value })}
-                  disabled={selectedCategory !== "new"}
-                />
-              </label>
-            </div>
-            <div className="sb-form-row">
-              <label>
-                Category description
-                <input
-                  name="categoryDescription"
-                  value={form.categoryDescription}
-                  onChange={(e) => setForm({ ...form, categoryDescription: e.target.value })}
-                  disabled={selectedCategory !== "new"}
-                />
-              </label>
-            </div>
-            <div className="sb-form-row">
-              <label>
-                Slika URL (opciono ako upload)
-                <input name="url" value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })} />
-              </label>
-              <label>
-                Upload fajl
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setGalleryFile(e.target.files?.[0] || null)}
-                />
-              </label>
-              <label>
-                Orientation
-                <select
-                  name="orientation"
-                  value={form.orientation}
-                  onChange={(e) => setForm({ ...form, orientation: e.target.value })}
-                >
-                  <option value="h">Horizontal</option>
-                  <option value="v">Vertical</option>
-                </select>
-              </label>
-              <label>
-                Sort
-                <input type="number" name="sort" value={form.sort} onChange={(e) => setForm({ ...form, sort: e.target.value })} />
-              </label>
-            </div>
-            <div className="sb-form-row">
-              <label>
-                Alt text
-                <input name="alt" value={form.alt} onChange={(e) => setForm({ ...form, alt: e.target.value })} />
-              </label>
-            </div>
-            <button type="submit" className="sb-btn sb-btn-2">
-              <span className="sb-icon">
-                <img src="/img/ui/icons/arrow-2.svg" alt="icon" />
-              </span>
-              <span>Sacuvaj</span>
-            </button>
-          </form>
-
-          <div className="sb-admin-list">
-            {groupedItems.map((cat) => (
-              <div key={cat.id} className="sb-admin-list-item">
-                <div className="sb-admin-list-header">
-                  <div>
-                    <p className="sb-label">{cat.slug}</p>
-                    <h5 className="sb-m-0">{cat.title}</h5>
-                    {cat.description && <p className="sb-text-sm">{cat.description}</p>}
-                  </div>
-                  <span className="sb-chip sb-chip--ghost">{cat.items.length} slika</span>
-                </div>
-                <div className="sb-admin-items-grid">
-                  {cat.items.map((item) => (
-                    <div key={item.id} className="sb-admin-item-card">
-                      <div className="sb-admin-thumb">
-                        <img src={item.url} alt={item.alt || "img"} />
-                      </div>
-                      <div className="sb-admin-item-body">
-                        <p className="sb-label">
-                          {item.orientation === "h" ? "Horizontal" : "Vertical"} - sort {item.sort}
-                        </p>
-                        <p className="sb-m-0">{item.alt || "-"}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    }}
+                  >
+                    {gallery.categories.map((cat) => (
+                      <option key={cat.slug} value={cat.slug}>
+                        {cat.title || cat.slug}
+                      </option>
+                    ))}
+                    <option value="new">+ Nova kategorija</option>
+                  </select>
+                </label>
               </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="sb-card sb-admin-card">
-          <div className="sb-panel-heading">
-            <div>
-              <p className="sb-label">Izdvojena jela</p>
-              <h4 className="sb-m-0">Sekcija "Most popular dishes"</h4>
-            </div>
-            <span className="sb-chip sb-chip--ghost">{featuredDishes.length} jela</span>
-          </div>
-
-          <form className="sb-form sb-admin-form" onSubmit={submitDish}>
-            <div className="sb-form-row">
-              <label>
-                Naslov jela
-                <input
-                  name="title"
-                  value={dishForm.title}
-                  onChange={(e) => setDishForm({ ...dishForm, title: e.target.value })}
-                  required
-                  placeholder="Naziv koji se prikazuje"
-                />
-              </label>
-            </div>
-            <div className="sb-form-row">
-              <label>
-                Kratak opis
-                <textarea
-                  name="description"
-                  rows="2"
-                  value={dishForm.description}
-                  onChange={(e) => setDishForm({ ...dishForm, description: e.target.value })}
-                  placeholder="Tekst ispod naslova (opciono)"
-                />
-              </label>
-            </div>
-            <div className="sb-form-row">
-              <label>
-                Slika URL (ili upload)
-                <input
-                  name="imageUrl"
-                  value={dishForm.imageUrl}
-                  onChange={(e) => setDishForm({ ...dishForm, imageUrl: e.target.value })}
-                  placeholder="https://..."
-                />
-              </label>
-              <label>
-                Upload fajl
-                <input type="file" accept="image/*" onChange={(e) => setDishFile(e.target.files?.[0] || null)} />
-              </label>
-            </div>
-            <div className="sb-form-row">
-              <label>
-                Cena / tag (opciono)
-                <input
-                  name="price"
-                  value={dishForm.price}
-                  onChange={(e) => setDishForm({ ...dishForm, price: e.target.value })}
-                  placeholder="npr. 1200 RSD"
-                />
-              </label>
-              <label>
-                Sort
-                <input
-                  type="number"
-                  name="dishSort"
-                  value={dishForm.sort}
-                  onChange={(e) => setDishForm({ ...dishForm, sort: e.target.value })}
-                />
-              </label>
-            </div>
-            <div className="sb-form-actions">
+              <div className="sb-form-row">
+                <label>
+                  Category slug
+                  <input
+                    name="categorySlug"
+                    value={form.categorySlug}
+                    onChange={(e) => setForm({ ...form, categorySlug: e.target.value })}
+                    required
+                    disabled={selectedCategory !== "new"}
+                  />
+                </label>
+                <label>
+                  Category title
+                  <input
+                    name="categoryTitle"
+                    value={form.categoryTitle}
+                    onChange={(e) => setForm({ ...form, categoryTitle: e.target.value })}
+                    disabled={selectedCategory !== "new"}
+                  />
+                </label>
+              </div>
+              <div className="sb-form-row">
+                <label>
+                  Category description
+                  <input
+                    name="categoryDescription"
+                    value={form.categoryDescription}
+                    onChange={(e) => setForm({ ...form, categoryDescription: e.target.value })}
+                    disabled={selectedCategory !== "new"}
+                  />
+                </label>
+              </div>
+              <div className="sb-form-row">
+                <label>
+                  Slika URL (opciono ako upload)
+                  <input name="url" value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })} />
+                </label>
+                <label>
+                  Upload fajl
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setGalleryFile(e.target.files?.[0] || null)}
+                  />
+                </label>
+                <label>
+                  Orientation
+                  <select
+                    name="orientation"
+                    value={form.orientation}
+                    onChange={(e) => setForm({ ...form, orientation: e.target.value })}
+                  >
+                    <option value="h">Horizontal</option>
+                    <option value="v">Vertical</option>
+                  </select>
+                </label>
+                <label>
+                  Sort
+                  <input
+                    type="number"
+                    name="sort"
+                    value={form.sort}
+                    onChange={(e) => setForm({ ...form, sort: e.target.value })}
+                  />
+                </label>
+              </div>
+              <div className="sb-form-row">
+                <label>
+                  Alt text
+                  <input name="alt" value={form.alt} onChange={(e) => setForm({ ...form, alt: e.target.value })} />
+                </label>
+              </div>
               <button type="submit" className="sb-btn sb-btn-2">
                 <span className="sb-icon">
                   <img src="/img/ui/icons/arrow-2.svg" alt="icon" />
                 </span>
-                <span>{dishForm.id ? "Sacuvaj izmene" : "Dodaj jelo"}</span>
+                <span>Sacuvaj</span>
               </button>
-              {dishForm.id && (
-                <button type="button" className="sb-btn sb-btn-2 sb-btn-gray" onClick={resetDishForm}>
-                  Otkazi izmene
+            </form>
+
+            <div className="sb-admin-list">
+              {groupedItems.map((cat) => (
+                <div key={cat.id} className="sb-admin-list-item">
+                  <div className="sb-admin-list-header">
+                    <div>
+                      <p className="sb-label">{cat.slug}</p>
+                      <h5 className="sb-m-0">{cat.title}</h5>
+                      {cat.description && <p className="sb-text-sm">{cat.description}</p>}
+                    </div>
+                    <span className="sb-chip sb-chip--ghost">{cat.items.length} slika</span>
+                  </div>
+                  <div className="sb-admin-items-grid">
+                    {cat.items.map((item) => (
+                      <div key={item.id} className="sb-admin-item-card">
+                        <div className="sb-admin-thumb">
+                          <img src={item.url} alt={item.alt || "img"} />
+                        </div>
+                        <div className="sb-admin-item-body">
+                          <p className="sb-label">
+                            {item.orientation === "h" ? "Horizontal" : "Vertical"} - sort {item.sort}
+                          </p>
+                          <p className="sb-m-0">{item.alt || "-"}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeSection === "dishes" && (
+          <div className="sb-card sb-admin-card">
+            <div className="sb-panel-heading">
+              <div>
+                <p className="sb-label">Izdvojena jela</p>
+                <h4 className="sb-m-0">Sekcija "Most popular dishes"</h4>
+              </div>
+              <span className="sb-chip sb-chip--ghost">{featuredDishes.length} jela</span>
+            </div>
+
+            <form className="sb-form sb-admin-form" onSubmit={submitDish}>
+              <div className="sb-form-row">
+                <label>
+                  Naslov jela
+                  <input
+                    name="title"
+                    value={dishForm.title}
+                    onChange={(e) => setDishForm({ ...dishForm, title: e.target.value })}
+                    required
+                    placeholder="Naziv koji se prikazuje"
+                  />
+                </label>
+              </div>
+              <div className="sb-form-row">
+                <label>
+                  Kratak opis
+                  <textarea
+                    name="description"
+                    rows="2"
+                    value={dishForm.description}
+                    onChange={(e) => setDishForm({ ...dishForm, description: e.target.value })}
+                    placeholder="Tekst ispod naslova (opciono)"
+                  />
+                </label>
+              </div>
+              <div className="sb-form-row">
+                <label>
+                  Slika URL (ili upload)
+                  <input
+                    name="imageUrl"
+                    value={dishForm.imageUrl}
+                    onChange={(e) => setDishForm({ ...dishForm, imageUrl: e.target.value })}
+                    placeholder="https://..."
+                  />
+                </label>
+                <label>
+                  Upload fajl
+                  <input type="file" accept="image/*" onChange={(e) => setDishFile(e.target.files?.[0] || null)} />
+                </label>
+              </div>
+              <div className="sb-form-row">
+                <label>
+                  Cena / tag (opciono)
+                  <input
+                    name="price"
+                    value={dishForm.price}
+                    onChange={(e) => setDishForm({ ...dishForm, price: e.target.value })}
+                    placeholder="npr. 1200 RSD"
+                  />
+                </label>
+                <label>
+                  Sort
+                  <input
+                    type="number"
+                    name="dishSort"
+                    value={dishForm.sort}
+                    onChange={(e) => setDishForm({ ...dishForm, sort: e.target.value })}
+                  />
+                </label>
+              </div>
+              <div className="sb-form-actions">
+                <button type="submit" className="sb-btn sb-btn-2">
+                  <span className="sb-icon">
+                    <img src="/img/ui/icons/arrow-2.svg" alt="icon" />
+                  </span>
+                  <span>{dishForm.id ? "Sacuvaj izmene" : "Dodaj jelo"}</span>
                 </button>
+                {dishForm.id && (
+                  <button type="button" className="sb-btn sb-btn-2 sb-btn-gray" onClick={resetDishForm}>
+                    Otkazi izmene
+                  </button>
+                )}
+              </div>
+            </form>
+
+            <div className="sb-admin-items-grid sb-admin-dishes">
+              {featuredDishes.map((dish) => (
+                <div key={dish.id} className="sb-admin-item-card sb-admin-dish-card">
+                  <div className="sb-admin-thumb">
+                    <img src={dish.imageUrl} alt={dish.title || "jelo"} />
+                  </div>
+                  <div className="sb-admin-item-body">
+                    <p className="sb-label">Sort {dish.sort}</p>
+                    <h5 className="sb-m-0">{dish.title}</h5>
+                    {dish.description && <p className="sb-text-sm">{dish.description}</p>}
+                    {dish.price && <p className="sb-label sb-label-muted">{dish.price}</p>}
+                  </div>
+                  <div className="sb-admin-dish-actions">
+                    <button type="button" className="sb-chip" onClick={() => startEditDish(dish)}>
+                      Uredi
+                    </button>
+                    <button type="button" className="sb-chip sb-chip--ghost" onClick={() => deleteDish(dish.id)}>
+                      Obrisi
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {featuredDishes.length === 0 && (
+                <div className="sb-alert sb-alert-error">Dodaj jelo da se prikaze na sajtu.</div>
               )}
             </div>
-          </form>
+          </div>
+        )}
 
-          <div className="sb-admin-items-grid sb-admin-dishes">
-            {featuredDishes.map((dish) => (
-              <div key={dish.id} className="sb-admin-item-card sb-admin-dish-card">
-                <div className="sb-admin-thumb">
-                  <img src={dish.imageUrl} alt={dish.title || "jelo"} />
+        {activeSection === "halls" && (
+          <div className="sb-card sb-admin-card">
+            <div className="sb-panel-heading">
+              <div>
+                <p className="sb-label">Sale</p>
+                <h4 className="sb-m-0">Rezervacije i blokade</h4>
+              </div>
+              <span className="sb-chip sb-chip--ghost">{halls.reservations?.length || 0} rezervacija</span>
+            </div>
+            <div className="sb-admin-halls">
+              {["velika", "mala"].map((hall) => (
+                <div key={hall} className="sb-admin-hall-column">
+                  <div className="sb-admin-list-header">
+                    <div>
+                      <p className="sb-label">{hall === "velika" ? "Svecana" : "Mala"}</p>
+                      <h5 className="sb-m-0">Rezervacije</h5>
+                    </div>
+                    <span className="sb-chip sb-chip--ghost">{reservationsByHall[hall]?.length || 0}</span>
+                  </div>
+                  <div className="sb-admin-reservations">
+                    {(reservationsByHall[hall] || []).map((r) => (
+                      <div
+                        key={r.id}
+                        className={`sb-admin-reservation-row ${activeReservation?.id === r.id ? "is-active" : ""}`}
+                        onClick={() => setActiveReservation(r)}
+                      >
+                        <div>
+                          <p className="sb-label">
+                            {formatDateTime(r.startAt)}
+                            {" -> "}
+                            {formatDateTime(r.endAt)}
+                          </p>
+                          <p className="sb-m-0">{r.guestName || "?"}</p>
+                          <p className="sb-text-sm sb-m-0">{r.guestEmail || r.guestPhone || ""}</p>
+                          {r.notes && <p className="sb-text-sm">{r.notes}</p>}
+                        </div>
+                        <span className="sb-chip sb-chip--ghost">{STATUS_LABELS[r.status] || r.status}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="sb-admin-list-header">
+                    <div>
+                      <p className="sb-label">Blokade</p>
+                      <h5 className="sb-m-0">Datumi</h5>
+                    </div>
+                    <span className="sb-chip sb-chip--ghost">{blockoutsByHall[hall]?.length || 0}</span>
+                  </div>
+                  <div className="sb-admin-reservations">
+                    {(blockoutsByHall[hall] || []).map((b) => (
+                      <div key={b.id} className="sb-admin-reservation-row is-static">
+                        <div>
+                          <p className="sb-label">
+                            {new Date(b.startDate).toLocaleDateString()}
+                            {" -> "}
+                            {new Date(b.endDate).toLocaleDateString()}
+                          </p>
+                          <p className="sb-m-0">{b.reason || "Blokirano"}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="sb-admin-item-body">
-                  <p className="sb-label">Sort {dish.sort}</p>
-                  <h5 className="sb-m-0">{dish.title}</h5>
-                  {dish.description && <p className="sb-text-sm">{dish.description}</p>}
-                  {dish.price && <p className="sb-label sb-label-muted">{dish.price}</p>}
+              ))}
+            </div>
+
+            {activeReservation && (
+              <div className="sb-admin-reservation-detail">
+                <div className="sb-panel-heading">
+                  <div>
+                    <p className="sb-label">{activeReservation.hallType === "velika" ? "Svecana sala" : "Mala sala"}</p>
+                    <h4 className="sb-m-0">{activeReservation.guestName || "Rezervacija"}</h4>
+                    <p className="sb-label sb-label-muted">
+                      Status: {STATUS_LABELS[activeReservation.status] || activeReservation.status}
+                    </p>
+                    <p className="sb-label sb-label-muted">
+                      Azurirano: {formatDateTime(activeReservation.updatedAt || activeReservation.createdAt)}
+                    </p>
+                  </div>
+                  <div className="sb-chip sb-chip--ghost">ID #{activeReservation.id}</div>
                 </div>
-                <div className="sb-admin-dish-actions">
-                  <button type="button" className="sb-chip" onClick={() => startEditDish(dish)}>
-                    Uredi
+
+                <div className="sb-reservation-meta">
+                  <div>
+                    <p className="sb-label">Vreme</p>
+                    <p className="sb-m-0">{formatDateTime(activeReservation.startAt)}</p>
+                    <p className="sb-label sb-label-muted">do {formatDateTime(activeReservation.endAt)}</p>
+                  </div>
+                  <div>
+                    <p className="sb-label">Kontakt</p>
+                    <p className="sb-m-0">{activeReservation.guestEmail || "-"}</p>
+                    {activeReservation.guestPhone && <p className="sb-m-0">{activeReservation.guestPhone}</p>}
+                  </div>
+                  <div>
+                    <p className="sb-label">Napomena gosta</p>
+                    <p className="sb-m-0">{activeReservation.notes || "Nema napomene."}</p>
+                  </div>
+                </div>
+
+                <div className="sb-reservation-actions">
+                  <button
+                    type="button"
+                    className="sb-btn sb-btn-2"
+                    onClick={() => updateReservationStatus(activeReservation.id, "confirmed")}
+                  >
+                    Potvrdi
                   </button>
-                  <button type="button" className="sb-chip sb-chip--ghost" onClick={() => deleteDish(dish.id)}>
-                    Obrisi
+                  <button
+                    type="button"
+                    className="sb-btn sb-btn-2 sb-btn-gray"
+                    onClick={() => updateReservationStatus(activeReservation.id, "pending")}
+                  >
+                    Vrati na cekanje
+                  </button>
+                  <button
+                    type="button"
+                    className="sb-btn sb-btn-2 sb-btn-gray"
+                    onClick={() => updateReservationStatus(activeReservation.id, "cancelled")}
+                  >
+                    Otkazi
+                  </button>
+                  <button
+                    type="button"
+                    className="sb-btn sb-btn-2 sb-btn-danger"
+                    onClick={() => updateReservationStatus(activeReservation.id, "rejected")}
+                  >
+                    Odbij
+                  </button>
+                  <button
+                    type="button"
+                    className="sb-btn sb-btn-2 sb-btn-gray"
+                    onClick={() => setActiveReservation(null)}
+                  >
+                    Zatvori pregled
                   </button>
                 </div>
               </div>
-            ))}
-            {featuredDishes.length === 0 && (
-              <div className="sb-alert sb-alert-error">Dodaj jelo da se prikaze na sajtu.</div>
             )}
           </div>
-        </div>
-
-        <div className="sb-card sb-admin-card">
-          <div className="sb-panel-heading">
-            <div>
-              <p className="sb-label">Sale</p>
-              <h4 className="sb-m-0">Rezervacije i blokade</h4>
-            </div>
-          </div>
-          <div className="sb-admin-halls">
-            {["velika", "mala"].map((hall) => (
-              <div key={hall} className="sb-admin-hall-column">
-                <div className="sb-admin-list-header">
-                  <div>
-                    <p className="sb-label">{hall === "velika" ? "Svecana" : "Mala"}</p>
-                    <h5 className="sb-m-0">Rezervacije</h5>
-                  </div>
-                  <span className="sb-chip sb-chip--ghost">{reservationsByHall[hall]?.length || 0}</span>
-                </div>
-                <div className="sb-admin-reservations">
-                  {(reservationsByHall[hall] || []).map((r) => (
-                    <div
-                      key={r.id}
-                      className={`sb-admin-reservation-row ${activeReservation?.id === r.id ? "is-active" : ""}`}
-                      onClick={() => setActiveReservation(r)}
-                    >
-                      <div>
-                        <p className="sb-label">
-                          {formatDateTime(r.startAt)}
-                          {" -> "}
-                          {formatDateTime(r.endAt)}
-                        </p>
-                        <p className="sb-m-0">{r.guestName || "?"}</p>
-                        <p className="sb-text-sm sb-m-0">{r.guestEmail || r.guestPhone || ""}</p>
-                        {r.notes && <p className="sb-text-sm">{r.notes}</p>}
-                      </div>
-                      <span className="sb-chip sb-chip--ghost">{STATUS_LABELS[r.status] || r.status}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="sb-admin-list-header">
-                  <div>
-                    <p className="sb-label">Blokade</p>
-                    <h5 className="sb-m-0">Datumi</h5>
-                  </div>
-                  <span className="sb-chip sb-chip--ghost">{blockoutsByHall[hall]?.length || 0}</span>
-                </div>
-                <div className="sb-admin-reservations">
-                  {(blockoutsByHall[hall] || []).map((b) => (
-                    <div key={b.id} className="sb-admin-reservation-row is-static">
-                      <div>
-                        <p className="sb-label">
-                          {new Date(b.startDate).toLocaleDateString()}
-                          {" -> "}
-                          {new Date(b.endDate).toLocaleDateString()}
-                        </p>
-                        <p className="sb-m-0">{b.reason || "Blokirano"}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {activeReservation && (
-            <div className="sb-admin-reservation-detail">
-              <div className="sb-panel-heading">
-                <div>
-                  <p className="sb-label">{activeReservation.hallType === "velika" ? "Svecana sala" : "Mala sala"}</p>
-                  <h4 className="sb-m-0">{activeReservation.guestName || "Rezervacija"}</h4>
-                  <p className="sb-label sb-label-muted">
-                    Status: {STATUS_LABELS[activeReservation.status] || activeReservation.status}
-                  </p>
-                  <p className="sb-label sb-label-muted">
-                    Azurirano: {formatDateTime(activeReservation.updatedAt || activeReservation.createdAt)}
-                  </p>
-                </div>
-                <div className="sb-chip sb-chip--ghost">ID #{activeReservation.id}</div>
-              </div>
-
-              <div className="sb-reservation-meta">
-                <div>
-                  <p className="sb-label">Vreme</p>
-                  <p className="sb-m-0">{formatDateTime(activeReservation.startAt)}</p>
-                  <p className="sb-label sb-label-muted">do {formatDateTime(activeReservation.endAt)}</p>
-                </div>
-                <div>
-                  <p className="sb-label">Kontakt</p>
-                  <p className="sb-m-0">{activeReservation.guestEmail || "—"}</p>
-                  {activeReservation.guestPhone && <p className="sb-m-0">{activeReservation.guestPhone}</p>}
-                </div>
-                <div>
-                  <p className="sb-label">Napomena gosta</p>
-                  <p className="sb-m-0">{activeReservation.notes || "Nema napomene."}</p>
-                </div>
-              </div>
-
-              <div className="sb-reservation-actions">
-                <button
-                  type="button"
-                  className="sb-btn sb-btn-2"
-                  onClick={() => updateReservationStatus(activeReservation.id, "confirmed")}
-                >
-                  Potvrdi
-                </button>
-                <button
-                  type="button"
-                  className="sb-btn sb-btn-2 sb-btn-gray"
-                  onClick={() => updateReservationStatus(activeReservation.id, "pending")}
-                >
-                  Vrati na cekanje
-                </button>
-                <button
-                  type="button"
-                  className="sb-btn sb-btn-2 sb-btn-gray"
-                  onClick={() => updateReservationStatus(activeReservation.id, "cancelled")}
-                >
-                  Otkazi
-                </button>
-                <button
-                  type="button"
-                  className="sb-btn sb-btn-2 sb-btn-danger"
-                  onClick={() => updateReservationStatus(activeReservation.id, "rejected")}
-                >
-                  Odbij
-                </button>
-                <button
-                  type="button"
-                  className="sb-btn sb-btn-2 sb-btn-gray"
-                  onClick={() => setActiveReservation(null)}
-                >
-                  Zatvori pregled
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

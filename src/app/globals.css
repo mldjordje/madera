@@ -510,6 +510,38 @@
   gap: 22px;
 }
 
+.sb-admin-switcher {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.sb-admin-tile {
+  border: 1px solid var(--madera-border);
+  border-radius: 14px;
+  padding: 14px;
+  background: var(--madera-surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.sb-admin-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+}
+
+.sb-admin-tile.is-active {
+  border-color: var(--madera-accent);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.14);
+}
+
 .sb-admin-header h2 {
   margin-bottom: 6px;
 }
