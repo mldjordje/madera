@@ -31,6 +31,7 @@ async function fetchJson(url, token, options = {}) {
 
 const AdminPanel = () => {
   const [token, setToken] = useState("");
+  const [tokenInput, setTokenInput] = useState("");
   const [status, setStatus] = useState("");
   const [authStatus, setAuthStatus] = useState("");
   const [gallery, setGallery] = useState({ categories: [], items: [] });
@@ -62,6 +63,7 @@ const AdminPanel = () => {
 
   const logout = (message = "") => {
     setToken("");
+    setTokenInput("");
     localStorage.removeItem(STORAGE_KEY);
     setStatus("");
     setAuthStatus(message);
@@ -69,25 +71,25 @@ const AdminPanel = () => {
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) setToken(stored);
+    if (stored) {
+      setTokenInput(stored);
+      setToken(stored);
+      loadData(stored);
+    }
   }, []);
 
-  useEffect(() => {
-    if (!token) return;
-    localStorage.setItem(STORAGE_KEY, token);
-    loadData();
-  }, [token]);
-
-  const loadData = async (options = {}) => {
+  const loadData = async (tokenArg = "", options = {}) => {
+    const authToken = tokenArg || token;
+    if (!authToken) return;
     const activeId = options.activeReservationId || activeReservation?.id;
     setStatus("Ucitavanje podataka...");
     setAuthStatus("");
     try {
       const [g, h, d, s] = await Promise.all([
-        fetchJson("/api/admin/gallery", token),
-        fetchJson("/api/admin/halls", token),
-        fetchJson("/api/admin/featured-dishes", token),
-        fetchJson("/api/admin/halls/settings", token),
+        fetchJson("/api/admin/gallery", authToken),
+        fetchJson("/api/admin/halls", authToken),
+        fetchJson("/api/admin/featured-dishes", authToken),
+        fetchJson("/api/admin/halls/settings", authToken),
       ]);
       setGallery(g);
       if (g.categories?.length && selectedCategory === "new") {
@@ -325,10 +327,22 @@ const AdminPanel = () => {
               type="password"
               className="sb-admin-input"
               placeholder="Admin token"
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
+              value={tokenInput}
+              onChange={(e) => setTokenInput(e.target.value)}
             />
-            <button className="sb-btn sb-btn-2" onClick={() => token && setToken(token.trim())}>
+            <button
+              className="sb-btn sb-btn-2"
+              onClick={async () => {
+                const val = (tokenInput || "").trim();
+                if (!val) {
+                  setAuthStatus("Unesi token.");
+                  return;
+                }
+                setToken(val);
+                localStorage.setItem(STORAGE_KEY, val);
+                await loadData(val);
+              }}
+            >
               Udji
             </button>
             {authStatus && <div className="sb-alert sb-alert-error sb-mt-10">{authStatus}</div>}

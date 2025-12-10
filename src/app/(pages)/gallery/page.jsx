@@ -20,6 +20,7 @@ export const metadata = {
 const Gallery1 = async () => {
   const { intro, categories } = await fetchGalleryData();
   const nonEmptyCategories = categories.filter((cat) => (cat.items || []).length > 0);
+  const hasCategories = nonEmptyCategories.length > 0;
 
   return (
     <>
@@ -33,7 +34,7 @@ const Gallery1 = async () => {
       {/* gallery */}
       <div className="sb-p-90-60">
         <div className="container">
-          {nonEmptyCategories.map((category) => (
+          {hasCategories ? nonEmptyCategories.map((category) => (
             <div className="sb-mb-60" key={category.slug}>
               <div className="sb-main-title-frame sb-mb-30">
                 <div className="sb-main-title">
@@ -51,7 +52,12 @@ const Gallery1 = async () => {
 
               <GalleryMasonry items={category.items} layout={1} />
             </div>
-          ))}
+          )) : (
+            <div className="sb-main-title sb-mb-30">
+              <h3>Galerija uskoro</h3>
+              <p className="sb-text">Još uvek nema unetih kategorija ili slika.</p>
+            </div>
+          )}
         </div>
       </div>
       {/* gallery end */}

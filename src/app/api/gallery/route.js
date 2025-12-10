@@ -54,10 +54,9 @@ export async function GET() {
       categories: combined,
     });
   } catch (error) {
-    // fallback to static JSON
     return NextResponse.json({
       intro: GalleryData.intro,
-      categories: GalleryData.categories || [],
+      categories: [],
       reason: error.message,
     });
   } finally {

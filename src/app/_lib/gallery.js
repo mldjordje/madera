@@ -47,7 +47,7 @@ async function fetchFromDatabase() {
       return null;
     }
     const payload = await response.json();
-    if (!payload || !Array.isArray(payload.categories) || payload.categories.length === 0) {
+    if (!payload || !Array.isArray(payload.categories)) {
       return null;
     }
     return {
@@ -69,7 +69,7 @@ export async function fetchGalleryData() {
 
   return {
     intro: GalleryData.intro,
-    categories: GalleryData.categories || [],
+    categories: [],
   };
 }
 
