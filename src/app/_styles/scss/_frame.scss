@@ -95,6 +95,14 @@ top bar
   .sb-top-bar-frame {
     & .sb-top-bar {
       height: 90px;
+
+      & .sb-right-side {
+        & .sb-buttons-frame {
+          & .sb-btn-cart {
+            display: none;
+          }
+        }
+      }
     }
   }
 }
