@@ -47,7 +47,7 @@ async function fetchFromDatabase() {
       return null;
     }
     const payload = await response.json();
-    if (!payload || !Array.isArray(payload.categories)) {
+    if (!payload || !Array.isArray(payload.categories) || payload.categories.length === 0) {
       return null;
     }
     return {

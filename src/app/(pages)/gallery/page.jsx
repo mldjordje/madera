@@ -19,6 +19,7 @@ export const metadata = {
 
 const Gallery1 = async () => {
   const { intro, categories } = await fetchGalleryData();
+  const nonEmptyCategories = categories.filter((cat) => (cat.items || []).length > 0);
 
   return (
     <>
@@ -32,7 +33,7 @@ const Gallery1 = async () => {
       {/* gallery */}
       <div className="sb-p-90-60">
         <div className="container">
-          {categories.map((category) => (
+          {nonEmptyCategories.map((category) => (
             <div className="sb-mb-60" key={category.slug}>
               <div className="sb-main-title-frame sb-mb-30">
                 <div className="sb-main-title">

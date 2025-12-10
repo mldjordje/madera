@@ -43,13 +43,15 @@ export async function GET() {
     const cats = categories.rows.map(mapCategoryRow);
     const pics = items.rows.map(mapItemRow);
 
-    if (!cats.length) {
-      throw new Error("No categories in database");
+    const combined = combine(cats, pics).filter((cat) => (cat.items || []).length > 0);
+
+    if (!combined.length) {
+      throw new Error("No categories with items in database");
     }
 
     return NextResponse.json({
       intro: GalleryData.intro,
-      categories: combine(cats, pics),
+      categories: combined,
     });
   } catch (error) {
     // fallback to static JSON
