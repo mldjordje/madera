@@ -844,7 +844,7 @@ const AdminPanel = () => {
               <div className="sb-panel-heading">
                 <div>
                   <p className="sb-label">Blokade datuma</p>
-                  <h4 className="sb-m-0">Telefon rezervacije -> zatvori online termin</h4>
+                  <h4 className="sb-m-0">Telefon rezervacije - zatvori online termin</h4>
                 </div>
                 <span className="sb-chip sb-chip--ghost">{halls.blackouts?.length || 0} blokada</span>
               </div>
