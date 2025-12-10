@@ -21,7 +21,7 @@
       { "label": "Početna", "link": "/", "children": [] },
       { "label": "Meni", "link": "/menu", "children": [] },
       { "label": "Galerija", "link": "/gallery", "children": [] },
-      { "label": "Rezervacija", "link": "/reservation", "children": [] },
+      { "label": "Rezervacija sale", "link": "/reservation", "children": [] },
       { "label": "O nama", "link": "/about", "children": [] },
       { "label": "Kontakt", "link": "/contact", "children": [] }
     ]
