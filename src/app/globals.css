@@ -816,6 +816,16 @@
   background: #fbf7f1;
 }
 
+.sb-hall-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.sb-hall-summary-card {
+  padding: 14px;
+}
+
 .sb-admin-reservations {
   display: flex;
   flex-direction: column;

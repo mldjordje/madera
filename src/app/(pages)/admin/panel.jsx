@@ -327,6 +327,13 @@ const AdminPanel = () => {
         .slice(0, 5),
     [pendingReservations]
   );
+  const upcomingConfirmed = useMemo(
+    () =>
+      [...confirmedReservations]
+        .sort((a, b) => new Date(a.startAt || 0).valueOf() - new Date(b.startAt || 0).valueOf())
+        .slice(0, 5),
+    [confirmedReservations]
+  );
 
   const toggleReservations = async (enabled) => {
     setStatus("Snima se podesavanje...");
@@ -814,6 +821,79 @@ const AdminPanel = () => {
               </div>
               <span className="sb-chip sb-chip--ghost">{halls.reservations?.length || 0} rezervacija</span>
             </div>
+
+            <div className="sb-hall-summary-grid sb-mb-20">
+              <div className="sb-card sb-admin-card sb-hall-summary-card">
+                <div className="sb-panel-heading">
+                  <div>
+                    <p className="sb-label">Novi upiti</p>
+                    <h5 className="sb-m-0">Na cekanju ({pendingReservations.length})</h5>
+                  </div>
+                  <span className="sb-chip sb-chip--ghost">Top 5</span>
+                </div>
+                <div className="sb-admin-reservations">
+                  {latestPending.map((r) => (
+                    <div key={`pending-${r.id}`} className="sb-admin-reservation-row is-static">
+                      <div>
+                        <p className="sb-label">
+                          {formatDateTime(r.startAt)}{" -> "}{formatDateTime(r.endAt)}
+                        </p>
+                        <p className="sb-m-0">{r.guestName || "Gost"}</p>
+                        <p className="sb-text-sm sb-m-0">{r.guestEmail || r.guestPhone || ""}</p>
+                      </div>
+                      <span className="sb-chip sb-chip--ghost">{STATUS_LABELS[r.status] || r.status}</span>
+                    </div>
+                  ))}
+                  {latestPending.length === 0 && (
+                    <div className="sb-alert sb-alert-info sb-m-0">Nema novih upita.</div>
+                  )}
+                </div>
+              </div>
+
+              <div className="sb-card sb-admin-card sb-hall-summary-card">
+                <div className="sb-panel-heading">
+                  <div>
+                    <p className="sb-label">Brzi pregled</p>
+                    <h5 className="sb-m-0">Status po kategorijama</h5>
+                  </div>
+                </div>
+                <div className="sb-chip-row">
+                  <span className="sb-chip">Pending: {pendingReservations.length}</span>
+                  <span className="sb-chip sb-chip--ghost">Potvrdjeno: {confirmedReservations.length}</span>
+                  <span className="sb-chip sb-chip--ghost">Blokade: {halls.blackouts?.length || 0}</span>
+                </div>
+                {!settings.allowReservations && (
+                  <div className="sb-alert sb-alert-info sb-mt-10">Online zakazivanje je iskljuceno.</div>
+                )}
+              </div>
+
+              <div className="sb-card sb-admin-card sb-hall-summary-card">
+                <div className="sb-panel-heading">
+                  <div>
+                    <p className="sb-label">Skori termini</p>
+                    <h5 className="sb-m-0">Potvrdjeno (do 5)</h5>
+                  </div>
+                </div>
+                <div className="sb-admin-reservations">
+                  {upcomingConfirmed.map((r) => (
+                    <div key={`confirmed-${r.id}`} className="sb-admin-reservation-row is-static">
+                      <div>
+                        <p className="sb-label">
+                          {formatDateTime(r.startAt)}{" -> "}{formatDateTime(r.endAt)}
+                        </p>
+                        <p className="sb-m-0">{r.guestName || "Gost"}</p>
+                        <p className="sb-text-sm sb-m-0">{r.guestEmail || r.guestPhone || ""}</p>
+                      </div>
+                      <span className="sb-chip sb-chip--ghost">{r.hallType === "velika" ? "Svecana" : "Mala"}</span>
+                    </div>
+                  ))}
+                  {upcomingConfirmed.length === 0 && (
+                    <div className="sb-alert sb-alert-info sb-m-0">Nema potvrdjenih termina.</div>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div className="sb-form sb-admin-form sb-mb-20">
               <div className="sb-form-row">
                 <label className="sb-toggle">
