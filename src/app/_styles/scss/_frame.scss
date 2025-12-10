@@ -273,6 +273,10 @@ navigation
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
 
+      & li > a[href="/shop"] {
+        display: none;
+      }
+
       & li {
         text-align: center;
         width: 100%;
