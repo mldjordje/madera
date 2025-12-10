@@ -37,6 +37,7 @@ const AdminPanel = () => {
   const [gallery, setGallery] = useState({ categories: [], items: [] });
   const [featuredDishes, setFeaturedDishes] = useState([]);
   const [halls, setHalls] = useState({ reservations: [], blackouts: [] });
+  const [hallPhotos, setHallPhotos] = useState({ velika: [], mala: [] });
   const [settings, setSettings] = useState({ allowReservations: true, contactPhone: "+381 63 000 000" });
   const [selectedCategory, setSelectedCategory] = useState("new");
   const [galleryFile, setGalleryFile] = useState(null);
@@ -58,6 +59,15 @@ const AdminPanel = () => {
     price: "",
     sort: 0,
   });
+  const [hallPhotoForm, setHallPhotoForm] = useState({
+    id: null,
+    hallType: "velika",
+    url: "",
+    alt: "",
+    sort: 0,
+  });
+  const [hallPhotoFile, setHallPhotoFile] = useState(null);
+  const [blackoutForm, setBlackoutForm] = useState({ hallType: "velika", startDate: "", endDate: "", reason: "" });
   const [activeReservation, setActiveReservation] = useState(null);
   const [activeSection, setActiveSection] = useState("gallery");
 
@@ -82,19 +92,20 @@ const AdminPanel = () => {
     const authToken = tokenArg || token;
     if (!authToken) return;
     const activeId = options.activeReservationId || activeReservation?.id;
-    setStatus("Ucitavanje podataka...");
-    setAuthStatus("");
-    try {
-      const [g, h, d, s] = await Promise.all([
-        fetchJson("/api/admin/gallery", authToken),
-        fetchJson("/api/admin/halls", authToken),
-        fetchJson("/api/admin/featured-dishes", authToken),
-        fetchJson("/api/admin/halls/settings", authToken),
-      ]);
-      setGallery(g);
-      if (g.categories?.length && selectedCategory === "new") {
-        setSelectedCategory(g.categories[0].slug);
-        setForm((prev) => ({
+      setStatus("Ucitavanje podataka...");
+      setAuthStatus("");
+      try {
+        const [g, h, d, s, p] = await Promise.all([
+          fetchJson("/api/admin/gallery", authToken),
+          fetchJson("/api/admin/halls", authToken),
+          fetchJson("/api/admin/featured-dishes", authToken),
+          fetchJson("/api/admin/halls/settings", authToken),
+          fetchJson("/api/admin/halls/photos", authToken),
+        ]);
+        setGallery(g);
+        if (g.categories?.length && selectedCategory === "new") {
+          setSelectedCategory(g.categories[0].slug);
+          setForm((prev) => ({
           ...prev,
           categorySlug: g.categories[0].slug,
           categoryTitle: g.categories[0].title,
@@ -103,15 +114,16 @@ const AdminPanel = () => {
       }
       setFeaturedDishes(d.items || []);
       setHalls(h);
-      setSettings({
-        allowReservations: s.allowReservations !== false,
-        contactPhone: s.contactPhone || "+381 63 000 000",
-      });
-      if (activeId) {
-        const refreshed = h.reservations?.find((r) => r.id === activeId);
-        if (refreshed) {
-          setActiveReservation(refreshed);
-        }
+        setSettings({
+          allowReservations: s.allowReservations !== false,
+          contactPhone: s.contactPhone || "+381 63 000 000",
+        });
+        setHallPhotos(p.photos || { velika: [], mala: [] });
+        if (activeId) {
+          const refreshed = h.reservations?.find((r) => r.id === activeId);
+          if (refreshed) {
+            setActiveReservation(refreshed);
+          }
       }
       setStatus("");
     } catch (error) {
@@ -295,7 +307,9 @@ const AdminPanel = () => {
   const sectionStats = {
     gallery: `${gallery.items?.length || 0} slika`,
     dishes: `${featuredDishes?.length || 0} jela`,
-    halls: settings.allowReservations ? `${halls.reservations?.length || 0} rez.` : "Rezervacije iskljucene",
+    halls: settings.allowReservations
+      ? `${halls.reservations?.length || 0} rez. / ${(hallPhotos.velika?.length || 0) + (hallPhotos.mala?.length || 0)} foto`
+      : "Rezervacije iskljucene",
   };
 
   const toggleReservations = async (enabled) => {
@@ -310,6 +324,123 @@ const AdminPanel = () => {
         contactPhone: next.contactPhone || settings.contactPhone,
       });
       setStatus(enabled ? "Rezervacije ukljucene." : "Rezervacije iskljucene.");
+    } catch (error) {
+      setStatus(error.message);
+    }
+  };
+
+  const resetHallPhotoForm = () => {
+    setHallPhotoForm({ id: null, hallType: "velika", url: "", alt: "", sort: 0 });
+    setHallPhotoFile(null);
+  };
+
+  const submitHallPhoto = async (e) => {
+    e.preventDefault();
+    setStatus("Snima se slika sale...");
+    try {
+      let finalUrl = hallPhotoForm.url;
+      if (!finalUrl && hallPhotoFile) {
+        finalUrl = await fileToDataUrl(hallPhotoFile);
+      }
+      if (!finalUrl) {
+        throw new Error("Unesi URL ili izaberi sliku.");
+      }
+
+      const payload = {
+        hallType: hallPhotoForm.hallType,
+        url: finalUrl,
+        alt: hallPhotoForm.alt?.trim() || "",
+        sort: Number(hallPhotoForm.sort) || 0,
+      };
+
+      const method = hallPhotoForm.id ? "PATCH" : "POST";
+      const body = hallPhotoForm.id ? { ...payload, id: hallPhotoForm.id } : payload;
+
+      await fetchJson("/api/admin/halls/photos", token, {
+        method,
+        body: JSON.stringify(body),
+      });
+
+      setStatus("Slika sacuvana.");
+      resetHallPhotoForm();
+      await loadData();
+    } catch (error) {
+      setStatus(error.message);
+    }
+  };
+
+  const startEditHallPhoto = (photo) => {
+    setHallPhotoForm({
+      id: photo.id,
+      hallType: photo.hallType,
+      url: photo.url,
+      alt: photo.alt || "",
+      sort: photo.sort ?? 0,
+    });
+    setHallPhotoFile(null);
+  };
+
+  const deleteHallPhoto = async (id) => {
+    if (!id) return;
+    if (typeof window !== "undefined" && !window.confirm("Obrisati ovu sliku?")) {
+      return;
+    }
+    setStatus("Brisanje slike...");
+    try {
+      await fetchJson("/api/admin/halls/photos", token, {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      });
+      if (hallPhotoForm.id === id) {
+        resetHallPhotoForm();
+      }
+      setStatus("Slika obrisana.");
+      await loadData();
+    } catch (error) {
+      setStatus(error.message);
+    }
+  };
+
+  const submitBlackout = async (e) => {
+    e.preventDefault();
+    setStatus("Dodavanje blokade...");
+    try {
+      if (!blackoutForm.startDate || !blackoutForm.endDate) {
+        throw new Error("Odaberi pocetni i krajnji datum.");
+      }
+      const start = new Date(blackoutForm.startDate);
+      const end = new Date(blackoutForm.endDate);
+      if (start > end) {
+        throw new Error("Pocetni datum mora biti pre krajnjeg.");
+      }
+      await fetchJson("/api/admin/halls/blackouts", token, {
+        method: "POST",
+        body: JSON.stringify({
+          hallType: blackoutForm.hallType,
+          startDate: blackoutForm.startDate,
+          endDate: blackoutForm.endDate,
+          reason: blackoutForm.reason,
+        }),
+      });
+      setStatus("Blokada dodata.");
+      setBlackoutForm({ hallType: "velika", startDate: "", endDate: "", reason: "" });
+      await loadData();
+    } catch (error) {
+      setStatus(error.message);
+    }
+  };
+
+  const deleteBlackout = async (id) => {
+    if (!id) return;
+    if (typeof window !== "undefined" && !window.confirm("Obrisati blokadu?")) return;
+    setStatus("Brisanje blokade...");
+    try {
+      await fetchJson("/api/admin/halls/blackouts", token, {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      });
+      setStatus("Blokada obrisana.");
+      await loadData();
     } catch (error) {
       setStatus(error.message);
     }
@@ -709,6 +840,173 @@ const AdminPanel = () => {
                 </label>
               </div>
             </div>
+            <div className="sb-form sb-admin-form sb-mb-20">
+              <div className="sb-panel-heading">
+                <div>
+                  <p className="sb-label">Blokade datuma</p>
+                  <h4 className="sb-m-0">Telefon rezervacije -> zatvori online termin</h4>
+                </div>
+                <span className="sb-chip sb-chip--ghost">{halls.blackouts?.length || 0} blokada</span>
+              </div>
+              <form className="sb-form" onSubmit={submitBlackout}>
+                <div className="sb-form-row">
+                  <label>
+                    Sala
+                    <select
+                      value={blackoutForm.hallType}
+                      onChange={(e) => setBlackoutForm((prev) => ({ ...prev, hallType: e.target.value }))}
+                    >
+                      <option value="velika">Svecana sala</option>
+                      <option value="mala">Mala sala</option>
+                    </select>
+                  </label>
+                  <label>
+                    Od datuma
+                    <input
+                      type="date"
+                      value={blackoutForm.startDate}
+                      onChange={(e) => setBlackoutForm((prev) => ({ ...prev, startDate: e.target.value }))}
+                      required
+                    />
+                  </label>
+                  <label>
+                    Do datuma
+                    <input
+                      type="date"
+                      value={blackoutForm.endDate}
+                      onChange={(e) => setBlackoutForm((prev) => ({ ...prev, endDate: e.target.value }))}
+                      required
+                    />
+                  </label>
+                </div>
+                <div className="sb-form-row">
+                  <label>
+                    Razlog (opciono)
+                    <input
+                      type="text"
+                      value={blackoutForm.reason}
+                      onChange={(e) => setBlackoutForm((prev) => ({ ...prev, reason: e.target.value }))}
+                      placeholder="Vec rezervisano telefonom"
+                    />
+                  </label>
+                </div>
+                <button type="submit" className="sb-btn sb-btn-2">
+                  <span className="sb-icon">
+                    <img src="/img/ui/icons/arrow-2.svg" alt="icon" />
+                  </span>
+                  <span>Dodaj blokadu</span>
+                </button>
+              </form>
+            </div>
+
+            <div className="sb-form sb-admin-form sb-mb-20">
+              <div className="sb-panel-heading">
+                <div>
+                  <p className="sb-label">Slike sala</p>
+                  <h4 className="sb-m-0">Slider za veliku i malu salu</h4>
+                </div>
+                <span className="sb-chip sb-chip--ghost">
+                  {(hallPhotos.velika?.length || 0) + (hallPhotos.mala?.length || 0)} slika
+                </span>
+              </div>
+              <form className="sb-form" onSubmit={submitHallPhoto}>
+                <div className="sb-form-row">
+                  <label>
+                    Sala
+                    <select
+                      value={hallPhotoForm.hallType}
+                      onChange={(e) => setHallPhotoForm((prev) => ({ ...prev, hallType: e.target.value }))}
+                    >
+                      <option value="velika">Svecana sala</option>
+                      <option value="mala">Mala sala</option>
+                    </select>
+                  </label>
+                  <label>
+                    Slika URL (ili upload)
+                    <input
+                      name="hallPhotoUrl"
+                      value={hallPhotoForm.url}
+                      onChange={(e) => setHallPhotoForm((prev) => ({ ...prev, url: e.target.value }))}
+                      placeholder="https://..."
+                    />
+                  </label>
+                  <label>
+                    Upload fajl
+                    <input type="file" accept="image/*" onChange={(e) => setHallPhotoFile(e.target.files?.[0] || null)} />
+                  </label>
+                </div>
+                <div className="sb-form-row">
+                  <label>
+                    Alt opis (seo)
+                    <input
+                      name="hallPhotoAlt"
+                      value={hallPhotoForm.alt}
+                      onChange={(e) => setHallPhotoForm((prev) => ({ ...prev, alt: e.target.value }))}
+                      placeholder="Sala dekoracija..."
+                    />
+                  </label>
+                  <label>
+                    Sort
+                    <input
+                      type="number"
+                      name="hallPhotoSort"
+                      value={hallPhotoForm.sort}
+                      onChange={(e) => setHallPhotoForm((prev) => ({ ...prev, sort: e.target.value }))}
+                    />
+                  </label>
+                </div>
+                <div className="sb-form-actions">
+                  <button type="submit" className="sb-btn sb-btn-2">
+                    <span className="sb-icon">
+                      <img src="/img/ui/icons/arrow-2.svg" alt="icon" />
+                    </span>
+                    <span>{hallPhotoForm.id ? "Sacuvaj sliku" : "Dodaj sliku"}</span>
+                  </button>
+                  {hallPhotoForm.id && (
+                    <button type="button" className="sb-btn sb-btn-2 sb-btn-gray" onClick={resetHallPhotoForm}>
+                      Otkazi izmene
+                    </button>
+                  )}
+                </div>
+              </form>
+
+              <div className="sb-admin-hall-photos">
+                {["velika", "mala"].map((hallKey) => (
+                  <div key={hallKey} className="sb-admin-hall-photos__column">
+                    <div className="sb-admin-list-header">
+                      <div>
+                        <p className="sb-label">{hallKey === "velika" ? "Svecana sala" : "Mala sala"}</p>
+                        <h5 className="sb-m-0">Slider ({hallPhotos[hallKey]?.length || 0})</h5>
+                      </div>
+                    </div>
+                    <div className="sb-admin-items-grid sb-admin-dishes">
+                      {(hallPhotos[hallKey] || []).map((photo) => (
+                        <div key={photo.id} className="sb-admin-item-card sb-admin-dish-card">
+                          <div className="sb-admin-thumb">
+                            <img src={photo.url} alt={photo.alt || "hall"} />
+                          </div>
+                          <div className="sb-admin-item-body">
+                            <p className="sb-label">Sort {photo.sort}</p>
+                            <h5 className="sb-m-0">{photo.alt || "Slika sale"}</h5>
+                          </div>
+                          <div className="sb-admin-dish-actions">
+                            <button type="button" className="sb-chip" onClick={() => startEditHallPhoto(photo)}>
+                              Uredi
+                            </button>
+                            <button type="button" className="sb-chip sb-chip--ghost" onClick={() => deleteHallPhoto(photo.id)}>
+                              Obrisi
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      {(hallPhotos[hallKey] || []).length === 0 && (
+                        <div className="sb-alert sb-alert-error">Dodaj bar jednu sliku za ovu salu.</div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
             <div className="sb-admin-halls">
               {["velika", "mala"].map((hall) => (
                 <div key={hall} className="sb-admin-hall-column">
@@ -758,6 +1056,15 @@ const AdminPanel = () => {
                             {new Date(b.endDate).toLocaleDateString()}
                           </p>
                           <p className="sb-m-0">{b.reason || "Blokirano"}</p>
+                        </div>
+                        <div className="sb-chip-row">
+                          <button
+                            type="button"
+                            className="sb-chip sb-chip--ghost"
+                            onClick={() => deleteBlackout(b.id)}
+                          >
+                            Obrisi
+                          </button>
                         </div>
                       </div>
                     ))}

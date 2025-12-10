@@ -83,3 +83,27 @@ BEGIN
     ) WHERE (status IN ('pending', 'confirmed'));
   END IF;
 END$$;
+
+-- Hall settings (single row) and photo galleries per hall
+CREATE TABLE IF NOT EXISTS hall_settings (
+  id SMALLINT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+  allow_reservations BOOLEAN NOT NULL DEFAULT TRUE,
+  contact_phone TEXT DEFAULT '+381 63 000 000',
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+INSERT INTO hall_settings (id, allow_reservations, contact_phone)
+VALUES (1, TRUE, '+381 63 000 000')
+ON CONFLICT (id) DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS hall_photos (
+  id BIGSERIAL PRIMARY KEY,
+  hall_type TEXT NOT NULL CHECK (hall_type IN ('velika', 'mala')),
+  url TEXT NOT NULL,
+  alt TEXT,
+  sort INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_hall_photos_hall_sort
+  ON hall_photos (hall_type, sort, id);

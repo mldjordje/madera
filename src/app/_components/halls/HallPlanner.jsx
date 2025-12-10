@@ -16,6 +16,8 @@ const HallPlanner = ({ halls, initialSettings }) => {
   const [settings, setSettings] = useState(
     initialSettings || { allowReservations: true, contactPhone: "+38163000000" }
   );
+  const [photos, setPhotos] = useState({ velika: [], mala: [] });
+  const [photoIndex, setPhotoIndex] = useState({ velika: 0, mala: 0 });
 
   const loadAvailability = async () => {
     setLoading(true);
@@ -40,12 +42,21 @@ const HallPlanner = ({ halls, initialSettings }) => {
       try {
         const resp = await fetch("/api/halls/settings", { cache: "no-store" });
         const data = await resp.json();
-        setSettings({
+        setSettings((prev) => ({
           allowReservations: data.allowReservations !== false,
-          contactPhone: data.contactPhone || settings.contactPhone,
-        });
+          contactPhone: data.contactPhone || prev.contactPhone,
+        }));
       } catch (err) {
         // keep default
+      }
+    })();
+    (async () => {
+      try {
+        const resp = await fetch("/api/halls/photos", { cache: "no-store" });
+        const payload = await resp.json();
+        setPhotos(payload.photos || {});
+      } catch (err) {
+        // fallback handled via API defaults; ignore
       }
     })();
   }, []);
@@ -61,6 +72,23 @@ const HallPlanner = ({ halls, initialSettings }) => {
   );
 
   const hallMeta = halls.find((hall) => hall.slug === activeHall) || halls[0];
+  const hallPhotos = (photos[activeHall] && photos[activeHall].length
+    ? photos[activeHall]
+    : [{ url: hallMeta?.image, alt: hallMeta?.name || "Sala", hallType: activeHall }]
+  );
+  const activeIndex = photoIndex[activeHall] || 0;
+  const setActivePhotoIndex = (idx) =>
+    setPhotoIndex((prev) => ({
+      ...prev,
+      [activeHall]: Math.max(0, Math.min(idx, hallPhotos.length - 1)),
+    }));
+  const nextPhoto = () => setActivePhotoIndex(hallPhotos.length ? (activeIndex + 1) % hallPhotos.length : 0);
+  const prevPhoto = () =>
+    setActivePhotoIndex(hallPhotos.length ? (activeIndex - 1 + hallPhotos.length) % hallPhotos.length : 0);
+
+  useEffect(() => {
+    setActivePhotoIndex(0);
+  }, [activeHall, photos]);
 
   const telHref = settings.contactPhone ? `tel:${settings.contactPhone.replace(/[^+\\d]/g, "")}` : "tel:+38163000000";
 
@@ -152,6 +180,38 @@ const HallPlanner = ({ halls, initialSettings }) => {
                 )}
               </div>
               <div className="sb-chip">{hallMeta?.capacity}</div>
+            </div>
+
+            <div className="sb-hall-slider">
+              <div className="sb-hall-slider__image">
+                {hallPhotos[activeIndex] && <img src={hallPhotos[activeIndex].url} alt={hallPhotos[activeIndex].alt || hallMeta?.name || "Sala"} />}
+                {hallPhotos.length > 1 && (
+                  <div className="sb-hall-slider__controls">
+                    <button type="button" className="sb-chip sb-chip--ghost" onClick={prevPhoto}>
+                      ◀
+                    </button>
+                    <span className="sb-label sb-label-muted">
+                      {activeIndex + 1}/{hallPhotos.length}
+                    </span>
+                    <button type="button" className="sb-chip sb-chip--ghost" onClick={nextPhoto}>
+                      ▶
+                    </button>
+                  </div>
+                )}
+              </div>
+              {hallPhotos.length > 1 && (
+                <div className="sb-hall-slider__dots">
+                  {hallPhotos.map((_, idx) => (
+                    <button
+                      key={`${activeHall}-dot-${idx}`}
+                      type="button"
+                      className={`sb-hall-slider__dot ${idx === activeIndex ? "is-active" : ""}`}
+                      onClick={() => setActivePhotoIndex(idx)}
+                      aria-label={`Slika ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             {settings.allowReservations ? (
