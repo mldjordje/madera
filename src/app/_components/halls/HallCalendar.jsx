@@ -59,6 +59,8 @@ const HallCalendar = ({
   month,
   onMonthChange,
   reservations = [],
+  otherReservations = [],
+  otherBlackouts = [],
   blackouts = [],
   selectedDate,
   onSelectDate,
@@ -130,7 +132,18 @@ const HallCalendar = ({
         <div className="sb-hall-calendar__weekday">Ned</div>
 
         {days.map((day) => {
-          const { state, title, items } = getDayStatus(day, reservations, blackouts);
+          const currentStatus = getDayStatus(day, reservations, blackouts);
+          const otherStatus = getDayStatus(day, otherReservations, otherBlackouts);
+
+          const isOtherAvailable = otherStatus.state === "available";
+          const showOtherHall = ["reserved", "pending", "blocked"].includes(currentStatus.state) && isOtherAvailable;
+
+          const state = showOtherHall ? "other-free" : currentStatus.state;
+          const title = showOtherHall
+            ? "Druga sala je slobodna"
+            : currentStatus.title;
+          const items = currentStatus.items;
+
           const isSelected = selectedDate ? isSameDay(day, selectedDate) : false;
           const isMuted = !isSameMonth(day, month);
           const badge =
@@ -140,6 +153,8 @@ const HallCalendar = ({
               ? "Rezervisano"
               : state === "pending"
               ? "Upit"
+              : state === "other-free"
+              ? "Druga sala"
               : "Slobodno";
 
           return (

@@ -330,12 +330,13 @@
 }
 
 .sb-hall-calendar__day.state-pending {
-  background: #fff7e6;
-  border-color: #d7b46a;
+  background: #fff6d6;
+  border-color: #ffcf5c;
+  color: #8a5b00;
 }
 
 .sb-hall-calendar__day.state-pending .sb-day-badge {
-  background: #d7b46a;
+  background: #ffcf5c;
   color: #2b1a12;
 }
 
@@ -359,6 +360,17 @@
 .sb-hall-calendar__day.state-blocked .sb-day-badge {
   background: #e2b4b4;
   color: #2b1a12;
+}
+
+.sb-hall-calendar__day.state-other-free {
+  background: #e0edff;
+  border-color: #7bb6f5;
+  color: #0f3e73;
+}
+
+.sb-hall-calendar__day.state-other-free .sb-day-badge {
+  background: #7bb6f5;
+  color: #0f1a2a;
 }
 
 .sb-calendar-legend {
@@ -394,6 +406,10 @@
 
 .sb-legend-dot.state-blocked {
   background: #e2b4b4;
+}
+
+.sb-legend-dot.state-other-free {
+  background: #7bb6f5;
 }
 
 .sb-hall-form {
@@ -489,6 +505,16 @@
 @media (max-width: 991px) {
   .sb-halls-board {
     padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sb-hall-calendar__day {
+    min-height: 72px;
+  }
+  .sb-day-badge,
+  .sb-day-meta {
+    display: none;
   }
 }
 
@@ -982,14 +1008,14 @@ body {
 }
 
 .sb-hall-calendar__day.state-pending {
-  background: var(--madera-accent-soft);
-  border-color: var(--madera-accent);
-  color: var(--madera-text);
+  background: #fff6d6;
+  border-color: #ffcf5c;
+  color: #8a5b00;
 }
 
 .sb-hall-calendar__day.state-pending .sb-day-badge {
-  background: var(--madera-accent);
-  color: var(--madera-surface);
+  background: #ffcf5c;
+  color: #2b1a12;
 }
 
 .sb-hall-calendar__day.state-reserved {
@@ -1014,6 +1040,17 @@ body {
   color: var(--madera-text);
 }
 
+.sb-hall-calendar__day.state-other-free {
+  background: #e0edff;
+  border-color: #7bb6f5;
+  color: #0f3e73;
+}
+
+.sb-hall-calendar__day.state-other-free .sb-day-badge {
+  background: #7bb6f5;
+  color: #0f1a2a;
+}
+
 .sb-calendar-legend {
   color: var(--madera-text);
 }
@@ -1035,6 +1072,10 @@ body {
 
 .sb-legend-dot.state-blocked {
   background: rgba(161, 94, 94, 0.22);
+}
+
+.sb-legend-dot.state-other-free {
+  background: #7bb6f5;
 }
 
 .sb-hall-form {

@@ -66,9 +66,21 @@ const HallPlanner = ({ halls, initialSettings }) => {
     [availability, activeHall]
   );
 
+  const otherHall = activeHall === "velika" ? "mala" : "velika";
+
+  const otherHallReservations = useMemo(
+    () => (availability.reservations || []).filter((item) => item.hallType === otherHall),
+    [availability, otherHall]
+  );
+
   const hallBlackouts = useMemo(
     () => (availability.blackouts || []).filter((item) => item.hallType === activeHall),
     [availability, activeHall]
+  );
+
+  const otherHallBlackouts = useMemo(
+    () => (availability.blackouts || []).filter((item) => item.hallType === otherHall),
+    [availability, otherHall]
   );
 
   const hallMeta = halls.find((hall) => hall.slug === activeHall) || halls[0];
@@ -223,7 +235,9 @@ const HallPlanner = ({ halls, initialSettings }) => {
                     setSelectedDate(startOfDay(value));
                   }}
                   reservations={hallReservations}
+                  otherReservations={otherHallReservations}
                   blackouts={hallBlackouts}
+                  otherBlackouts={otherHallBlackouts}
                   selectedDate={selectedDate}
                   onSelectDate={(date) => setSelectedDate(startOfDay(date))}
                   isLoading={loading}
@@ -235,6 +249,7 @@ const HallPlanner = ({ halls, initialSettings }) => {
                   <div className="sb-legend-dot state-pending" /> Upit u obradi
                   <div className="sb-legend-dot state-reserved" /> Rezervisano
                   <div className="sb-legend-dot state-blocked" /> Blokirano
+                  <div className="sb-legend-dot state-other-free" /> Druga sala slobodna
                 </div>
 
                 {hallReservations.length === 0 && hallBlackouts.length === 0 && (
