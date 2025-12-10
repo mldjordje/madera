@@ -73,6 +73,10 @@ banner
 }
 
 @media (max-width: 768px) {
+  .sb-banner {
+    min-height: 100vh;
+  }
+
   .sb-hero-mobile-video {
     display: block;
     position: absolute;
@@ -81,7 +85,8 @@ banner
     left: 0;
     right: 0;
     bottom: 0;
-    height: 100%;
+    height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
 
     &:after {
