@@ -312,6 +312,22 @@ const AdminPanel = () => {
       : "Rezervacije iskljucene",
   };
 
+  const pendingReservations = useMemo(
+    () => (halls.reservations || []).filter((r) => r.status === "pending"),
+    [halls.reservations]
+  );
+  const confirmedReservations = useMemo(
+    () => (halls.reservations || []).filter((r) => r.status === "confirmed"),
+    [halls.reservations]
+  );
+  const latestPending = useMemo(
+    () =>
+      [...pendingReservations]
+        .sort((a, b) => new Date(a.startAt || 0).valueOf() - new Date(b.startAt || 0).valueOf())
+        .slice(0, 5),
+    [pendingReservations]
+  );
+
   const toggleReservations = async (enabled) => {
     setStatus("Snima se podesavanje...");
     try {
@@ -783,7 +799,7 @@ const AdminPanel = () => {
                 </div>
               ))}
               {featuredDishes.length === 0 && (
-                <div className="sb-alert sb-alert-error">Dodaj jelo da se prikaze na sajtu.</div>
+                <div className="sb-alert sb-alert-info">Dodaj jelo da se prikaze na sajtu.</div>
               )}
             </div>
           </div>
@@ -1000,7 +1016,7 @@ const AdminPanel = () => {
                         </div>
                       ))}
                       {(hallPhotos[hallKey] || []).length === 0 && (
-                        <div className="sb-alert sb-alert-error">Dodaj bar jednu sliku za ovu salu.</div>
+                        <div className="sb-alert sb-alert-info">Dodaj bar jednu sliku za ovu salu.</div>
                       )}
                     </div>
                   </div>
