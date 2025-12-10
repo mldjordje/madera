@@ -1,4 +1,4 @@
-import { Rubik, Monoton } from 'next/font/google'
+import { Rubik, Monoton, Playfair_Display } from 'next/font/google'
 
 const rubik = Rubik({
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -12,6 +12,14 @@ const monoton = Monoton({
   weight: ['400'],
   subsets: ['latin'],
   variable: '--font-monoton',
+  display: 'swap',
+})
+
+const playfair = Playfair_Display({
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-playfair',
   display: 'swap',
 })
 
@@ -42,7 +50,7 @@ const Layouts = ({
   children
 }) => {
   return (
-    <html lang="en" className={`${rubik.variable} ${monoton.variable}`}>
+    <html lang="en" className={`${rubik.variable} ${monoton.variable} ${playfair.variable}`}>
       <body>
         {/* app wrapper */}
         <div className="sb-app">
