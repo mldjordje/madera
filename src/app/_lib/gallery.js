@@ -1,4 +1,5 @@
 import GalleryData from "@data/gallery.json";
+import { getDemoGalleryCombined } from "@library/demoStore";
 
 const CMS_GALLERY_ENDPOINT = process.env.CMS_GALLERY_ENDPOINT;
 const CMS_GALLERY_TOKEN = process.env.CMS_GALLERY_TOKEN;
@@ -40,36 +41,16 @@ async function fetchFromCms() {
   }
 }
 
-async function fetchFromDatabase() {
-  try {
-    const response = await fetch("/api/gallery", { cache: "no-store" });
-    if (!response.ok) {
-      return null;
-    }
-    const payload = await response.json();
-    if (!payload || !Array.isArray(payload.categories)) {
-      return null;
-    }
-    return {
-      intro: payload.intro || GalleryData.intro,
-      categories: payload.categories,
-    };
-  } catch (error) {
-    console.warn("[gallery] Unable to load internal gallery API", error);
-    return null;
-  }
-}
-
 export async function fetchGalleryData() {
-  const dbData = await fetchFromDatabase();
-  if (dbData) return dbData;
+  const demoData = getDemoGalleryCombined();
+  if (demoData?.categories?.length) return demoData;
 
   const cmsData = await fetchFromCms();
   if (cmsData) return cmsData;
 
   return {
     intro: GalleryData.intro,
-    categories: [],
+    categories: GalleryData.categories || [],
   };
 }
 

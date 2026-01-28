@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { getDbClient } from "../../admin/_utils";
+import { getDbClient, tryGetDbClient } from "../../admin/_utils";
+import { getDemoHallSettings } from "@library/demoStore";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -48,11 +49,15 @@ async function readSettingsFromDb() {
 }
 
 export async function GET() {
+  const clientCandidate = tryGetDbClient();
+  if (!clientCandidate) {
+    return NextResponse.json(getDemoHallSettings());
+  }
   try {
     const settings = await readSettingsFromDb();
     return NextResponse.json(settings);
   } catch (error) {
     console.error("Public hall settings GET failed:", error);
-    return NextResponse.json(DEFAULT_SETTINGS);
+    return NextResponse.json(getDemoHallSettings());
   }
 }

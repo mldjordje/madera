@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getDbClient, requireAdmin } from "../_utils";
+import { requireAdmin, tryGetDbClient } from "../_utils";
+import { getDemoHallData, updateDemoReservationStatus } from "@library/demoStore";
 
 const ALLOWED_STATUSES = ["pending", "confirmed", "rejected", "cancelled"];
 
@@ -30,10 +31,20 @@ export async function GET(request) {
   const auth = requireAdmin(request);
   if (!auth.ok) return auth.response;
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
+  const demoData = getDemoHallData();
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      return NextResponse.json({
+        reservations: demoData.reservations,
+        blackouts: demoData.blackouts,
+        source: "demo",
+      });
+    }
+
+    await client.connect();
     const reservationsPromise = client.query(
       `SELECT id, hall_type, start_at, end_at, guest_name, guest_email, guest_phone, status, notes, created_at, updated_at
        FROM hall_reservations
@@ -55,9 +66,16 @@ export async function GET(request) {
     });
   } catch (error) {
     console.error("Admin halls GET failed:", error);
-    return NextResponse.json({ error: "Failed to fetch hall data" }, { status: 500 });
+    return NextResponse.json({
+      reservations: demoData.reservations,
+      blackouts: demoData.blackouts,
+      source: "demo",
+      error: error.message,
+    });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }
 
@@ -78,10 +96,19 @@ export async function PATCH(request) {
     return NextResponse.json({ error: "Status mora biti pending, confirmed, rejected ili cancelled." }, { status: 400 });
   }
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      const updated = updateDemoReservationStatus(reservationId, nextStatus);
+      if (!updated) {
+        return NextResponse.json({ error: "Rezervacija nije pronadjena." }, { status: 404 });
+      }
+      return NextResponse.json({ ok: true, reservation: updated, source: "demo" });
+    }
+
+    await client.connect();
     const result = await client.query(
       `UPDATE hall_reservations
        SET status = $2,
@@ -98,8 +125,14 @@ export async function PATCH(request) {
     return NextResponse.json({ ok: true, reservation: mapReservation(result.rows[0]) });
   } catch (error) {
     console.error("Admin halls PATCH failed:", error);
+    const updated = updateDemoReservationStatus(reservationId, nextStatus);
+    if (updated) {
+      return NextResponse.json({ ok: true, reservation: updated, source: "demo" });
+    }
     return NextResponse.json({ error: "Nije uspelo azuriranje statusa." }, { status: 500 });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }

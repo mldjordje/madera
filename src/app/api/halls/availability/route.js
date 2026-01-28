@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { addMonths, startOfDay } from "date-fns";
 import { Client } from "pg";
 
-import { resolveDbConnectionString } from "../../admin/_utils";
+import { resolveDbConnectionString, tryGetDbClient } from "../../admin/_utils";
+import { addDemoReservation, getDemoHallData } from "@library/demoStore";
 
 const HALL_TYPES = ["velika", "mala"];
 const DEFAULT_MONTHS = 6;
@@ -75,17 +76,6 @@ async function fetchFromDatabase({ windowStart, windowEnd, halls, connectionStri
   }
 }
 
-const buildEmptyData = (windowStart, months, reason) => ({
-  source: "fallback",
-  reason: reason || "Nema podataka ili baza nije dostupna.",
-  range: {
-    from: windowStart.toISOString(),
-    to: addMonths(windowStart, months).toISOString(),
-  },
-  reservations: [],
-  blackouts: [],
-});
-
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const months = clampMonths(parseInt(searchParams.get("months") || DEFAULT_MONTHS, 10));
@@ -99,11 +89,38 @@ export async function GET(request) {
   const windowStart = startOfDay(new Date());
   const windowEnd = addMonths(windowStart, months);
 
+  const demoStore = getDemoHallData();
+  const demoReservations = (demoStore.reservations || []).filter((item) => {
+    const start = new Date(item.startAt);
+    const end = new Date(item.endAt);
+    return start <= windowEnd && end >= windowStart && halls.includes(item.hallType);
+  });
+  const demoBlackouts = (demoStore.blackouts || []).filter((item) => {
+    const start = new Date(item.startDate);
+    const end = new Date(item.endDate);
+    return start <= windowEnd && end >= windowStart && halls.includes(item.hallType);
+  });
+
+  const demoPayload = {
+    source: "demo",
+    range: {
+      from: windowStart.toISOString(),
+      to: windowEnd.toISOString(),
+    },
+    reservations: demoReservations,
+    blackouts: demoBlackouts,
+  };
+
+  const clientCandidate = tryGetDbClient();
+  if (!clientCandidate) {
+    return NextResponse.json(demoPayload);
+  }
+
   let connectionString;
   try {
     connectionString = resolveDbConnectionString();
   } catch (error) {
-    return NextResponse.json(buildEmptyData(windowStart, months, error.message));
+    return NextResponse.json(demoPayload);
   }
 
   try {
@@ -123,23 +140,13 @@ export async function GET(request) {
       error.code || ""
     );
     const reason = isConnectionIssue
-      ? "Baza nije dostupna. Proveri DATABASE_URL (koristi Railway public connection string na Vercel-u)."
+      ? "Demo podaci (Railway baza nije dostupna)."
       : error.message;
-    return NextResponse.json(buildEmptyData(windowStart, months, reason), { status: 200 });
+    return NextResponse.json({ ...demoPayload, reason }, { status: 200 });
   }
 }
 
 export async function POST(request) {
-  let connectionString;
-  try {
-    connectionString = resolveDbConnectionString();
-  } catch (error) {
-    return NextResponse.json(
-      { error: error.message, hint: "Postavi DATABASE_URL (Railway public connection string za Vercel) i ponovi." },
-      { status: 503 }
-    );
-  }
-
   const payload = await request.json();
   const {
     hallType,
@@ -168,6 +175,38 @@ export async function POST(request) {
 
   if (!guestName || !guestName.trim()) {
     return NextResponse.json({ error: "Ime gosta je obavezno." }, { status: 400 });
+  }
+
+  const clientCandidate = tryGetDbClient();
+  if (!clientCandidate) {
+    const reservation = addDemoReservation({
+      hallType,
+      startAt,
+      endAt,
+      guestName,
+      guestEmail,
+      guestPhone,
+      notes,
+      status: "pending",
+    });
+    return NextResponse.json({ ok: true, reservation, source: "demo" }, { status: 201 });
+  }
+
+  let connectionString;
+  try {
+    connectionString = resolveDbConnectionString();
+  } catch (error) {
+    const reservation = addDemoReservation({
+      hallType,
+      startAt,
+      endAt,
+      guestName,
+      guestEmail,
+      guestPhone,
+      notes,
+      status: "pending",
+    });
+    return NextResponse.json({ ok: true, reservation, source: "demo" }, { status: 201 });
   }
 
   const client = new Client({ connectionString });
@@ -208,16 +247,34 @@ export async function POST(request) {
     const isConnectionIssue = ["ECONNREFUSED", "ENOTFOUND", "EHOSTUNREACH", "ECONNRESET", "ETIMEDOUT"].includes(
       error.code || ""
     );
+    if (isConnectionIssue) {
+      const reservation = addDemoReservation({
+        hallType,
+        startAt,
+        endAt,
+        guestName,
+        guestEmail,
+        guestPhone,
+        notes,
+        status: "pending",
+      });
+      return NextResponse.json(
+        {
+          ok: true,
+          reservation,
+          source: "demo",
+          warning: "Podaci su sacuvani lokalno (demo).",
+        },
+        { status: 201 }
+      );
+    }
+
     return NextResponse.json(
       {
-        error: isConnectionIssue
-          ? "Baza nije dostupna. Proveri DATABASE_URL (Railway public connection string na Vercel-u)."
-          : isOverlap
-            ? "Termin se preklapa sa postojecim rezervacijama."
-            : "Nije moguce sacuvati rezervaciju.",
-        details: isConnectionIssue ? undefined : error.message,
+        error: isOverlap ? "Termin se preklapa sa postojecim rezervacijama." : "Nije moguce sacuvati rezervaciju.",
+        details: error.message,
       },
-      { status: isConnectionIssue ? 503 : isOverlap ? 409 : 500 }
+      { status: isOverlap ? 409 : 500 }
     );
   } finally {
     await client.end();

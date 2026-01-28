@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
 import halls from "@data/halls.json";
-import { getDbClient } from "../../admin/_utils";
+import { getDbClient, tryGetDbClient } from "../../admin/_utils";
+import { getDemoHallPhotos } from "@library/demoStore";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -32,8 +33,14 @@ export async function GET(request) {
 
   let client;
 
+  const demoPhotos = getDemoHallPhotos();
+  const demoGrouped = { velika: demoPhotos.velika || [], mala: demoPhotos.mala || [] };
+
   try {
-    client = getDbClient();
+    client = tryGetDbClient();
+    if (!client) {
+      return NextResponse.json({ source: "demo", photos: demoGrouped });
+    }
     await client.connect();
     const result = await client.query(
       `SELECT id, hall_type, url, alt, sort
@@ -60,7 +67,7 @@ export async function GET(request) {
     return NextResponse.json({ source: "database", photos: grouped });
   } catch (error) {
     console.error("Hall photos GET failed:", error);
-    return NextResponse.json({ source: "fallback", photos: defaultPhotos });
+    return NextResponse.json({ source: "demo", photos: demoGrouped });
   } finally {
     if (client) {
       await client.end();

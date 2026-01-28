@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
-import { getDbClient, requireAdmin } from "../_utils";
+import { requireAdmin, tryGetDbClient } from "../_utils";
+import {
+  addDemoFeaturedDish,
+  deleteDemoFeaturedDish,
+  getDemoFeaturedDishes,
+  updateDemoFeaturedDish,
+} from "@library/demoStore";
 
 const mapDishRow = (row) => ({
   id: row.id,
@@ -21,10 +27,15 @@ export async function GET(request) {
   const auth = requireAdmin(request);
   if (!auth.ok) return auth.response;
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      return NextResponse.json({ items: getDemoFeaturedDishes(), source: "demo" });
+    }
+
+    await client.connect();
     const result = await client.query(
       `SELECT id, title, description, image_url, price, sort, created_at, updated_at
        FROM featured_dishes
@@ -34,9 +45,11 @@ export async function GET(request) {
     return NextResponse.json({ items: result.rows.map(mapDishRow) });
   } catch (error) {
     console.error("Admin featured dishes GET failed:", error);
-    return NextResponse.json({ error: "Failed to fetch featured dishes" }, { status: 500 });
+    return NextResponse.json({ items: getDemoFeaturedDishes(), source: "demo", error: error.message });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }
 
@@ -51,10 +64,16 @@ export async function POST(request) {
     return NextResponse.json({ error: "Naslov i slika su obavezni." }, { status: 400 });
   }
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      const item = addDemoFeaturedDish({ title, description, imageUrl, price, sort });
+      return NextResponse.json({ ok: true, item, source: "demo" }, { status: 201 });
+    }
+
+    await client.connect();
     const result = await client.query(
       `INSERT INTO featured_dishes (title, description, image_url, price, sort)
        VALUES ($1, $2, $3, $4, $5)
@@ -65,9 +84,12 @@ export async function POST(request) {
     return NextResponse.json({ ok: true, item: mapDishRow(result.rows[0]) }, { status: 201 });
   } catch (error) {
     console.error("Admin featured dishes POST failed:", error);
-    return NextResponse.json({ error: "Failed to save dish" }, { status: 500 });
+    const item = addDemoFeaturedDish({ title, description, imageUrl, price, sort });
+    return NextResponse.json({ ok: true, item, source: "demo" }, { status: 201 });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }
 
@@ -87,10 +109,19 @@ export async function PATCH(request) {
     return NextResponse.json({ error: "Naslov i slika su obavezni." }, { status: 400 });
   }
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      const item = updateDemoFeaturedDish({ id: numericId, title, description, imageUrl, price, sort });
+      if (!item) {
+        return NextResponse.json({ error: "Jelo nije pronađeno." }, { status: 404 });
+      }
+      return NextResponse.json({ ok: true, item, source: "demo" });
+    }
+
+    await client.connect();
     const result = await client.query(
       `UPDATE featured_dishes
        SET title = $2,
@@ -111,9 +142,15 @@ export async function PATCH(request) {
     return NextResponse.json({ ok: true, item: mapDishRow(result.rows[0]) });
   } catch (error) {
     console.error("Admin featured dishes PATCH failed:", error);
+    const item = updateDemoFeaturedDish({ id: numericId, title, description, imageUrl, price, sort });
+    if (item) {
+      return NextResponse.json({ ok: true, item, source: "demo" });
+    }
     return NextResponse.json({ error: "Nije uspelo ažuriranje jela" }, { status: 500 });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }
 
@@ -129,20 +166,35 @@ export async function DELETE(request) {
     return NextResponse.json({ error: "Nedostaje ID jela za brisanje." }, { status: 400 });
   }
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      const removed = deleteDemoFeaturedDish(numericId);
+      if (!removed) {
+        return NextResponse.json({ error: "Jelo nije pronadeno." }, { status: 404 });
+      }
+      return NextResponse.json({ ok: true, id: numericId, source: "demo" });
+    }
+
+    await client.connect();
     const result = await client.query("DELETE FROM featured_dishes WHERE id = $1", [numericId]);
     if (result.rowCount === 0) {
-      return NextResponse.json({ error: "Jelo nije pronađeno." }, { status: 404 });
+      return NextResponse.json({ error: "Jelo nije pronadeno." }, { status: 404 });
     }
 
     return NextResponse.json({ ok: true, id: numericId });
   } catch (error) {
     console.error("Admin featured dishes DELETE failed:", error);
+    const removed = deleteDemoFeaturedDish(numericId);
+    if (removed) {
+      return NextResponse.json({ ok: true, id: numericId, source: "demo" });
+    }
     return NextResponse.json({ error: "Nije uspelo brisanje jela" }, { status: 500 });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }

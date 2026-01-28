@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { getDbClient, requireAdmin } from "../../_utils";
+import { requireAdmin, tryGetDbClient } from "../../_utils";
+import { addDemoBlackout, deleteDemoBlackout } from "@library/demoStore";
 
 const HALL_TYPES = ["velika", "mala"];
 
@@ -50,10 +51,16 @@ export async function POST(request) {
     return NextResponse.json({ error: "Pocetni datum mora biti pre ili isti kao krajnji." }, { status: 400 });
   }
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      const blackout = addDemoBlackout({ hallType, startDate, endDate, reason });
+      return NextResponse.json({ blackout, source: "demo" }, { status: 201 });
+    }
+
+    await client.connect();
     const result = await client.query(
       `INSERT INTO hall_blackouts (hall_type, start_date, end_date, reason)
        VALUES ($1, $2, $3, $4)
@@ -64,9 +71,12 @@ export async function POST(request) {
     return NextResponse.json({ blackout: mapBlackout(result.rows[0]) }, { status: 201 });
   } catch (error) {
     console.error("Admin hall blackout POST failed:", error);
-    return NextResponse.json({ error: "Nije uspelo dodavanje blokade." }, { status: 500 });
+    const blackout = addDemoBlackout({ hallType, startDate, endDate, reason });
+    return NextResponse.json({ blackout, source: "demo" }, { status: 201 });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }
 
@@ -86,10 +96,19 @@ export async function DELETE(request) {
     return NextResponse.json({ error: "ID blokade je obavezan." }, { status: 400 });
   }
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      const removed = deleteDemoBlackout(id);
+      if (!removed) {
+        return NextResponse.json({ error: "Blokada nije pronadjena." }, { status: 404 });
+      }
+      return NextResponse.json({ ok: true, source: "demo" });
+    }
+
+    await client.connect();
     const result = await client.query("DELETE FROM hall_blackouts WHERE id = $1", [id]);
     if (result.rowCount === 0) {
       return NextResponse.json({ error: "Blokada nije pronadjena." }, { status: 404 });
@@ -97,8 +116,14 @@ export async function DELETE(request) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Admin hall blackout DELETE failed:", error);
+    const removed = deleteDemoBlackout(id);
+    if (removed) {
+      return NextResponse.json({ ok: true, source: "demo" });
+    }
     return NextResponse.json({ error: "Nije uspelo brisanje blokade." }, { status: 500 });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }

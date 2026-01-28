@@ -35,3 +35,14 @@ export function resolveDbConnectionString() {
 export function getDbClient() {
   return new Client({ connectionString: resolveDbConnectionString() });
 }
+
+export function tryGetDbClient() {
+  if (process.env.DEMO_MODE === "true") {
+    return null;
+  }
+  try {
+    return new Client({ connectionString: resolveDbConnectionString() });
+  } catch (error) {
+    return null;
+  }
+}

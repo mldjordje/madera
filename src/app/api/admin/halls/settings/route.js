@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { getDbClient, requireAdmin } from "../../_utils";
+import { getDbClient, requireAdmin, tryGetDbClient } from "../../_utils";
+import { getDemoHallSettings, updateDemoHallSettings } from "@library/demoStore";
 
 const DEFAULT_SETTINGS = { allowReservations: true, contactPhone: "+381 63 000 000" };
 
@@ -80,12 +81,18 @@ export async function GET(request) {
   const auth = requireAdmin(request);
   if (!auth.ok) return auth.response;
 
+  const demoSettings = getDemoHallSettings();
+  const clientCandidate = tryGetDbClient();
+  if (!clientCandidate) {
+    return NextResponse.json({ ...demoSettings, source: "demo" });
+  }
+
   try {
     const settings = await readSettingsFromDb();
     return NextResponse.json(settings);
   } catch (error) {
     console.error("Admin hall settings GET failed:", error);
-    return NextResponse.json(DEFAULT_SETTINGS);
+    return NextResponse.json({ ...demoSettings, source: "demo" });
   }
 }
 
@@ -104,11 +111,18 @@ export async function PATCH(request) {
     typeof incoming.allowReservations === "boolean" ? incoming.allowReservations : DEFAULT_SETTINGS.allowReservations;
   const contactPhone = incoming.contactPhone?.trim() || DEFAULT_SETTINGS.contactPhone;
 
+  const clientCandidate = tryGetDbClient();
+  if (!clientCandidate) {
+    const next = updateDemoHallSettings({ allowReservations, contactPhone });
+    return NextResponse.json({ ...next, source: "demo" });
+  }
+
   try {
     const next = await writeSettingsToDb({ allowReservations, contactPhone });
     return NextResponse.json(next);
   } catch (error) {
     console.error("Admin hall settings PATCH failed:", error);
-    return NextResponse.json({ error: "Nije uspelo cuvanje podesavanja sala." }, { status: 500 });
+    const next = updateDemoHallSettings({ allowReservations, contactPhone });
+    return NextResponse.json({ ...next, source: "demo" });
   }
 }

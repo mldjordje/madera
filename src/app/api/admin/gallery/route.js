@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getDbClient, requireAdmin } from "../_utils";
+import { requireAdmin, tryGetDbClient } from "../_utils";
+import { addDemoGalleryItem, getDemoStore } from "@library/demoStore";
 
 const mapCategoryRow = (row) => ({
   id: row.id,
@@ -21,10 +22,20 @@ export async function GET(request) {
   const auth = requireAdmin(request);
   if (!auth.ok) return auth.response;
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
+  const demoStore = getDemoStore();
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      return NextResponse.json({
+        categories: demoStore.gallery.categories,
+        items: demoStore.gallery.items,
+        source: "demo",
+      });
+    }
+
+    await client.connect();
     const categories = await client.query(
       "SELECT id, slug, title, description FROM gallery_categories ORDER BY title ASC"
     );
@@ -38,9 +49,16 @@ export async function GET(request) {
     });
   } catch (error) {
     console.error("Admin gallery GET failed:", error);
-    return NextResponse.json({ error: "Failed to fetch gallery data" }, { status: 500 });
+    return NextResponse.json({
+      categories: demoStore.gallery.categories,
+      items: demoStore.gallery.items,
+      source: "demo",
+      error: error.message,
+    });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }
 
@@ -63,10 +81,27 @@ export async function POST(request) {
     return NextResponse.json({ error: "categorySlug and url (ili fajl) su obavezni" }, { status: 400 });
   }
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      const result = addDemoGalleryItem({
+        categorySlug,
+        categoryTitle,
+        categoryDescription,
+        url,
+        orientation,
+        alt,
+        sort,
+      });
+      if (!result) {
+        return NextResponse.json({ error: "Nije uspelo cuvanje slike." }, { status: 500 });
+      }
+      return NextResponse.json({ ok: true, category: result.category, item: result.item, source: "demo" });
+    }
+
+    await client.connect();
     await client.query("BEGIN");
 
     const catResult = await client.query(
@@ -94,10 +129,26 @@ export async function POST(request) {
       item: mapItemRow(itemResult.rows[0]),
     });
   } catch (error) {
-    await client.query("ROLLBACK");
+    if (client) {
+      await client.query("ROLLBACK");
+    }
     console.error("Admin gallery POST failed:", error);
+    const result = addDemoGalleryItem({
+      categorySlug,
+      categoryTitle,
+      categoryDescription,
+      url,
+      orientation,
+      alt,
+      sort,
+    });
+    if (result) {
+      return NextResponse.json({ ok: true, category: result.category, item: result.item, source: "demo" });
+    }
     return NextResponse.json({ error: "Failed to save gallery item" }, { status: 500 });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }

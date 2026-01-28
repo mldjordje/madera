@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getDbClient } from "../admin/_utils";
+import { tryGetDbClient } from "../admin/_utils";
+import { getDemoGalleryCombined } from "@library/demoStore";
 import GalleryData from "@data/gallery.json";
 
 const mapCategoryRow = (row) => ({
@@ -29,10 +30,15 @@ function combine(categories = [], items = []) {
 }
 
 export async function GET() {
-  const client = getDbClient();
-  await client.connect();
+  const client = tryGetDbClient();
+
+  if (!client) {
+    const demo = getDemoGalleryCombined();
+    return NextResponse.json({ ...demo, source: "demo" });
+  }
 
   try {
+    await client.connect();
     const categories = await client.query(
       "SELECT id, slug, title, description FROM gallery_categories ORDER BY title ASC"
     );
@@ -54,9 +60,10 @@ export async function GET() {
       categories: combined,
     });
   } catch (error) {
+    const demo = getDemoGalleryCombined();
     return NextResponse.json({
-      intro: GalleryData.intro,
-      categories: [],
+      ...demo,
+      source: "demo",
       reason: error.message,
     });
   } finally {

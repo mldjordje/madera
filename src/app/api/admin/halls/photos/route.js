@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { getDbClient, requireAdmin } from "../../_utils";
+import { requireAdmin, tryGetDbClient } from "../../_utils";
+import { addDemoHallPhoto, deleteDemoHallPhoto, getDemoHallPhotos, updateDemoHallPhoto } from "@library/demoStore";
 
 const HALL_TYPES = ["velika", "mala"];
 
@@ -16,10 +17,16 @@ export async function GET(request) {
   const auth = requireAdmin(request);
   if (!auth.ok) return auth.response;
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
+  const demoPhotos = getDemoHallPhotos();
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      return NextResponse.json({ photos: demoPhotos, source: "demo" });
+    }
+
+    await client.connect();
     const result = await client.query(
       "SELECT id, hall_type, url, alt, sort FROM hall_photos ORDER BY hall_type, sort, id"
     );
@@ -32,9 +39,11 @@ export async function GET(request) {
     return NextResponse.json({ photos: grouped });
   } catch (error) {
     console.error("Admin hall photos GET failed:", error);
-    return NextResponse.json({ error: "Nije uspelo ucitavanje slika sala." }, { status: 500 });
+    return NextResponse.json({ photos: demoPhotos, source: "demo", error: error.message });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }
 
@@ -62,10 +71,16 @@ export async function POST(request) {
     return NextResponse.json({ error: "URL slike je obavezan." }, { status: 400 });
   }
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      const photo = addDemoHallPhoto({ hallType, url, alt, sort });
+      return NextResponse.json({ photo, source: "demo" }, { status: 201 });
+    }
+
+    await client.connect();
     const result = await client.query(
       `INSERT INTO hall_photos (hall_type, url, alt, sort)
        VALUES ($1, $2, $3, $4)
@@ -76,9 +91,12 @@ export async function POST(request) {
     return NextResponse.json({ photo: mapPhoto(result.rows[0]) }, { status: 201 });
   } catch (error) {
     console.error("Admin hall photos POST failed:", error);
-    return NextResponse.json({ error: "Nije uspelo cuvanje slike." }, { status: 500 });
+    const photo = addDemoHallPhoto({ hallType, url, alt, sort });
+    return NextResponse.json({ photo, source: "demo" }, { status: 201 });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }
 
@@ -134,10 +152,19 @@ export async function PATCH(request) {
 
   values.push(id);
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      const photo = updateDemoHallPhoto({ id, hallType, url, alt, sort });
+      if (!photo) {
+        return NextResponse.json({ error: "Slika nije pronadjena." }, { status: 404 });
+      }
+      return NextResponse.json({ photo, source: "demo" });
+    }
+
+    await client.connect();
     const result = await client.query(
       `UPDATE hall_photos
        SET ${updates.join(", ")}
@@ -153,9 +180,15 @@ export async function PATCH(request) {
     return NextResponse.json({ photo: mapPhoto(result.rows[0]) });
   } catch (error) {
     console.error("Admin hall photos PATCH failed:", error);
+    const photo = updateDemoHallPhoto({ id, hallType, url, alt, sort });
+    if (photo) {
+      return NextResponse.json({ photo, source: "demo" });
+    }
     return NextResponse.json({ error: "Nije uspelo azuriranje slike." }, { status: 500 });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }
 
@@ -175,10 +208,19 @@ export async function DELETE(request) {
     return NextResponse.json({ error: "ID je obavezan." }, { status: 400 });
   }
 
-  const client = getDbClient();
-  await client.connect();
+  let client;
 
   try {
+    client = tryGetDbClient();
+    if (!client) {
+      const removed = deleteDemoHallPhoto(id);
+      if (!removed) {
+        return NextResponse.json({ error: "Slika nije pronadjena." }, { status: 404 });
+      }
+      return NextResponse.json({ ok: true, source: "demo" });
+    }
+
+    await client.connect();
     const result = await client.query("DELETE FROM hall_photos WHERE id = $1", [id]);
     if (result.rowCount === 0) {
       return NextResponse.json({ error: "Slika nije pronadjena." }, { status: 404 });
@@ -186,8 +228,14 @@ export async function DELETE(request) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Admin hall photos DELETE failed:", error);
+    const removed = deleteDemoHallPhoto(id);
+    if (removed) {
+      return NextResponse.json({ ok: true, source: "demo" });
+    }
     return NextResponse.json({ error: "Nije uspelo brisanje slike." }, { status: 500 });
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }

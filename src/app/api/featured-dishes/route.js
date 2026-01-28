@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { Client } from "pg";
-import { resolveDbConnectionString } from "../admin/_utils";
+import { tryGetDbClient } from "../admin/_utils";
+import { getDemoFeaturedDishes } from "@library/demoStore";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -15,18 +15,14 @@ const mapDishRow = (row) => ({
 });
 
 export async function GET() {
-  let connectionString;
+  const client = tryGetDbClient();
 
-  try {
-    connectionString = resolveDbConnectionString();
-  } catch (error) {
-    return NextResponse.json({ items: [], reason: error.message }, { status: 200 });
+  if (!client) {
+    return NextResponse.json({ items: getDemoFeaturedDishes(), source: "demo" }, { status: 200 });
   }
 
-  const client = new Client({ connectionString });
-  await client.connect();
-
   try {
+    await client.connect();
     const result = await client.query(
       `SELECT id, title, description, image_url, price, sort
        FROM featured_dishes
@@ -37,7 +33,7 @@ export async function GET() {
     return NextResponse.json({ items: result.rows.map(mapDishRow) });
   } catch (error) {
     console.error("Public featured dishes GET failed:", error);
-    return NextResponse.json({ items: [], error: "Failed to load featured dishes" }, { status: 500 });
+    return NextResponse.json({ items: getDemoFeaturedDishes(), source: "demo", error: error.message }, { status: 200 });
   } finally {
     await client.end();
   }
