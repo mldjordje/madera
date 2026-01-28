@@ -28,14 +28,6 @@ const CallToActionSection = ( { bg } ) => {
                       </a>
                     </div>
 
-                    <div className="sb-cta-downloads">
-                      <a href="/reservation" data-no-swup className="sb-download-btn">
-                        <img src="/img/buttons/1.svg" alt="Google Play" />
-                      </a>
-                      <a href="/reservation" data-no-swup className="sb-download-btn">
-                        <img src="/img/buttons/2.svg" alt="App Store" />
-                      </a>
-                    </div>
                   </div>
                 </div>
                 <div className="col-lg-6">

@@ -2,29 +2,29 @@
     "banner1": {
         "image": {
             "url": "/img/illustrations/burger.png",
-            "alt": "burger"
+            "alt": "meni"
         },
         "title_before": "-",
         "title": "50",
         "title_after": "%",
-        "subtitle": "Discount for all* burgers!",
-        "text": "*Et modi itaque praesentium.",
+        "subtitle": "Preporuka kuce",
+        "text": "Pogledajte aktuelni meni i ponudu.",
         "button": {
-            "link": "/shop",
-            "label": "Get it now"
+            "link": "/menu",
+            "label": "Pogledaj meni"
         }
     },
     "banner2": {
         "image": {
             "url": "/img/illustrations/cup.png",
-            "alt": "cup"
+            "alt": "kontakt"
         },
-        "title": "For free!",
-        "subtitle": "Visit Starbelly and get your coffee*",
-        "text": "*Et modi itaque praesentium.",
+        "title": "Kontakt",
+        "subtitle": "Pozovite nas ili posaljite poruku",
+        "text": "Rado cemo odgovoriti na sva pitanja.",
         "button": {
             "link": "/contact",
-            "label": "Get it now"
+            "label": "Kontakt"
         }
     }
 }

@@ -1,18 +1,18 @@
 {
-    "title": "<sup>-</sup><span class='sb-title-lg'>50</span><sup>%</sup> Discount <br>for all* burgers!",
-    "description": "*Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+    "title": "Nasa ponuda",
+    "description": "Pogledajte meni i galeriju restorana.",
     "button1": {
-        "label": "Get it now!",
-        "icon": "/img/ui/icons/cart.svg",
-        "link": "/shop"
-    },
-    "button2": {
-        "label": "Menu",
+        "label": "Meni",
         "icon": "/img/ui/icons/menu.svg",
         "link": "/menu"
     },
+    "button2": {
+        "label": "Kontakt",
+        "icon": "/img/ui/icons/dialog.svg",
+        "link": "/contact"
+    },
     "image": {
         "url": "/img/illustrations/burger-2.png",
-        "alt": "burger"
+        "alt": "meni"
     }
 }

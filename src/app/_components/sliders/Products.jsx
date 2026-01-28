@@ -7,7 +7,6 @@ import Data from '@data/sliders/products';
 import Link from "next/link";
 
 import MenuItem from "@components/menu/MenuItem";
-import ProductItem from "@components/products/ProductItem";
 
 const FeaturedDishCard = ({ item }) => {
   const image = item.imageUrl || item.image;
@@ -32,15 +31,10 @@ const FeaturedDishCard = ({ item }) => {
 };
 
 const ProductsSlider = ( {items, title, description, button = {}, slidesPerView, paddingTop = 0, bgType, itemType} ) => {
-  const moreType = slidesPerView == 3 ? 2 : '';
   const safeItems = Array.isArray(items) ? items : [];
   const limitedItems = slidesPerView == 4 ? safeItems.slice(0, 8) : safeItems.slice(0, 6);
 
   const renderItem = (item, key) => {
-    if (itemType === "product") {
-      return <ProductItem item={item} index={key} marginBottom={0} moreType={moreType} />;
-    }
-
     if (itemType === "featured") {
       return <FeaturedDishCard item={item} />;
     }

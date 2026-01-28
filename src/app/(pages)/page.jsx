@@ -1,6 +1,5 @@
 import React from "react";
 import dynamic from "next/dynamic";
-import { headers } from "next/headers";
 
 import AppData from "@data/app.json";
 import Products from '@data/products';
@@ -21,11 +20,6 @@ export const metadata = {
 }
 
 async function Home1() {
-  const headerList = headers();
-  const protocol = headerList.get("x-forwarded-proto") || "http";
-  const host = headerList.get("host");
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (host ? `${protocol}://${host}` : "");
-
   const fallbackFeatured = (Products.collection['popular'] || []).map((item, idx) => ({
     id: `fallback-${idx}`,
     title: item.title,
@@ -34,19 +28,7 @@ async function Home1() {
     price: item.price ? `${item.price} ${item.currency || ""}`.trim() : "",
   }));
 
-  let featuredDishes = [];
-
-  if (baseUrl) {
-    try {
-      const response = await fetch(`${baseUrl}/api/featured-dishes`, { cache: "no-store" });
-      const payload = await response.json();
-      featuredDishes = Array.isArray(payload.items) ? payload.items : [];
-    } catch (error) {
-      console.error("Featured dishes fetch failed:", error);
-    }
-  }
-
-  const sliderItems = featuredDishes.length ? featuredDishes : fallbackFeatured;
+  const sliderItems = fallbackFeatured;
 
   return (
     <>

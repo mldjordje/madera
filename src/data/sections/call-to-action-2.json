@@ -1,18 +1,18 @@
 {
-    "title": "Free delivery service.",
-    "description": "*Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+    "title": "Kontakt i rezervacije.",
+    "description": "Pozovite nas ili posaljite poruku za informacije.",
     "button1": {
-        "label": "Order delivery",
-        "icon": "/img/ui/icons/cart.svg",
-        "link": "/shop"
+        "label": "Kontakt",
+        "icon": "/img/ui/icons/dialog.svg",
+        "link": "/contact"
     },
     "button2": {
-        "label": "Menu",
-        "icon": "/img/ui/icons/menu.svg",
-        "link": "/menu"
+        "label": "Galerija",
+        "icon": "/img/ui/icons/arrow.svg",
+        "link": "/gallery"
     },
     "image": {
         "url": "/img/illustrations/delivery.png",
-        "alt": "reserved"
+        "alt": "kontakt"
     }
 }

@@ -12,18 +12,15 @@ export const ScrollAnimation = () => {
     // top panel
     const topPanel = document.querySelector('.sb-top-bar-frame');
     const infoBar = document.querySelector('.sb-info-bar');
-    const miniCart = document.querySelector('.sb-minicart');
 
     if ( topPanel ) {
         window.addEventListener("scroll", (e) => {
             if( window.scrollY > 10 ) {
                 topPanel.classList.add('sb-scroll');
                 infoBar?.classList.add('sb-scroll');
-                miniCart?.classList.add('sb-scroll');
             } else {
                 topPanel.classList.remove('sb-scroll');
                 infoBar?.classList.remove('sb-scroll');
-                miniCart?.classList.remove('sb-scroll');
             }
         });
     }
