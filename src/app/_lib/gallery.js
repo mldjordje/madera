@@ -40,16 +40,36 @@ async function fetchFromCms() {
   }
 }
 
-export async function fetchGalleryData() {
-  const cmsData = await fetchFromCms();
-
-  if (cmsData) {
-    return cmsData;
+async function fetchFromDatabase() {
+  try {
+    const response = await fetch("/api/gallery", { cache: "no-store" });
+    if (!response.ok) {
+      return null;
+    }
+    const payload = await response.json();
+    if (!payload || !Array.isArray(payload.categories)) {
+      return null;
+    }
+    return {
+      intro: payload.intro || GalleryData.intro,
+      categories: payload.categories,
+    };
+  } catch (error) {
+    console.warn("[gallery] Unable to load internal gallery API", error);
+    return null;
   }
+}
+
+export async function fetchGalleryData() {
+  const dbData = await fetchFromDatabase();
+  if (dbData) return dbData;
+
+  const cmsData = await fetchFromCms();
+  if (cmsData) return cmsData;
 
   return {
     intro: GalleryData.intro,
-    categories: GalleryData.categories || [],
+    categories: [],
   };
 }
 

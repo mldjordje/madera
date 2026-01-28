@@ -54,11 +54,6 @@ const PageBanner = ({ pageTitle, breadTitle, description, type }) => {
                       <Link href="/blog">Blog</Link>
                     </li>
                     }
-                    {asPath.indexOf('/products') != -1 || asPath.indexOf('/cart') != -1 || asPath.indexOf('/checkout') != -1 &&
-                    <li>
-                      <Link href="/shop">Shop</Link>
-                    </li>
-                    }
                     {asPath.endsWith('/product') == 1 &&
                     <li>
                       <Link href="/products">Products</Link>

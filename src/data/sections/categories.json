@@ -1,14 +1,14 @@
 {
-    "title": "Šta biste <span>danas</span> probali?",
-    "description": "Izaberite kategoriju i otkrijte specijalitete kuće.",
-    "button": {
-        "link": "/shop",
-        "label": "Go shopping now"
-    },
-    "items": [
-        { "image": "/img/3.jpg", "title": "Predjela", "text": "Hladna i topla predjela iz naše kuhinje.", "link": "/menu" },
-        { "image": "/img/4.jpg", "title": "Glavna jela", "text": "Specijaliteti od mesa, ribe i pasta.", "link": "/menu" },
-        { "image": "/img/5.jpg", "title": "Pića", "text": "Vinska karta i pažljivo odabran izbor pića.", "link": "/menu" },
-        { "image": "/img/6.jpg", "title": "Dezerti", "text": "Kućne poslastice i klasici.", "link": "/menu" }
-    ]
+  "title": "Šta biste danas probali?",
+  "description": "Kratak izbor naših specijaliteta, uredno složen po kategorijama.",
+  "button": {
+    "link": "/menu",
+    "label": "Pogledaj meni"
+  },
+  "items": [
+    { "icon": "fas fa-seedling", "title": "Predjela", "text": "Hladna i topla predjela kuće.", "link": "/menu" },
+    { "icon": "fas fa-drumstick-bite", "title": "Glavna jela", "text": "Meso, riba i domaća pasta.", "link": "/menu" },
+    { "icon": "fas fa-wine-glass-alt", "title": "Pića", "text": "Vinska karta i pažljivo birani kokteli.", "link": "/menu" },
+    { "icon": "fas fa-ice-cream", "title": "Dezerti", "text": "Kućni klasici i sezonske torte.", "link": "/menu" }
+  ]
 }

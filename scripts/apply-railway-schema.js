@@ -3,6 +3,14 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client } = require('pg');
 
+// Load env from .env.local or .env so local scripts work like Next.js runtime
+try {
+  require('dotenv').config({ path: path.join(process.cwd(), '.env.local') });
+  require('dotenv').config();
+} catch (err) {
+  // dotenv optional if env already injected
+}
+
 async function main() {
   const connectionString = process.env.DATABASE_URL;
 

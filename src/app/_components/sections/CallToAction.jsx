@@ -4,36 +4,48 @@ const CallToActionSection = ( { bg } ) => {
   return (
     <>
         {/* call to action */}
-        <section className="sb-call-to-action">
-            <div className="sb-bg-3"></div>
+        <section className="sb-call-to-action sb-call-to-action--light sb-soft-reveal">
+          <div className="container">
+            <div className="sb-cta-card">
+              <div className="row align-items-center">
+                <div className="col-lg-6 align-self-center">
+                  <div className="sb-cta-text">
+                    <h2 className="sb-h1 sb-mb-20" dangerouslySetInnerHTML={{__html : Data.title}} />
+                    <p className="sb-text sb-mb-25" dangerouslySetInnerHTML={{__html : Data.subtitle}} />
 
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-6 align-self-center">
-                        <div className="sb-cta-text">
-                            <h2 className="sb-h1 sb-mb-30" dangerouslySetInnerHTML={{__html : Data.title}} />
-                            <p className="sb-text sb-mb-30" dangerouslySetInnerHTML={{__html : Data.subtitle}} />
-
-                            <a href={Data.link1.url} target="_blank" title={Data.link1.title} data-no-swup className="sb-download-btn"><img src="/img/buttons/1.svg" alt="img" /></a>
-                            <a href={Data.link2.url} target="_blank" title={Data.link2.title} data-no-swup className="sb-download-btn"><img src="/img/buttons/2.svg" alt="img" /></a>
-                        </div>
+                    <div className="sb-cta-actions sb-mb-20">
+                      <a href={Data.link1.url} title={Data.link1.title} className="sb-btn">
+                        <span className="sb-icon">
+                          <img src="/img/ui/icons/arrow.svg" alt="arrow" />
+                        </span>
+                        <span>{Data.link1.title}</span>
+                      </a>
+                      <a href={Data.link2.url} title={Data.link2.title} className="sb-btn sb-btn-2 sb-btn-gray">
+                        <span className="sb-icon">
+                          <img src="/img/ui/icons/menu.svg" alt="contact" />
+                        </span>
+                        <span>{Data.link2.title}</span>
+                      </a>
                     </div>
-                    <div className="col-lg-6">
-                        <div className="sb-illustration-3">
-                            <img src={Data.image.url} alt={Data.image.alt} className="sb-phones" />
 
-                            <div className="sb-cirkle-1"></div>
-                            <div className="sb-cirkle-2"></div>
-                            <div className="sb-cirkle-3"></div>
-                            <div className="sb-cirkle-4"></div>
-
-                            <img src="/img/illustrations/1.svg" alt="phones" className="sb-pik-1" />
-                            <img src="/img/illustrations/2.svg" alt="phones" className="sb-pik-2" />
-                            <img src="/img/illustrations/3.svg" alt="phones" className="sb-pik-3" />
-                        </div>
+                    <div className="sb-cta-downloads">
+                      <a href="/reservation" data-no-swup className="sb-download-btn">
+                        <img src="/img/buttons/1.svg" alt="Google Play" />
+                      </a>
+                      <a href="/reservation" data-no-swup className="sb-download-btn">
+                        <img src="/img/buttons/2.svg" alt="App Store" />
+                      </a>
                     </div>
+                  </div>
                 </div>
+                <div className="col-lg-6">
+                  <div className="sb-cta-image">
+                    <img src={Data.image.url} alt={Data.image.alt} />
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </section>
         {/* call to action end */}
     </>
