@@ -1,4 +1,5 @@
 ﻿import AppData from "@data/app.json";
+import Image from "next/image";
 import TemplateHeader from "@/components/TemplateHeader";
 import TemplateFooter from "@/components/TemplateFooter";
 import ImmersiveGallery from "@/components/ImmersiveGallery";
@@ -131,20 +132,20 @@ export default function HomePage() {
         <div className="scroll-section">
           <div className="pagewrap">
             <div className="element-top">
-              <img src="/img/ui/madera-logo.png" alt="Madera" />
+              <Image src="/img/ui/madera-logo.png" alt="Madera" width={230} height={88} />
             </div>
             <div className="element-bottom">
               <div className="element-bottom-left">
                 <div className="image-element parallax">
-                  <img src="/restoran/IMG_20250921_184124.jpg" alt="Madera sala" />
+                  <Image src="/restoran/IMG_20250921_184124.jpg" alt="Madera sala" width={1600} height={1100} />
                 </div>
               </div>
               <div className="element-bottom-right">
                 <div className="image-element parallax">
-                  <img src="/svecanasala/IMG_20250919_161505.jpg" alt="Madera ambijent" />
+                  <Image src="/svecanasala/IMG_20250919_161505.jpg" alt="Madera ambijent" width={1600} height={1100} />
                 </div>
                 <div className="image-element parallax">
-                  <img src="/img/gallery/3.jpg" alt="Madera bazen" />
+                  <Image src="/img/gallery/3.jpg" alt="Madera bazen" width={1400} height={960} />
                 </div>
               </div>
             </div>
@@ -289,7 +290,7 @@ export default function HomePage() {
             <div className="section-top">
               <div className="flex-elements">
                 <div className="flex-element-left">
-                  <img src="/img/ui/madera-logo.png" alt="Madera" />
+                  <Image src="/img/ui/madera-logo.png" alt="Madera" width={328} height={126} />
                 </div>
                 <div className="flex-element-right">
                   <a href="/kontakt" className="button white">Kontakt</a>
@@ -356,7 +357,7 @@ export default function HomePage() {
               <div className="location-content">
                 <div className="section-title" data-aos="fade-up">
                   <p>LOKACIJA</p>
-                  <img src="/img/ui/madera-logo.png" alt="Madera" />
+                  <Image src="/img/ui/madera-logo.png" alt="Madera" width={120} height={46} />
                 </div>
                 <div className="section-bigtitle">
                   <h1>Mirna lokacija uz <em>prirodu</em></h1>
@@ -371,10 +372,10 @@ export default function HomePage() {
             <div className="section-elements-bottom">
               <div className="grid-2-elements">
                 <div className="grid-element-left parallax" data-aos="fade-up">
-                  <img src="/restoran/IMG_20250919_173541.jpg" alt="Madera priroda" />
+                  <Image src="/restoran/IMG_20250919_173541.jpg" alt="Madera priroda" width={1500} height={1000} />
                 </div>
                 <div className="grid-element-right parallax" data-aos="fade-up">
-                  <img src="/img/gallery/6.jpg" alt="Madera bazen okolina" />
+                  <Image src="/img/gallery/6.jpg" alt="Madera bazen okolina" width={1500} height={1000} />
                 </div>
               </div>
             </div>
@@ -465,5 +466,7 @@ export default function HomePage() {
     </>
   );
 }
+
+
 
 
