@@ -1172,3 +1172,46 @@ body {
   background: var(--madera-surface);
   color: var(--madera-text);
 }
+
+.sb-admin-grid--compact {
+  padding: 80px 0 60px;
+  gap: 18px;
+}
+
+.sb-admin-grid--compact .sb-admin-tile h5 {
+  margin-top: 4px;
+}
+
+.sb-admin-items-grid--simple {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.sb-admin-booking {
+  transition: 0.2s ease-in-out;
+}
+
+.sb-admin-booking-placeholder {
+  margin-top: 12px;
+  border: 1px dashed var(--madera-border);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.sb-admin-booking.is-disabled {
+  background: #ececec;
+  border-color: #d2d2d2;
+  color: #6b6b6b;
+}
+
+.sb-admin-booking.is-disabled .sb-admin-booking-placeholder {
+  background: #f5f5f5;
+  border-color: #c7c7c7;
+  color: #666;
+}
+
+.sb-admin-booking.is-disabled .sb-label,
+.sb-admin-booking.is-disabled .sb-toggle-label {
+  color: #6b6b6b;
+}

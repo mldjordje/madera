@@ -1,64 +1,108 @@
-import { Inter, Playfair_Display, Monoton } from 'next/font/google'
-
-const inter = Inter({
-  weight: ['300', '400', '500', '600', '700', '800'],
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-})
-
-const playfair = Playfair_Display({
-  weight: ['400', '500', '600', '700'],
-  subsets: ['latin'],
-  variable: '--font-serif',
-  display: 'swap',
-})
-
-const monoton = Monoton({
-  weight: ['400'],
-  subsets: ['latin'],
-  variable: '--font-monoton',
-  display: 'swap',
-})
-
-import "@styles/css/plugins/bootstrap.min.css";
-import "@styles/css/plugins/swiper.min.css";
-import "@styles/css/plugins/font-awesome.min.css";
-
-import { register } from "swiper/element/bundle";
-// register Swiper custom elements
-register();
-
-import '@styles/scss/style.scss';
-import "./globals.css";
-
-import ScrollbarProgress from "@layouts/scrollbar-progress/Index";
-
-import AppData from "@data/app.json";
+import Script from "next/script";
+import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from "@mantine/core";
+import "@mantine/core/styles.css";
 
 export const metadata = {
-  title: {
-		default: AppData.settings.siteName,
-		template: "%s | " + AppData.settings.siteName,
-	},
-  description: AppData.settings.siteDescription,
-}
+  title: "Hotel-Restoran Madera",
+  description: "Hotel-Restoran Madera - proslave, restoran i letnji bazen u mirnom ambijentu.",
+};
 
-const Layouts = ({
-  children
-}) => {
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+import MobileCallButton from "@/components/MobileCallButton";
+
+const Layouts = ({ children }) => {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} ${monoton.variable}`}>
-      <body>
-        {/* app wrapper */}
-        <div className="sb-app">
+    <html lang="sr" {...mantineHtmlProps}>
+      <head>
+        <ColorSchemeScript defaultColorScheme="light" />
+        <link rel="stylesheet" href="/the8/style.css" />
+        <link rel="stylesheet" href="/the8/css/aos.css" />
+        <link rel="stylesheet" href="/the8/css/swiper-bundle.min.css" />
+        <link rel="stylesheet" href="/the8/css/lenis.css" />
+        <link rel="stylesheet" href="/the8/gallery/finaltilesgallery.css" />
+        <link rel="stylesheet" href="/the8/gallery/lightbox2.css" />
+      </head>
+      <body className="home wp-singular page-template-default page page-id-23 wp-theme-the8project">
+        <MantineProvider defaultColorScheme="light">
           {children}
+          <MobileCallButton />
+        </MantineProvider>
+        <Script src="/the8/js/jquery.min.js" strategy="afterInteractive" />
+        <Script src="/the8/js/lenis.min.js" strategy="afterInteractive" />
+        <Script src="/the8/js/aos.js" strategy="afterInteractive" />
+        <Script src="/the8/js/swiper-bundle.min.js" strategy="afterInteractive" />
+        <Script src="/the8/gallery/jquery.finaltilesgallery.js" strategy="afterInteractive" />
+        <Script src="/the8/gallery/lightbox2.js" strategy="afterInteractive" />
+        <Script src="/the8/gsap-premium/minified/gsap.min.js" strategy="afterInteractive" />
+        <Script src="/the8/gsap-premium/minified/ScrollTrigger.min.js" strategy="afterInteractive" />
+        <Script src="/the8/gsap-premium/minified/ScrollSmoother.min.js" strategy="afterInteractive" />
+        <Script src="/the8/gsap-premium/minified/SplitText.min.js" strategy="afterInteractive" />
+        <Script src="/the8/animations.js" strategy="afterInteractive" />
+        <Script id="the8-init" strategy="afterInteractive">
+          {`
+            (function () {
+              var tries = 0;
+              var maxTries = 30;
 
-          <ScrollbarProgress />
-        </div>
-        {/* app wrapper end */}
+              function revealAosFallback() {
+                document.querySelectorAll('[data-aos]').forEach(function (el) {
+                  el.classList.add('aos-animate');
+                  el.style.opacity = '1';
+                  el.style.transform = 'none';
+                });
+              }
+
+              function initThe8() {
+              if (window.AOS) {
+                window.AOS.refreshHard && window.AOS.refreshHard();
+                window.AOS.init({ duration: 1300, once: true });
+              } else {
+                tries += 1;
+                if (tries < maxTries) {
+                  window.setTimeout(initThe8, 120);
+                } else {
+                  revealAosFallback();
+                }
+                return;
+              }
+              if (window.Swiper) {
+                document.querySelectorAll('.mySwiper').forEach(function (el) {
+                  if (el.swiper) return;
+                  new window.Swiper(el, {
+                  loop: true,
+                  speed: 800,
+                  spaceBetween: 32,
+                  pagination: {
+                    el: el.querySelector('.swiper-pagination'),
+                    type: 'fraction',
+                  },
+                  navigation: {
+                    nextEl: el.querySelector('.swiper-button-next'),
+                    prevEl: el.querySelector('.swiper-button-prev'),
+                  },
+                });
+                });
+              }
+              if (window.jQuery && window.jQuery.fn && window.jQuery.fn.finalTilesGallery) {
+                window.jQuery('.final-tiles-gallery').finalTilesGallery();
+              }
+              }
+
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initThe8);
+              } else {
+                initThe8();
+              }
+            })();
+          `}
+        </Script>
       </body>
     </html>
   );
 };
+
 export default Layouts;
