@@ -1,24 +1,42 @@
-﻿'use client';
-
-import { useEffect } from "react";
 import TemplateHeader from "@/components/TemplateHeader";
 import TemplateFooter from "@/components/TemplateFooter";
 import ImmersiveGallery from "@/components/ImmersiveGallery";
-import { pageShowcaseContent } from "@data/showcase-content";
-import { useSiteShowcase } from "@library/use-site-showcase";
+import StructuredData from "@components/StructuredData";
+import { getHallBookingEnabled, getShowcaseForPage } from "@library/site-content";
+import { buildEventVenueSchema, buildMetadata } from "../_lib/seo";
 
-export default function SvecanaSalaPage() {
-  const { showcase, hallBookingEnabled } = useSiteShowcase("svecanasala", pageShowcaseContent.svecanasala);
+export const metadata = buildMetadata({
+  title: "Svecane sale za vencanja, rodjendane i poslovne dogadjaje",
+  description:
+    "Svecane sale Madera kod Nisa nude elegantan prostor za vencanja, krstenja, rodjendane, jubileje i poslovne dogadjaje uz podrsku tima i dogovor oko organizacije.",
+  path: "/svecanasala",
+  image: "/svecanasala/IMG_20250919_161505.jpg",
+  keywords: [
+    "svecana sala Nis",
+    "vencanja Nis",
+    "sala za proslave Nis",
+    "krstenja Nis",
+    "poslovni dogadjaji Nis",
+  ],
+});
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.AOS) {
-      window.AOS.init({ duration: 1300, once: true });
-    }
-  }, []);
+const pageSchema = buildEventVenueSchema({
+  name: "Svecane sale Madera",
+  description:
+    "Velika i mala svecana sala Madera kod Nisa za vencanja, rodjendane, krstenja, jubileje i poslovna okupljanja.",
+  path: "/svecanasala",
+  image: "/svecanasala/IMG_20250919_161505.jpg",
+});
+
+export default async function SvecanaSalaPage() {
+  const [showcase, hallBookingEnabled] = await Promise.all([
+    getShowcaseForPage("svecanasala"),
+    getHallBookingEnabled(),
+  ]);
 
   return (
     <>
+      <StructuredData id="madera-svecanasala-schema" data={pageSchema} />
       <TemplateHeader />
       <div id="svecanasala-page">
         <div className="hero-section">
@@ -29,23 +47,28 @@ export default function SvecanaSalaPage() {
             aria-hidden="true"
           ></div>
           <div className="titlos-element">
-            <h1>Svečana sala <em>Madera</em></h1>
+            <h1>Svecane sale <em>Madera</em></h1>
           </div>
           <div className="small-title">
-            <p>Idealna za sve vrste događaja i proslava</p>
+            <p>Elegantna pozornica za velike trenutke i proslave koje se pamte</p>
           </div>
         </div>
 
         <div className="about-section lefko">
           <div className="pagewrap">
             <div className="section-title" data-aos="fade-up">
-              <p>SVEČANE SALE</p>
+              <p>SVECANE SALE</p>
             </div>
             <div className="section-bigtitle" data-aos="fade-up">
-              <h2>Prostor za sve vrste <em>proslava i događaja</em></h2>
+              <h2>Prostor koji se prilagodjava vasem povodu, broju gostiju i utisku koji zelite da ostavite</h2>
             </div>
             <div className="section-content" data-aos="fade-up" data-aos-delay="250">
-              <p>Naše svečane sale nude fleksibilan prostor sa modernom opremom. Idealne su za venčanja, rođendane, krštenja i poslovne konferencije.</p>
+              <p>
+                U Maderi su na raspolaganju velika i mala sala, pa lako birate
+                da li vam je potrebna reprezentativna scena za veliko slavlje ili
+                topliji ambijent za porodicno okupljanje. Organizacija ostaje
+                pregledna, a prostor uredjen i spreman za vazan dan.
+              </p>
             </div>
           </div>
         </div>
@@ -58,15 +81,15 @@ export default function SvecanaSalaPage() {
             <div className="element-bottom">
               <div className="element-bottom-left">
                 <div className="image-element parallax">
-                  <img src="/svecanasala/IMG_20250919_161505.jpg" alt="Sala" />
+                  <img src="/svecanasala/IMG_20250919_161505.jpg" alt="Velika svecana sala Madera" />
                 </div>
               </div>
               <div className="element-bottom-right">
                 <div className="image-element parallax">
-                  <img src="/svecanasala/20240429_155233_0000.png" alt="Sala" />
+                  <img src="/svecanasala/20240429_155233_0000.png" alt="Mala sala Madera" />
                 </div>
                 <div className="image-element parallax">
-                  <img src="/svecanasala/IMG_20250918_165826.jpg" alt="Sala" />
+                  <img src="/svecanasala/IMG_20250918_165826.jpg" alt="Detalji dekoracije u sali Madera" />
                 </div>
               </div>
             </div>
@@ -78,32 +101,32 @@ export default function SvecanaSalaPage() {
             <div className="grid-2-elements">
               <div className="grid-element-left">
                 <div className="section-title" data-aos="fade-up">
-                  <p>DOGAĐAJI</p>
+                  <p>DOGADJAJI</p>
                 </div>
                 <div className="section-bigtitle" data-aos="fade-up">
-                  <h2>Sve vrste proslava</h2>
+                  <h2>Sale za trenutke koji traze i lepotu prostora i sigurnost organizacije</h2>
                 </div>
               </div>
               <div className="grid-element-right">
                 <div className="section-bottom">
                   <div className="element-story" data-aos="fade-up" data-aos-delay="250">
-                    <div className="element-story-top"><h4>Venčanja</h4></div>
-                    <div className="element-story-bottom"><p>Kompletan servis za vaš poseban dan.</p></div>
+                    <div className="element-story-top"><h4>Vencanja i velike proslave</h4></div>
+                    <div className="element-story-bottom"><p>Prostor koji izgleda reprezentativno na docek, ceremoniju, fotografije i zavrsetak veceri.</p></div>
                   </div>
                   <div className="story-line"></div>
                   <div className="element-story" data-aos="fade-up" data-aos-delay="350">
-                    <div className="element-story-top"><h4>Korporativni događaji</h4></div>
-                    <div className="element-story-bottom"><p>Konferencije i seminari uz profesionalnu podršku.</p></div>
+                    <div className="element-story-top"><h4>Porodicna slavlja</h4></div>
+                    <div className="element-story-bottom"><p>Topla atmosfera za rodjendane, krstenja, jubileje i okupljanja vise generacija.</p></div>
                   </div>
                   <div className="story-line"></div>
                   <div className="element-story" data-aos="fade-up" data-aos-delay="450">
-                    <div className="element-story-top"><h4>Privatne proslave</h4></div>
-                    <div className="element-story-bottom"><p>Rođendani, krštenja, jubileji - nezaboravni momenti.</p></div>
+                    <div className="element-story-top"><h4>Poslovni dogadjaji</h4></div>
+                    <div className="element-story-bottom"><p>Uredan raspored i ozbiljan ambijent za ruckove, proslave firmi i formalna okupljanja.</p></div>
                   </div>
                   <div className="story-line"></div>
                 </div>
                 <a href="/kontakt" className="button" data-aos="fade-up" data-aos-delay="550">
-                  {hallBookingEnabled ? "Zakazi termin" : "Pozovi za dostupnost"}
+                  {hallBookingEnabled ? "Zakazi obilazak i termin" : "Pozovi za dostupnost"}
                 </a>
               </div>
             </div>
@@ -117,14 +140,14 @@ export default function SvecanaSalaPage() {
           <div className="background-filter"></div>
           <div className="opportunity-content">
             <div className="pagewrap">
-              <div className="section-title"><p>PROSLAVE</p></div>
+              <div className="section-title"><p>UTISAK KOJI OSTAJE</p></div>
               <div className="section-bigtitle">
-                <h1>Nezaboravni momenti <em>u Maderi</em></h1>
+                <h1>Sala koja izgleda svecano, a funkcionise <em>bez improvizacije</em></h1>
               </div>
               <div className="section-content">
-                <p>Dajte nam priliku da vaš događaj učinimo posebnim.</p>
+                <p>Javite datum i broj gostiju, a mi cemo predloziti prostor i nacin organizacije koji najbolje odgovara vasem dogadjaju.</p>
               </div>
-              <a href="/kontakt" className="button">Kontaktirajte nas</a>
+              <a href="/kontakt" className="button">Posaljite upit</a>
             </div>
           </div>
         </div>

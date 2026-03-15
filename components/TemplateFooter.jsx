@@ -58,14 +58,17 @@ export default function TemplateFooter() {
 
               <div className="flex-elements">
                 <div className="element-title">
-                  <p>DRUSTVENE MREZE</p>
+                  <p>REZERVACIJE</p>
                 </div>
                 <div className="element-informations">
-                  <li>
-                    <a href="https://instagram.com" target="_blank" rel="noreferrer">
-                      Instagram
-                    </a>
-                  </li>
+                  <ul>
+                    <li>
+                      <p>Pozovite za slobodne termine i detalje organizacije.</p>
+                    </li>
+                    <li>
+                      <a href="/kontakt">Posaljite upit online</a>
+                    </li>
+                  </ul>
                 </div>
               </div>
 
@@ -89,7 +92,7 @@ export default function TemplateFooter() {
 
             <div className="footer-element-right">
               <div className="footer-line"></div>
-              <p>© 2026 Hotel-Restoran Madera</p>
+              <p>(c) 2026 Hotel-Restoran Madera</p>
             </div>
           </div>
         </div>
@@ -97,4 +100,3 @@ export default function TemplateFooter() {
     </div>
   );
 }
-

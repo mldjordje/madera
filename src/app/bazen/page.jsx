@@ -1,24 +1,39 @@
-'use client';
-
-import { useEffect } from "react";
 import TemplateHeader from "@/components/TemplateHeader";
 import TemplateFooter from "@/components/TemplateFooter";
 import ImmersiveGallery from "@/components/ImmersiveGallery";
-import { pageShowcaseContent } from "@data/showcase-content";
-import { useSiteShowcase } from "@library/use-site-showcase";
+import StructuredData from "@components/StructuredData";
+import { getShowcaseForPage } from "@library/site-content";
+import { buildMetadata, buildPoolSchema } from "../_lib/seo";
 
-export default function BazenPage() {
-  const { showcase } = useSiteShowcase("bazen", pageShowcaseContent.bazen);
+export const metadata = buildMetadata({
+  title: "Letnji bazen i relax zona u okviru kompleksa Madera",
+  description:
+    "Letnji bazen Madera kod Nisa donosi opustanje, osvezenje i dodatni sadrzaj u okviru kompleksa, idealan za dnevni predah i letnja okupljanja.",
+  path: "/bazen",
+  image: "/img/4.jpg",
+  keywords: [
+    "bazen Nis",
+    "letnji bazen Nis",
+    "relax zona Nis",
+    "Madera bazen",
+    "bazen kod Nisa",
+  ],
+});
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.AOS) {
-      window.AOS.init({ duration: 1300, once: true });
-    }
-  }, []);
+const pageSchema = buildPoolSchema({
+  name: "Letnji bazen Madera",
+  description:
+    "Letnji bazen Madera kod Nisa upotpunjuje ponudu kompleksa kao sezonski prostor za osvezenje, odmor i opustenu atmosferu.",
+  path: "/bazen",
+  image: "/img/4.jpg",
+});
+
+export default async function BazenPage() {
+  const showcase = await getShowcaseForPage("bazen");
 
   return (
     <>
+      <StructuredData id="madera-bazen-schema" data={pageSchema} />
       <TemplateHeader />
       <div id="bazen-page">
         <div className="hero-section">
@@ -32,20 +47,25 @@ export default function BazenPage() {
             <h1>Letnji bazen <em>Madera</em></h1>
           </div>
           <div className="small-title">
-            <p>Osvezenje i opustanje u prirodnom ambijentu</p>
+            <p>Sezonski prostor za osvezenje i predah u mirnom ambijentu</p>
           </div>
         </div>
 
         <div className="about-section lefko">
           <div className="pagewrap">
             <div className="section-title" data-aos="fade-up">
-              <p>BAZEN</p>
+              <p>LETNJI SADRZAJ</p>
             </div>
             <div className="section-bigtitle" data-aos="fade-up">
-              <h2>Letnji kutak za <em>odmor i druzenje</em></h2>
+              <h2>Bazen koji Maderi daje opusteniji ritam tokom toplih meseci</h2>
             </div>
             <div className="section-content" data-aos="fade-up" data-aos-delay="250">
-              <p>Bazen je idealan za dnevni odmor, porodično uživanje i osveženje tokom letnjih dana.</p>
+              <p>
+                Uz restoran i svecane sale, letnji bazen dopunjuje ponudu Madera
+                kompleksa kao prostor za osvezenje, mirniji dnevni boravak i
+                prijatan letnji predah. Ambijent ostaje uredjen, pregledan i
+                prijatan za goste koji zele da uspore tempo i provedu dan lepo.
+              </p>
             </div>
           </div>
         </div>
@@ -58,15 +78,15 @@ export default function BazenPage() {
             <div className="element-bottom">
               <div className="element-bottom-left">
                 <div className="image-element parallax">
-                  <img src="/sobe/IMG_20230906_180646.jpg" alt="Relax zona Madera" />
+                  <img src="/sobe/IMG_20230906_180646.jpg" alt="Relax zona Madera bazena" />
                 </div>
               </div>
               <div className="element-bottom-right">
                 <div className="image-element parallax">
-                  <img src="/sobe/IMG_20230906_180741.jpg" alt="Ambijent prostora" />
+                  <img src="/sobe/IMG_20230906_180741.jpg" alt="Dodatni kadar relax zone Madera" />
                 </div>
                 <div className="image-element parallax">
-                  <img src="/sobe/IMG_20230906_180904.jpg" alt="Dodatni kadar prostora" />
+                  <img src="/sobe/IMG_20230906_180904.jpg" alt="Letnji ambijent Madera kompleksa" />
                 </div>
               </div>
             </div>
@@ -80,14 +100,14 @@ export default function BazenPage() {
           <div className="background-filter"></div>
           <div className="opportunity-content">
             <div className="pagewrap">
-              <div className="section-title"><p>LETNJA SEZONA</p></div>
+              <div className="section-title"><p>LETNJI UZITAK</p></div>
               <div className="section-bigtitle">
-                <h1>Uživajte u letu uz <em>Madera bazen</em></h1>
+                <h1>Mesto za predah koje uz restoran i sale zaokruzuje <em>Madera iskustvo</em></h1>
               </div>
               <div className="section-content">
-                <p>Kontaktirajte nas za informacije o dostupnosti i dnevnim terminima.</p>
+                <p>Kontaktirajte nas za informacije o sezoni, dostupnosti i nacinu koriscenja letnjih sadrzaja.</p>
               </div>
-              <a href="/kontakt" className="button">Kontaktirajte nas</a>
+              <a href="/kontakt" className="button">Posaljite upit</a>
             </div>
           </div>
         </div>

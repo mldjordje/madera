@@ -1,21 +1,85 @@
-﻿import AppData from "@data/app.json";
 import Image from "next/image";
 import TemplateHeader from "@/components/TemplateHeader";
 import TemplateFooter from "@/components/TemplateFooter";
 import ImmersiveGallery from "@/components/ImmersiveGallery";
 import MobileFirstShowcase from "@components/sections/MobileFirstShowcase";
+import StructuredData from "@components/StructuredData";
 import { pageShowcaseContent } from "@data/showcase-content";
-export const metadata = {
-  title: {
-    default: "Home",
-    template: "%s | " + AppData.settings.siteName,
+import {
+  buildEventVenueSchema,
+  buildFaqSchema,
+  buildMetadata,
+  buildPoolSchema,
+  buildRestaurantSchema,
+  buildWebSiteSchema,
+} from "../_lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Svecane sale, restoran i letnji bazen kod Nisa",
+  description:
+    "Madera je mesto kod Nisa za vencanja, rodjendane, porodicne i poslovne dogadjaje, uz restoran, svecane sale i letnji bazen u mirnom ambijentu.",
+  path: "/",
+  image: "/img/4.jpg",
+  keywords: [
+    "Madera Nis",
+    "svecana sala Nis",
+    "restoran za proslave Nis",
+    "vencanja kod Nisa",
+    "letnji bazen Nis",
+  ],
+});
+
+const homeFaqs = [
+  {
+    question: "Koje vrste proslava mozete organizovati u Maderi?",
+    answer:
+      "U Maderi se organizuju vencanja, rodjendani, krstenja, jubileji, poslovni dogadjaji i druga privatna okupljanja, uz izbor sale i menija prema broju gostiju.",
   },
-  description: AppData.settings.siteDescription,
+  {
+    question: "Da li Madera ima vise prostora za razlicite tipove gostiju?",
+    answer:
+      "Da. Gostima su na raspolaganju dve svecane sale, restoran za svakodnevne ili dogovorene obroke i letnji bazen kao dodatni sadrzaj tokom toplijih meseci.",
+  },
+  {
+    question: "Kako izgleda rezervacija termina?",
+    answer:
+      "Dovoljno je da posaljete okviran datum, broj gostiju i povod. Tim Madera zatim predlaze odgovarajuci prostor, osnovni model usluge i sledece korake do potvrde termina.",
+  },
+];
+
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    buildWebSiteSchema(),
+    buildEventVenueSchema({
+      name: "Svecane sale Madera",
+      description:
+        "Svecane sale Madera kod Nisa namenjene su vencanjima, rodjendanima, krstenjima i poslovnim dogadjajima.",
+      path: "/",
+      image: "/svecanasala/IMG_20250919_161505.jpg",
+    }),
+    buildRestaurantSchema({
+      name: "Restoran Madera",
+      description:
+        "Restoran Madera spaja domacu kuhinju, miran ambijent i prostor za porodicne i poslovne susrete kod Nisa.",
+      path: "/",
+      image: "/restoran/IMG_20250921_184124.jpg",
+    }),
+    buildPoolSchema({
+      name: "Letnji bazen Madera",
+      description:
+        "Letnji bazen Madera dopunjuje ponudu kompleksa za opustanje, dnevni odmor i osvezenje tokom sezone.",
+      path: "/",
+      image: "/img/4.jpg",
+    }),
+    buildFaqSchema(homeFaqs),
+  ].filter(Boolean),
 };
 
 export default function HomePage() {
   return (
     <>
+      <StructuredData id="madera-home-schema" data={pageSchema} />
       <TemplateHeader />
 
       <div id="homepage">
@@ -41,31 +105,33 @@ export default function HomePage() {
             </h1>
           </div>
           <div className="small-title">
-            <p>Okolina Niša, Srbija</p>
+            <p>Proslave, restoran i letnji predah u prirodi nadomak Nisa</p>
           </div>
         </div>
 
         <div className="about-section">
           <div className="pagewrap">
             <div className="section-title">
-              <p>INTRODUCTION</p>
+              <p>MADERA</p>
             </div>
             <div className="section-bigtitle">
               <h2>
-                Dve sale za proslave, restoran za svaki dan i letnji bazen u
-                mirnom ambijentu nadomak Niša.
+                Mesto gde se elegantne proslave, dobra hrana i mirna lokacija
+                spajaju u jedno iskustvo.
               </h2>
             </div>
             <div className="section-subtitle">
               <h4>
-                Idealno mesto za svadbe, rodendane, krštenja i poslovne dogadaje.
+                Za vencanja, rodjendane, krstenja, porodicne ruckove i poslovna
+                okupljanja sa jasnom organizacijom.
               </h4>
             </div>
             <div className="home-intro-copy">
               <p>
-                U Maderi možete organizovati intimna okupljanja i velike dogadaje na jednom mestu,
-                uz jasnu komunikaciju sa timom, fleksibilnu ponudu menija i prostor koji se prilagodava
-                vašem broju gostiju.
+                Madera nije samo prostor za rezervaciju, vec tim koji paze na
+                ritam dogadjaja, utisak gostiju i svaki detalj koji domacinu
+                donosi mir. Od prvog razgovora do poslednjih gostiju, cilj nam
+                je da sve izgleda skladno, prirodno i dostojno prilike.
               </p>
             </div>
           </div>
@@ -77,10 +143,26 @@ export default function HomePage() {
           <div className="pagewrap">
             <div className="madera-quick-facts__grid">
               {[
-                { value: "2", label: "Svecane sale", text: "Velika i mala sala za razlicite tipove proslava." },
-                { value: "1", label: "Restoran", text: "A la carte ponuda i meni po dogovoru." },
-                { value: "1", label: "Letnji bazen", text: "Dodatna vrednost tokom toplih dana." },
-                { value: "24/7", label: "Podrska", text: "Brza komunikacija tokom planiranja dogadjaja." },
+                {
+                  value: "2",
+                  label: "Svecane sale",
+                  text: "Velika i mala sala za intimne proslave i veca slavlja.",
+                },
+                {
+                  value: "1",
+                  label: "Restoran",
+                  text: "Prijatan ambijent za svakodnevne goste i dogovorene menije.",
+                },
+                {
+                  value: "1",
+                  label: "Letnji bazen",
+                  text: "Dodatni sadrzaj koji upotpunjuje boravak tokom sezone.",
+                },
+                {
+                  value: "Brzo",
+                  label: "Planiranje",
+                  text: "Jasan dogovor oko termina, broja gostiju i modela usluge.",
+                },
               ].map((fact, idx) => (
                 <article className="madera-quick-facts__card" key={`fact-${idx}`}>
                   <p className="madera-quick-facts__value">{fact.value}</p>
@@ -97,32 +179,34 @@ export default function HomePage() {
             <div className="grid-2-elements">
               <div className="story-copy" data-aos="fade-up">
                 <div className="section-title">
-                  <p>ISKUSTVO</p>
+                  <p>ISKUSTVO GOSTA</p>
                 </div>
                 <div className="section-bigtitle">
-                  <h2>Kako izgleda dogadaj u <em>Maderi</em></h2>
+                  <h2>Kako izgleda dan kada organizaciju prepustite <em>Maderi</em></h2>
                 </div>
                 <p>
-                  Od prvog poziva do završetka proslave, naš tim vodi vas kroz svaki korak:
-                  izbor sale, predlog posluženja, raspored sedenja i dinamiku dogadaja.
+                  Prvo biramo prostor koji odgovara povodu i broju gostiju, zatim
+                  uskladjujemo posluzenje, tok veceri i detalje koji su domacinu
+                  vazni. Sve je postavljeno tako da atmosfera ostane prirodna, a
+                  organizacija pregledna.
                 </p>
                 <p>
-                  Cilj nam je da domacini budu rastereceni, a gosti zadovoljni atmosferom,
-                  uslugom i kvalitetom hrane.
+                  Zato gosti Maderu pamte po toplini ambijenta, dobroj hrani i
+                  osecaju da je svaka proslava vodjena sa merom i ukusom.
                 </p>
               </div>
               <div className="story-points" data-aos="fade-up" data-aos-delay="200">
                 <div className="point-item">
-                  <h4>Planiranje bez stresa</h4>
-                  <p>Dobijate jasan predlog organizacije i okvir troškova pre potvrde termina.</p>
+                  <h4>Jasan dogovor od starta</h4>
+                  <p>Odmah znate koji prostor, koji kapacitet i koji tip usluge najbolje odgovara vasem planu.</p>
                 </div>
                 <div className="point-item">
-                  <h4>Tim koji je prisutan</h4>
-                  <p>Tokom dogadaja prisutna je ekipa koja prati ritam veceri i potrebe gostiju.</p>
+                  <h4>Tim koji nosi organizaciju</h4>
+                  <p>Na licu mesta imate podrsku ljudi koji brinu o tempu, servisu i utisku gostiju.</p>
                 </div>
                 <div className="point-item">
-                  <h4>Ambijent za fotografije</h4>
-                  <p>Prostor i okolina nude više lepih kadrova za uspomene koje ostaju.</p>
+                  <h4>Ambijent koji lepo izgleda uzivo i na fotografijama</h4>
+                  <p>Prirodno okruzenje, uredjeni enterijeri i vise scena za uspomene koje ostaju.</p>
                 </div>
               </div>
             </div>
@@ -137,15 +221,15 @@ export default function HomePage() {
             <div className="element-bottom">
               <div className="element-bottom-left">
                 <div className="image-element parallax">
-                  <Image src="/restoran/IMG_20250921_184124.jpg" alt="Madera sala" width={1600} height={1100} />
+                  <Image src="/restoran/IMG_20250921_184124.jpg" alt="Restoran Madera" width={1600} height={1100} />
                 </div>
               </div>
               <div className="element-bottom-right">
                 <div className="image-element parallax">
-                  <Image src="/svecanasala/IMG_20250919_161505.jpg" alt="Madera ambijent" width={1600} height={1100} />
+                  <Image src="/svecanasala/IMG_20250919_161505.jpg" alt="Svecana sala Madera" width={1600} height={1100} />
                 </div>
                 <div className="image-element parallax">
-                  <Image src="/img/gallery/3.jpg" alt="Madera bazen" width={1400} height={960} />
+                  <Image src="/img/gallery/3.jpg" alt="Letnji ambijent Madera" width={1400} height={960} />
                 </div>
               </div>
             </div>
@@ -157,26 +241,27 @@ export default function HomePage() {
             <div className="grid-2-elements">
               <div className="grid-element-left">
                 <div className="section-title" data-aos="fade-up">
-                  <p>PROSLAVE</p>
+                  <p>PROSLAVE I BORAVAK</p>
                 </div>
                 <div className="section-bigtitle" data-aos="fade-up">
-                  <h2>DVE SALE</h2>
+                  <h2>Dve sale, restoran i sezonski sadrzaji u jednom kompleksu</h2>
                 </div>
                 <div className="section-content" data-aos="fade-up">
-                  <h3>Organizujemo sve vrste proslava i dogadaja.</h3>
+                  <h3>Pravi izbor kada zelite lepo mesto i sigurnu organizaciju.</h3>
                   <p>
-                    Kapacitet i raspored prilagodavamo broju gostiju i vrsti
-                    dogadaja, uz kompletnu uslugu.
+                    Bilo da planirate intimno porodicno slavlje ili veci
+                    dogadjaj, Madera objedinjuje prostore i uslugu tako da sve
+                    ostane pregledno, skladno i prijatno za goste.
                   </p>
                 </div>
                 <a href="/kontakt" className="button" data-aos="fade-up">
-                  Zakaži termin
+                  Proveri termin
                 </a>
               </div>
 
               <div className="grid-element-right">
                 <div className="section-title" data-aos="fade-up">
-                  <p>RESTORAN</p>
+                  <p>STA GOSTI DOCEKAJU</p>
                 </div>
 
                 <div className="section-bottom">
@@ -185,7 +270,7 @@ export default function HomePage() {
                       <h4>Mala sala</h4>
                     </div>
                     <div className="element-story-bottom">
-                      <p>Idealna za porodicne proslave i intimna okupljanja.</p>
+                      <p>Topao prostor za porodicne proslave, krstenja i manja okupljanja.</p>
                     </div>
                   </div>
 
@@ -196,7 +281,7 @@ export default function HomePage() {
                       <h4>Velika sala</h4>
                     </div>
                     <div className="element-story-bottom">
-                      <p>Kapacitet za svadbe, krštenja i poslovne dogadaje.</p>
+                      <p>Reprezentativan ambijent za vencanja, jubileje i poslovne veceri.</p>
                     </div>
                   </div>
 
@@ -204,10 +289,10 @@ export default function HomePage() {
 
                   <div className="element-story" data-aos="fade-up" data-aos-delay="450">
                     <div className="element-story-top">
-                      <h4>Letnji bazen</h4>
+                      <h4>Letnji bazen i terasa</h4>
                     </div>
                     <div className="element-story-bottom">
-                      <p>Ambijent za opuštanje tokom toplih dana.</p>
+                      <p>Sezonski predah koji Maderi daje dodatnu sirinu i opustenu notu.</p>
                     </div>
                   </div>
 
@@ -225,28 +310,28 @@ export default function HomePage() {
         <section className="madera-service-strip lefko">
           <div className="pagewrap">
             <div className="section-title" data-aos="fade-up">
-              <p>STA DOBIJATE</p>
+              <p>USLUGA KOJA ULIVA POVERENJE</p>
             </div>
             <div className="section-bigtitle" data-aos="fade-up">
-              <h2>Kompletna usluga od ideje do realizacije</h2>
+              <h2>Od prvog pitanja do poslednjeg gosta imate jasnu podrsku</h2>
             </div>
             <div className="madera-service-strip__grid">
               {[
                 {
-                  title: "Plan prostora",
-                  text: "Predlog rasporeda stolova, bine i prolaza prema broju gostiju.",
+                  title: "Predlog prostora",
+                  text: "Preporuka sale i rasporeda prema povodu, broju gostiju i zeljenoj atmosferi.",
                 },
                 {
-                  title: "Meni po meri",
-                  text: "Opcije posluzenja i korekcije menija prema vrsti dogadjaja.",
+                  title: "Meni po meri dogadjaja",
+                  text: "Dogovor oko posluzivanja i ritma obroka tako da sve prati tok proslave.",
                 },
                 {
-                  title: "Vremenski plan",
-                  text: "Jasna satnica za pripremu, dolazak gostiju i tok veceri.",
+                  title: "Precizan plan veceri",
+                  text: "Laksa koordinacija dolaska gostiju, posluzenja i najvaznijih trenutaka.",
                 },
                 {
-                  title: "Koordinacija tima",
-                  text: "Operativna podrska tokom celog dogadjaja na licu mesta.",
+                  title: "Tim na licu mesta",
+                  text: "Podrska tokom dogadjaja kako bi domacin mogao da se posveti gostima.",
                 },
               ].map((item, idx) => (
                 <article key={`service-${idx}`} className="madera-service-strip__card" data-aos="fade-up" data-aos-delay={120 + idx * 80}>
@@ -263,17 +348,17 @@ export default function HomePage() {
         <section className="madera-flow-section">
           <div className="pagewrap">
             <div className="section-title" data-aos="fade-up">
-              <p>ORGANIZACIJA</p>
+              <p>KAKO REZERVACIJA TECE</p>
             </div>
             <div className="section-bigtitle" data-aos="fade-up">
-              <h2>Kako izgleda proces rezervacije</h2>
+              <h2>Proces koji je jednostavan i za domacine i za tim Madera</h2>
             </div>
             <div className="madera-flow-section__grid">
               {[
-                { step: "01", title: "Upit", text: "Posaljite okviran datum, broj gostiju i tip dogadjaja." },
-                { step: "02", title: "Ponuda", text: "Dobijate predlog sale, menija i osnovni plan realizacije." },
-                { step: "03", title: "Potvrda", text: "Zakljucujemo detalje i rezervisemo termin." },
-                { step: "04", title: "Dogadjaj", text: "Tim vodi realizaciju, a vi se fokusirate na goste." },
+                { step: "01", title: "Prvi kontakt", text: "Javite datum, povod i okviran broj gostiju da odmah procenimo najbolju opciju." },
+                { step: "02", title: "Predlog resenja", text: "Dobijate preporuku prostora, model usluge i osnovni pravac organizacije." },
+                { step: "03", title: "Dogovor detalja", text: "Potvrdjujemo meni, raspored i sve sto je vazno za tok dogadjaja." },
+                { step: "04", title: "Dan realizacije", text: "Tim preuzima operativni deo, a vi docekate goste rastereceno." },
               ].map((item, idx) => (
                 <article className="madera-flow-section__card" key={`flow-${idx}`} data-aos="fade-up" data-aos-delay={130 + idx * 90}>
                   <span>{item.step}</span>
@@ -293,38 +378,25 @@ export default function HomePage() {
                   <Image src="/img/ui/madera-logo.png" alt="Madera" width={328} height={126} />
                 </div>
                 <div className="flex-element-right">
-                  <a href="/kontakt" className="button white">Kontakt</a>
+                  <a href="/kontakt" className="button white">Posalji upit</a>
                 </div>
               </div>
             </div>
 
             <div className="section-bottom">
               <div className="faq-container">
-                {[
-                  {
-                    title: "DVE SALE ZA PROSLAVE",
-                    text: "Imamo malu i veliku salu koje prilagodavamo dogadaju.",
-                  },
-                  {
-                    title: "MENI PO DOGOVORU",
-                    text: "Jelovnik prilagodavamo dogadaju i broju gostiju.",
-                  },
-                  {
-                    title: "KAKO REZERVISATI TERMIN",
-                    text: "Pozovite nas ili pošaljite email za dogovor termina.",
-                  },
-                ].map((item, idx) => (
+                {homeFaqs.map((item, idx) => (
                   <div className="faq" key={`faq-${idx}`}>
                     <div className="faq-inside">
                       <div className="faq-question">
-                        <h3>{item.title}</h3>
+                        <h3>{item.question.toUpperCase()}</h3>
                         <div className="faq-btn">
                           <span></span>
                           <span></span>
                         </div>
                       </div>
                       <div className="faq-answer">
-                        <p>{item.text}</p>
+                        <p>{item.answer}</p>
                       </div>
                     </div>
                   </div>
@@ -339,14 +411,14 @@ export default function HomePage() {
           <div className="background-filter"></div>
           <div className="opportunity-content">
             <div className="pagewrap">
-              <div className="section-title"> <p>ZAŠTO MADERA</p> </div>
+              <div className="section-title"> <p>ZASTO GOSTI BIRAJU MADERU</p> </div>
               <div className="section-bigtitle">
-                <h1>Ugodna atmosfera <em>i kompletna usluga</em></h1>
+                <h1>Ambijent koji deluje otmeno, a ostaje <em>topao i prijatan</em></h1>
               </div>
               <div className="section-content">
-                <p>Spoj prirode, kvalitetne kuhinje i prostora za proslave na jednom mestu.</p>
+                <p>U Maderi dobijate prostor koji ostavlja utisak i uslugu koja olaksava svaki vazan trenutak.</p>
               </div>
-              <a href="/kontakt" className="button">Kontaktirajte nas</a>
+              <a href="/kontakt" className="button">Zatrazite ponudu</a>
             </div>
           </div>
         </div>
@@ -360,10 +432,10 @@ export default function HomePage() {
                   <Image src="/img/ui/madera-logo.png" alt="Madera" width={120} height={46} />
                 </div>
                 <div className="section-bigtitle">
-                  <h1>Mirna lokacija uz <em>prirodu</em></h1>
+                  <h1>Mirno okruzenje koje gostima daje <em>osecaj izdvojenosti</em></h1>
                 </div>
                 <div className="section-content">
-                  <p>Restoran se nalazi u mirnom ambijentu, idealnom za opuštanje i proslave.</p>
+                  <p>Blizina Nisa i ambijent u prirodi cine Maderu prakticnim izborom za goste koji zele lako dostupan, a ipak poseban prostor.</p>
                 </div>
                 <a href="/kontakt" className="button">Kako do nas</a>
               </div>
@@ -372,10 +444,10 @@ export default function HomePage() {
             <div className="section-elements-bottom">
               <div className="grid-2-elements">
                 <div className="grid-element-left parallax" data-aos="fade-up">
-                  <Image src="/restoran/IMG_20250919_173541.jpg" alt="Madera priroda" width={1500} height={1000} />
+                  <Image src="/restoran/IMG_20250919_173541.jpg" alt="Okruzenje Madera restorana" width={1500} height={1000} />
                 </div>
                 <div className="grid-element-right parallax" data-aos="fade-up">
-                  <Image src="/img/gallery/6.jpg" alt="Madera bazen okolina" width={1500} height={1000} />
+                  <Image src="/img/gallery/6.jpg" alt="Letnji ambijent Madera kompleksa" width={1500} height={1000} />
                 </div>
               </div>
             </div>
@@ -388,21 +460,21 @@ export default function HomePage() {
               <p>PREDNOSTI</p>
             </div>
             <div className="section-bigtitle" data-aos="fade-up">
-              <h2>Zašto gosti biraju <em>Maderu</em></h2>
+              <h2>Razlozi zbog kojih se u <em>Maderu</em> dolazi sa poverenjem</h2>
             </div>
             <div className="madera-benefits-grid">
               {[
                 {
-                  title: "Kompletna organizacija",
-                  text: "Od rasporeda stolova do toka veceri, naš tim vodi racuna o svakom detalju.",
+                  title: "Ambijent za vazne trenutke",
+                  text: "Prostor ostavlja lep prvi utisak, ali je dovoljno prijatan da se gosti brzo opuste.",
                 },
                 {
-                  title: "Domaca kuhinja",
-                  text: "Meni prilagodavamo dogadaju i broju gostiju, sa fokusom na kvalitet i svežinu.",
+                  title: "Hrana koja prati povod",
+                  text: "Od svakodnevnog restoranskog uzivanja do organizovanih menija za proslave i veca okupljanja.",
                 },
                 {
-                  title: "Mirna lokacija",
-                  text: "Ambijent u prirodi daje privatnost i prijatan osecaj tokom celog dogadaja.",
+                  title: "Jedna lokacija, vise mogucnosti",
+                  text: "Sale, restoran i letnji sadrzaji omogucavaju da Madera prati razlicite scenarije dogadjaja.",
                 },
               ].map((item, idx) => (
                 <div className="benefit-card" key={`benefit-${idx}`} data-aos="fade-up" data-aos-delay={150 + idx * 100}>
@@ -417,24 +489,24 @@ export default function HomePage() {
         <div className="madera-packages-section">
           <div className="pagewrap">
             <div className="section-title" data-aos="fade-up">
-              <p>PAKETI</p>
+              <p>IDEJE ZA REZERVACIJU</p>
             </div>
             <div className="section-bigtitle" data-aos="fade-up">
-              <h2>Predlog paketa za dogadaje</h2>
+              <h2>Tipovi dogadjaja koje gosti najcesce planiraju u Maderi</h2>
             </div>
             <div className="madera-packages-grid">
               {[
                 {
                   name: "Porodicna proslava",
-                  details: "Mala sala, meni po dogovoru i fleksibilan raspored za rucak ili veceru.",
+                  details: "Mala sala ili restoran, opustena atmosfera i dogovor oko menija prema gostima i terminu.",
                 },
                 {
-                  name: "Svadbeni paket",
-                  details: "Velika sala, kompletna usluga i podrška tima od pocetka do kraja dogadaja.",
+                  name: "Svadba ili veliko slavlje",
+                  details: "Velika sala, sveobuhvatna organizacija i prostor koji izgleda reprezentativno od doceka do zavrsetka veceri.",
                 },
                 {
-                  name: "Biznis okupljanje",
-                  details: "Formalniji raspored, uskladen meni i miran prostor za timske dogadaje.",
+                  name: "Poslovno okupljanje",
+                  details: "Mirno okruzenje i uredan raspored za rucak, sastanak, prezentaciju ili timsko obelezavanje vaznih trenutaka.",
                 },
               ].map((item, idx) => (
                 <div className="package-item" key={`package-${idx}`} data-aos="fade-up" data-aos-delay={200 + idx * 100}>
@@ -450,11 +522,11 @@ export default function HomePage() {
           <div className="pagewrap">
             <div className="cta-strip-inner" data-aos="fade-up">
               <div className="cta-copy">
-                <h3>Spremni ste za rezervaciju termina?</h3>
-                <p>Pozovite nas ili pošaljite upit i dobicete odgovor u najkracem roku.</p>
+                <h3>Imate datum ili samo ideju od koje zelite da krenete?</h3>
+                <p>Posaljite upit i dobicete brz odgovor sa predlogom prostora i sledecih koraka.</p>
               </div>
               <div className="cta-actions">
-                <a href="/kontakt" className="button white">Pošalji upit</a>
+                <a href="/kontakt" className="button white">Posalji upit</a>
                 <a href="tel:+381607180659" className="button white">Pozovi odmah</a>
               </div>
             </div>
@@ -466,7 +538,3 @@ export default function HomePage() {
     </>
   );
 }
-
-
-
-

@@ -6,36 +6,36 @@ import { Button, Card, CardBody, CardHeader, Chip, Image } from "@heroui/react";
 const showcaseCards = [
   {
     eyebrow: "Svecane sale",
-    title: "Velika sala za svadbe i vecernje proslave",
-    text: "Prostor za veci broj gostiju sa rasvetom i rasporedom stolova koji se prilagodjava formatu dogadjaja.",
+    title: "Velika sala za vencanja i svecane veceri",
+    text: "Elegantna postavka za dogadjaje koji traze reprezentativan ambijent, dobar raspored i lep prvi utisak.",
     tag: "Do 300 gostiju",
     image: "/svecanasala/IMG_20250918_165838.jpg",
   },
   {
     eyebrow: "Restoran",
-    title: "Topli restoran za svakodnevni rucak",
-    text: "Domaca kuhinja, pouzdana usluga i ambijent koji je podjednako prijatan za porodice i poslovne goste.",
+    title: "Restoran za rucak, veceru i dogovorene susrete",
+    text: "Topao enterijer, prijatan servis i kuhinja koja odgovara i porodicnim gostima i poslovnim okupljanjima.",
     tag: "A la carte",
     image: "/restoran/IMG_20250921_184124.jpg",
   },
   {
     eyebrow: "Mala sala",
-    title: "Intiman prostor za privatna okupljanja",
-    text: "Prakticna opcija za rodjendane, krstenja i manje porodicne dogadjaje sa fleksibilnim rasporedom.",
+    title: "Diskretan prostor za privatna slavlja",
+    text: "Pravi izbor za rodjendane, krstenja i porodicne trenutke koji traze bliskiju i topliju atmosferu.",
     tag: "Privatno",
     image: "/svecanasala/IMG_20250919_161505.jpg",
   },
   {
-    eyebrow: "Sobe",
-    title: "Komforne sobe za goste i odmor",
-    text: "Smestaj u okviru kompleksa olaksava organizaciju kada gosti dolaze iz drugih gradova.",
-    tag: "Hotel",
+    eyebrow: "Relax zona",
+    title: "Kutak za predah unutar Madera kompleksa",
+    text: "Uredjen prostor za opustanje koji upotpunjuje boravak i daje Maderi smiren, gostoprimljiv karakter.",
+    tag: "Komfor",
     image: "/sobe/IMG_20230906_180919.jpg",
   },
   {
     eyebrow: "Bazen",
-    title: "Letnji momenat za dnevna i vecernja desavanja",
-    text: "Bazen donosi dodatni vizuelni kvalitet prostoru i opusteniji ritam tokom toplih meseci.",
+    title: "Letnji ritam koji zaokruzuje boravak",
+    text: "Sezonski sadrzaj koji Maderi daje jos jednu dimenziju za osvezenje, odmor i prijatnu letnju atmosferu.",
     tag: "Sezonski",
     image: "/img/gallery/11.jpg",
   },
@@ -44,8 +44,8 @@ const showcaseCards = [
 const highlights = [
   "2 odvojene sale",
   "Bazen + restoran",
-  "Smestaj za goste",
-  "Podrska tima 24/7",
+  "Mirna lokacija",
+  "Podrska tima",
 ];
 
 export default function MobileFirstShowcase() {
@@ -91,12 +91,12 @@ export default function MobileFirstShowcase() {
       <div className="pagewrap">
         <div className="madera-mobile-showcase__intro" data-reveal style={{ "--reveal-delay": "0ms" }}>
           <Chip className="madera-mobile-showcase__chip" radius="full" size="sm" variant="flat">
-            VIZUELNI SADRZAJ
+            MADERA NA JEDNOM MESTU
           </Chip>
-          <h2>Vise prostora, vise fotografija i jasniji pregled ponude</h2>
+          <h2>Brz pregled prostora koji odmah pokazuje zasto se Madera bira za vazne trenutke</h2>
           <p>
-            Posle hero sekcije odmah prikazujemo realne kadrove iz sala, restorana, smestaja i bazena da
-            posetioci na telefonu brzo steknu kompletan utisak.
+            Vec na pocetku posetioci vide sale, restoran, relax zonu i letnje kadrove,
+            pa lakse procenjuju da li Madera odgovara njihovom povodu, gostima i zeljenoj atmosferi.
           </p>
         </div>
 
@@ -140,7 +140,7 @@ export default function MobileFirstShowcase() {
         </div>
 
         <div className="madera-mobile-showcase__cta" data-reveal style={{ "--reveal-delay": "180ms" }}>
-          <p>Zelite da proverite raspoloziv termin ili dogovorite obilazak prostora?</p>
+          <p>Zelite da proverite raspoloziv termin ili da najpre vidite koji prostor vam najvise odgovara?</p>
           <div className="madera-mobile-showcase__actions">
             <Button as="a" className="madera-mobile-showcase__button" href="/svecanasala" radius="full" size="md" variant="shadow">
               Pogledaj sale

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { unstable_noStore as noStore } from "next/cache";
 import { pageShowcaseContent } from "@data/showcase-content";
 import { getSqlClient, requireSqlClient } from "./neon-db";
 
@@ -25,8 +26,8 @@ const PAGE_SECTION_KEYS = {
 const FALLBACK_SECTION_ITEMS = {
   svecana_velika: [
     {
-      title: "Velika sala - centralni kadar",
-      description: "Prostor za veca slavlja i dogadjaje.",
+      title: "Velika sala - prvi utisak",
+      description: "Reprezentativan kadar prostora za vencanja, jubileje i veca slavlja.",
       category: "Velika sala",
       imageUrl: "/svecanasala/IMG_20250919_161505.jpg",
       altText: "Velika svecana sala",
@@ -35,7 +36,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Vecernja postavka",
-      description: "Dekoracija i osvetljenje za vecernje termine.",
+      description: "Osvetljenje i dekoracija koji sali daju svecan, elegantan ton.",
       category: "Velika sala",
       imageUrl: "/svecanasala/IMG_20250918_165838.jpg",
       altText: "Vecernji ambijent velike sale",
@@ -44,7 +45,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Raspored za slavlje",
-      description: "Fleksibilna postavka stolova i podijuma.",
+      description: "Postavka koja ostavlja dovoljno prostora za goste, posluzenje i glavne trenutke veceri.",
       category: "Velika sala",
       imageUrl: "/svecanasala/IMG_20250920_164436.jpg",
       altText: "Raspored stolova u velikoj sali",
@@ -53,7 +54,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Zimska postavka",
-      description: "Topliji tonovi i priprema sale za zimsku sezonu.",
+      description: "Topliji tonovi i puniji ambijent za slavlje u hladnijem delu godine.",
       category: "Velika sala",
       imageUrl: "/svecanasala/20251228_172631.jpg",
       altText: "Zimska postavka velike sale",
@@ -62,7 +63,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Formalni raspored",
-      description: "Varijanta postavke za poslovne i formalne skupove.",
+      description: "Urednija i ozbiljnija postavka za poslovna okupljanja i svecane prijeme.",
       category: "Velika sala",
       imageUrl: "/svecanasala/20230114_152110_0000.png",
       altText: "Formalna postavka velike sale",
@@ -73,7 +74,7 @@ const FALLBACK_SECTION_ITEMS = {
   svecana_mala: [
     {
       title: "Mala sala - elegantna postavka",
-      description: "Prostor za intimnija slavlja i privatne dogadjaje.",
+      description: "Topao prostor za intimnija slavlja, porodicne ruckove i privatne dogadjaje.",
       category: "Mala sala",
       imageUrl: "/svecanasala/IMG_20250918_165826.jpg",
       altText: "Mala sala elegantna postavka",
@@ -82,7 +83,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Mala sala - intimniji format",
-      description: "Pogodno za manja okupljanja i porodicne proslave.",
+      description: "Idealna kada zelite bliskiji ambijent i uredjen prostor za manje grupe gostiju.",
       category: "Mala sala",
       imageUrl: "/svecanasala/20240429_155233_0000.png",
       altText: "Mala sala Madera",
@@ -91,7 +92,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Dekoracija male sale",
-      description: "Topli tonovi i udoban raspored.",
+      description: "Detalji prostora koji stvaraju prijatan, nenametljivo svecan utisak.",
       category: "Mala sala",
       imageUrl: "/svecanasala/20240429_155322_0000.png",
       altText: "Dekoracija male sale",
@@ -100,7 +101,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Postavka za privatne proslave",
-      description: "Brza prilagodljivost prema broju gostiju.",
+      description: "Raspored koji se lako prilagodjava broju gostiju i prirodi okupljanja.",
       category: "Mala sala",
       imageUrl: "/svecanasala/20240429_155400_0000.png",
       altText: "Postavka male sale",
@@ -109,7 +110,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Detalji sale",
-      description: "Uredjenje i detalji prostora pre dolaska gostiju.",
+      description: "Uredjenje koje maloj sali daje uredan i gostoprimljiv karakter.",
       category: "Mala sala",
       imageUrl: "/svecanasala/20240429_155523_0000.png",
       altText: "Detalji male sale",
@@ -120,7 +121,7 @@ const FALLBACK_SECTION_ITEMS = {
   restoran: [
     {
       title: "Glavni restoran",
-      description: "Sirok prikaz prostora i ambijenta.",
+      description: "Sirok kadar koji pokazuje topao enterijer i raspored prostora za goste.",
       category: "Restoran",
       imageUrl: "/restoran/IMG_20250921_184124.jpg",
       altText: "Glavni restoran Madera",
@@ -129,7 +130,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Terasa",
-      description: "Otvoreni deo restorana za toplije dane.",
+      description: "Otvoreni deo restorana za opusteniji ritam tokom toplijih dana.",
       category: "Restoran",
       imageUrl: "/restoran/IMG_20250919_173541.jpg",
       altText: "Terasa restorana",
@@ -138,7 +139,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Ulaz i ambijent",
-      description: "Spoljasnji kadar restorana i parking zone.",
+      description: "Prvi pogled na restoran i pristup koji gostima olaksava dolazak.",
       category: "Restoran",
       imageUrl: "/restoran/IMG_20231024_175715.jpg",
       altText: "Ulaz restorana",
@@ -147,7 +148,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Vecernje osvetljenje",
-      description: "Restoran u vecernjem tonu sa ambijentalnim svetlom.",
+      description: "Atmosfera restorana kada prostor dobije mirniji, elegantniji vecernji ton.",
       category: "Ambijent",
       imageUrl: "/restoran/IMG_20250919_174921.jpg",
       altText: "Vecernje osvetljenje restorana",
@@ -156,7 +157,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Topli unutrasnji tonovi",
-      description: "Drveni detalji i prijatan unutrasnji raspored.",
+      description: "Drveni detalji i uredjen enterijer koji ostavljaju prijatan, domacinski utisak.",
       category: "Enterijer",
       imageUrl: "/restoran/20211124_081935.jpg",
       altText: "Topli enterijer restorana",
@@ -165,7 +166,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Zona za rucak",
-      description: "Prostor prilagodjen porodicnim i poslovnim terminima.",
+      description: "Praktican prostor za porodicne obroke, poslovne ruckove i dogovorena okupljanja.",
       category: "Enterijer",
       imageUrl: "/restoran/20211124_082159.jpg",
       altText: "Zona za rucak u restoranu",
@@ -176,7 +177,7 @@ const FALLBACK_SECTION_ITEMS = {
   bazen: [
     {
       title: "Relax zona - glavni kadar",
-      description: "Vizuelni pregled prostora za odmor i letnje termine.",
+      description: "Vizuelni pregled prostora za letnji predah i opustanje u okviru kompleksa.",
       category: "Relax zona",
       imageUrl: "/sobe/IMG_20230906_180646.jpg",
       layout: "wide",
@@ -184,7 +185,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Dodatni ugao prostora",
-      description: "Jasan raspored i pregled zone za goste.",
+      description: "Jos jedan kadar koji pokazuje organizaciju i preglednost letnje zone za goste.",
       category: "Relax zona",
       imageUrl: "/sobe/IMG_20230906_180741.jpg",
       layout: "default",
@@ -192,7 +193,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Prateci kadar",
-      description: "Vizuelna slika prostora kroz dnevno svetlo.",
+      description: "Dnevni kadar koji daje realan utisak o atmosferi i rasporedu prostora.",
       category: "Relax zona",
       imageUrl: "/sobe/IMG_20230906_180904.jpg",
       layout: "default",
@@ -200,7 +201,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Detalji enterijera",
-      description: "Dodatni kadar komfora i opustenog ambijenta.",
+      description: "Dodatni pogled na uredjene detalje koji pojacavaju osecaj komfora.",
       category: "Relax zona",
       imageUrl: "/sobe/IMG_20230906_180919.jpg",
       altText: "Detalji prostora za odmor",
@@ -209,7 +210,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Topli tonovi",
-      description: "Ambijent za dnevni odmor i predah gostiju.",
+      description: "Mirniji kadar prostora namenjenog dnevnom odmoru i letnjem predahu.",
       category: "Relax zona",
       imageUrl: "/sobe/IMG_20230906_180926.jpg",
       altText: "Topli tonovi ambijenta",
@@ -218,7 +219,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Kutak za opustanje",
-      description: "Intimniji kadar sa fokusom na udobnost.",
+      description: "Intimniji kadar koji istice mirniju i udobniju stranu letnjeg boravka.",
       category: "Relax zona",
       imageUrl: "/sobe/IMG_20230906_180729.jpg",
       altText: "Kutak za opustanje",
@@ -227,7 +228,7 @@ const FALLBACK_SECTION_ITEMS = {
     },
     {
       title: "Madera eksterijer",
-      description: "Dodatni kadar kompleksa za potpun vizuelni utisak.",
+      description: "Spoljasnji kadar kompleksa koji zaokruzuje utisak o ambijentu i lokaciji.",
       category: "Ambijent",
       imageUrl: "/img/4.jpg",
       altText: "Madera eksterijer",
@@ -398,6 +399,7 @@ export function isValidSectionKey(sectionKey) {
 }
 
 export async function getAdminGalleryPayload() {
+  noStore();
   const sectionKeys = GALLERY_SECTIONS.map((section) => section.key);
   const dbRows = await loadGalleryRows(sectionKeys);
   const grouped = groupBySection(dbRows || []);
@@ -416,6 +418,7 @@ export async function getAdminGalleryPayload() {
 }
 
 export async function getShowcaseForPage(pageKey) {
+  noStore();
   const base = pageShowcaseContent[pageKey];
   if (!base) {
     return null;
@@ -442,6 +445,7 @@ export async function getShowcaseForPage(pageKey) {
 }
 
 export async function getHallBookingEnabled() {
+  noStore();
   const sql = getSqlClient();
   if (!sql) {
     return false;

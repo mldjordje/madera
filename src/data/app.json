@@ -1,7 +1,7 @@
 {
   "settings": {
     "siteName": "Hotel-Restoran Madera",
-    "siteDescription": "Zvanični sajt restorana Madera.",
+    "siteDescription": "Hotel-Restoran Madera - svecane sale, restoran i letnji bazen kod Nisa.",
     "formspreeURL": "https://formspree.io/f/your_api_key",
     "mapbox": {
       "AccessToken": "*",
@@ -18,15 +18,15 @@
       "alt": "Madera logo"
     },
     "menu": [
-      { "label": "Početna", "link": "/", "children": [] },
-      { "label": "Meni", "link": "/menu", "children": [] },
-      { "label": "Galerija", "link": "/gallery", "children": [] },
-      { "label": "O nama", "link": "/about", "children": [] },
-      { "label": "Kontakt", "link": "/contact", "children": [] }
+      { "label": "Pocetna", "link": "/", "children": [] },
+      { "label": "Svecane sale", "link": "/svecanasala", "children": [] },
+      { "label": "Restoran", "link": "/restoran", "children": [] },
+      { "label": "Bazen", "link": "/bazen", "children": [] },
+      { "label": "Kontakt", "link": "/kontakt", "children": [] }
     ]
   },
   "footer": {
-    "copy": "(c) 2025 Hotel-Restoran Madera. Sva prava zadržana."
+    "copy": "(c) 2026 Hotel-Restoran Madera. Sva prava zadrzana."
   },
   "social": [
     { "link": "https://twitter.com", "title": "Twitter", "icon": "fab fa-twitter" },

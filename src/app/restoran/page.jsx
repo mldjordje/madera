@@ -1,24 +1,39 @@
-﻿'use client';
-
-import { useEffect } from "react";
 import TemplateHeader from "@/components/TemplateHeader";
 import TemplateFooter from "@/components/TemplateFooter";
 import ImmersiveGallery from "@/components/ImmersiveGallery";
-import { pageShowcaseContent } from "@data/showcase-content";
-import { useSiteShowcase } from "@library/use-site-showcase";
+import StructuredData from "@components/StructuredData";
+import { getShowcaseForPage } from "@library/site-content";
+import { buildMetadata, buildRestaurantSchema } from "../_lib/seo";
 
-export default function RestoranPage() {
-  const { showcase } = useSiteShowcase("restoran", pageShowcaseContent.restoran);
+export const metadata = buildMetadata({
+  title: "Restoran u prirodi za porodicna i poslovna okupljanja",
+  description:
+    "Restoran Madera kod Nisa nudi prijatan ambijent, domacu kuhinju i prostor za porodicne ruckove, vecere, poslovne sastanke i dogovorene proslave.",
+  path: "/restoran",
+  image: "/restoran/IMG_20250921_184124.jpg",
+  keywords: [
+    "restoran Nis",
+    "restoran u prirodi Nis",
+    "porodicni rucak Nis",
+    "restoran za proslave Nis",
+    "Madera restoran",
+  ],
+});
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.AOS) {
-      window.AOS.init({ duration: 1300, once: true });
-    }
-  }, []);
+const pageSchema = buildRestaurantSchema({
+  name: "Restoran Madera",
+  description:
+    "Restoran Madera kod Nisa spaja domacu kuhinju, prirodno okruzenje i ugodan ambijent za svakodnevne goste i rezervacije po dogovoru.",
+  path: "/restoran",
+  image: "/restoran/IMG_20250921_184124.jpg",
+});
+
+export default async function RestoranPage() {
+  const showcase = await getShowcaseForPage("restoran");
 
   return (
     <>
+      <StructuredData id="madera-restoran-schema" data={pageSchema} />
       <TemplateHeader />
       <div id="restoran-page">
         <div className="hero-section">
@@ -32,20 +47,25 @@ export default function RestoranPage() {
             <h1>Restoran <em>Madera</em></h1>
           </div>
           <div className="small-title">
-            <p>Autentičan ambijent, kvalitetna hrana, mirna lokacija</p>
+            <p>Mesto gde mirna lokacija i dobra kuhinja daju razlog da se ostane duze</p>
           </div>
         </div>
 
         <div className="about-section lefko">
           <div className="pagewrap">
             <div className="section-title" data-aos="fade-up">
-              <p>O RESTORANU</p>
+              <p>RESTORAN</p>
             </div>
             <div className="section-bigtitle" data-aos="fade-up">
-              <h2>Uživajte u <em>autentičnoj kuhinji</em></h2>
+              <h2>Hrana, usluga i ambijent koji jednako prijaju svakodnevnom rucku i posebnim prilikama</h2>
             </div>
             <div className="section-content" data-aos="fade-up" data-aos-delay="250">
-              <p>Naš restoran nudi tradicionalnu i modernu kuhinju prilagođenu svim godišnjim dobima. Svaki obrok je pripremljen s pažnjom i kvalitetnim namirnicama.</p>
+              <p>
+                Restoran Madera je prostor u kome se lako prelazi iz poslovnog
+                rucka u porodicno okupljanje ili veceru sa gostima. Atmosfera je
+                mirna, enterijer topao, a posluzenje organizovano tako da se
+                svako oseca prijatno i dobro doslo.
+              </p>
             </div>
           </div>
         </div>
@@ -58,15 +78,15 @@ export default function RestoranPage() {
             <div className="element-bottom">
               <div className="element-bottom-left">
                 <div className="image-element parallax">
-                  <img src="/restoran/IMG_20250921_184124.jpg" alt="Restoran ambijent" />
+                  <img src="/restoran/IMG_20250921_184124.jpg" alt="Restoran Madera enterijer" />
                 </div>
               </div>
               <div className="element-bottom-right">
                 <div className="image-element parallax">
-                  <img src="/restoran/IMG_20231024_175715.jpg" alt="Restoran prostor" />
+                  <img src="/restoran/IMG_20231024_175715.jpg" alt="Prilaz restoranu Madera" />
                 </div>
                 <div className="image-element parallax">
-                  <img src="/restoran/IMG_20250919_173541.jpg" alt="Restoran terasa" />
+                  <img src="/restoran/IMG_20250919_173541.jpg" alt="Terasa restorana Madera" />
                 </div>
               </div>
             </div>
@@ -78,31 +98,31 @@ export default function RestoranPage() {
             <div className="grid-2-elements">
               <div className="grid-element-left">
                 <div className="section-title" data-aos="fade-up">
-                  <p>ŠTA NUDIMO</p>
+                  <p>STA GOSTI NAJVISE CENE</p>
                 </div>
                 <div className="section-bigtitle" data-aos="fade-up">
-                  <h2>Kompletan doživljaj</h2>
+                  <h2>Restoran koji ostavlja dobar utisak bez prenaglasene formalnosti</h2>
                 </div>
               </div>
               <div className="grid-element-right">
                 <div className="section-bottom">
                   <div className="element-story" data-aos="fade-up" data-aos-delay="250">
-                    <div className="element-story-top"><h4>Tradicionalna hrana</h4></div>
-                    <div className="element-story-bottom"><p>Recepti inspirisani lokalnom kuhinjom i svetskim specijalitetima.</p></div>
+                    <div className="element-story-top"><h4>Domaca i poznata kuhinja</h4></div>
+                    <div className="element-story-bottom"><p>Ukusi koji prijaju sirokom krugu gostiju, uz dogovor kada je potreban meni za grupu ili dogadjaj.</p></div>
                   </div>
                   <div className="story-line"></div>
                   <div className="element-story" data-aos="fade-up" data-aos-delay="350">
-                    <div className="element-story-top"><h4>Vrhunski servis</h4></div>
-                    <div className="element-story-bottom"><p>Ljubazan i profesionalan tim posvećen vašem zadovoljstvu.</p></div>
+                    <div className="element-story-top"><h4>Prijatan servis</h4></div>
+                    <div className="element-story-bottom"><p>Ljubazan tempo usluge i prostor u kome se gosti osecaju opusteno i dobro prihvaceno.</p></div>
                   </div>
                   <div className="story-line"></div>
                   <div className="element-story" data-aos="fade-up" data-aos-delay="450">
-                    <div className="element-story-top"><h4>Prirodno okruženje</h4></div>
-                    <div className="element-story-bottom"><p>Otvoren prostor s pogledom na prirodu i mirnom atmosferom.</p></div>
+                    <div className="element-story-top"><h4>Ambijent u prirodi</h4></div>
+                    <div className="element-story-bottom"><p>Terasa i okolina doprinose utisku da ste izdvojeni od gradske guzve, a ipak blizu Nisa.</p></div>
                   </div>
                   <div className="story-line"></div>
                 </div>
-                <a href="/kontakt" className="button" data-aos="fade-up" data-aos-delay="550">Rezerviši termin</a>
+                <a href="/kontakt" className="button" data-aos="fade-up" data-aos-delay="550">Rezervisi sto ili posalji upit</a>
               </div>
             </div>
           </div>
@@ -115,12 +135,12 @@ export default function RestoranPage() {
           <div className="background-filter"></div>
           <div className="opportunity-content">
             <div className="pagewrap">
-              <div className="section-title"><p>ISKUSTVO</p></div>
+              <div className="section-title"><p>DOZIVLJAJ RESTORANA</p></div>
               <div className="section-bigtitle">
-                <h1>Nezaboravna jela i <em>ugodna atmosfera</em></h1>
+                <h1>Mesto za rucak, veceru ili dogovor koji zelite da odrzi <em>dobar ton i meru</em></h1>
               </div>
               <div className="section-content">
-                <p>Dođite da uživate u specijalitetima naše kuhinje u miru i komforu.</p>
+                <p>Kontaktirajte nas kada zelite siguran ambijent za goste, porodicu ili poslovni susret.</p>
               </div>
               <a href="/kontakt" className="button">Kontaktirajte nas</a>
             </div>

@@ -1,11 +1,62 @@
 import Script from "next/script";
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { businessInfo, siteUrl } from "./_lib/seo";
 
 export const metadata = {
-  title: "Hotel-Restoran Madera",
-  description: "Hotel-Restoran Madera - proslave, restoran i letnji bazen u mirnom ambijentu.",
+  metadataBase: siteUrl || undefined,
+  title: {
+    default: "Hotel-Restoran Madera | Svecane sale, restoran i bazen kod Nisa",
+    template: "%s | Hotel-Restoran Madera",
+  },
+  description: businessInfo.description,
+  applicationName: businessInfo.name,
+  keywords: [
+    "hotel restoran Madera",
+    "svecana sala Nis",
+    "restoran Nis",
+    "proslave kod Nisa",
+    "letnji bazen Nis",
+  ],
+  alternates: {
+    canonical: siteUrl ? siteUrl.toString() : undefined,
+  },
+  openGraph: {
+    title: "Hotel-Restoran Madera | Svecane sale, restoran i bazen kod Nisa",
+    description: businessInfo.description,
+    locale: businessInfo.locale,
+    siteName: businessInfo.name,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hotel-Restoran Madera | Svecane sale, restoran i bazen kod Nisa",
+    description: businessInfo.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
+
+if (siteUrl) {
+  metadata.openGraph.images = [
+    {
+      url: businessInfo.heroImage,
+      width: 1200,
+      height: 630,
+      alt: businessInfo.name,
+    },
+  ];
+  metadata.twitter.images = [businessInfo.heroImage];
+}
 
 export const viewport = {
   width: "device-width",

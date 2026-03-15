@@ -1,25 +1,25 @@
 export const pageShowcaseContent = {
   home: {
     sectionId: "home-gallery-immersive",
-    eyebrow: "Madera Gallery",
-    title: "Dozivljaj prostora kroz svaku sezonu",
+    eyebrow: "Madera Galerija",
+    title: "Prostor koji izgleda ubedljivo i kada ga gledate prvi put i kada ga birate za vazan datum",
     description:
-      "Prosirena galerija prikazuje kako izgledaju restoran, sobe i sale kroz dnevne i vecernje termine, uz vise kadrova za planiranje vaseg dolaska.",
+      "Galerija prikazuje kako izgledaju sale, restoran, terasa i letnji ambijent Madera kompleksa kroz razlicite tipove dogadjaja i delove dana.",
     highlights: [
       {
-        kicker: "UI/UX",
-        title: "Mobile-first raspored",
-        text: "Kartice i filteri su optimizovani za ekran telefona, a zatim se prirodno sire na tablet i desktop.",
+        kicker: "Proslave",
+        title: "Sale za razlicite formate",
+        text: "Na jednom mestu se vidi kako Madera izgleda kada planirate intimno slavlje, vecu proslavu ili formalniji dogadjaj.",
       },
       {
-        kicker: "Sadrzaj",
-        title: "Vise realnih scena",
-        text: "Dodati su novi kadrovi enterijera, terasa, sala i bazena kako bi korisnik lakse procenio prostor.",
+        kicker: "Ambijent",
+        title: "Prirodna i vecernja atmosfera",
+        text: "Fotografije pokazuju i dnevni karakter prostora i ton koji Madera dobija kada dogadjaj udje u vecernji ritam.",
       },
       {
-        kicker: "Konverzija",
-        title: "Brza akcija",
-        text: "Svaka sekcija zadrzava jasne CTA linkove ka rezervaciji i direktnom kontaktu.",
+        kicker: "Rezervacija",
+        title: "Laksi izbor prostora",
+        text: "Pre upita mozete jasnije da procenite koji deo ponude najbolje odgovara vasem broju gostiju i povodu.",
       },
     ],
     ctaPrimary: { label: "Rezervisi termin", href: "/kontakt" },
@@ -46,9 +46,9 @@ export const pageShowcaseContent = {
       },
       {
         src: "/sobe/IMG_20230906_180646.jpg",
-        title: "Relax zona",
-        text: "Vizuelni kadar dodatnog prostora za odmor gostiju.",
-        category: "Relax",
+        title: "Relax zona Madera",
+        text: "Kutak za opusteniji boravak koji dopunjuje utisak kompleksa.",
+        category: "Relax zona",
       },
       {
         src: "/restoran/20211124_082159.jpg",
@@ -77,21 +77,21 @@ export const pageShowcaseContent = {
       },
       {
         src: "/sobe/IMG_20230906_180741.jpg",
-        title: "Kadar prostora za odmor",
-        text: "Dodatni pogled na smiren i uredjen ambijent.",
-        category: "Relax",
+        title: "Detalj zone za predah",
+        text: "Jos jedan kadar prostora koji gostima donosi mirniji tempo boravka.",
+        category: "Relax zona",
       },
       {
         src: "/sobe/IMG_20230906_180904.jpg",
-        title: "Moderan unutrasnji ton",
-        text: "Cist raspored i neutralna paleta boja.",
-        category: "Relax",
+        title: "Uredjen i miran enterijer",
+        text: "Sveden ambijent koji doprinosi utisku komfora i urednosti.",
+        category: "Relax zona",
       },
       {
         src: "/sobe/IMG_20230906_180926.jpg",
         title: "Topli detalji",
         text: "Kadar koji doprinosi osecaju udobnosti.",
-        category: "Relax",
+        category: "Relax zona",
         layout: "tall",
       },
       {
@@ -111,24 +111,24 @@ export const pageShowcaseContent = {
   restoran: {
     sectionId: "restoran-gallery-immersive",
     eyebrow: "Restoran Galerija",
-    title: "Prosirena vizuelna prica restorana",
+    title: "Galerija restorana kroz ambijent, terasu i ton usluge",
     description:
-      "Dodali smo vise kadrova servisa, enterijera i terasa kako bi korisnik odmah razumeo ponudu i atmosferu restorana.",
+      "Ovi kadrovi pokazuju kako Restoran Madera izgleda kada trazite mirno mesto za porodicni rucak, poslovni susret ili dogovoreno okupljanje.",
     highlights: [
       {
-        kicker: "Aceternity style",
-        title: "Spotlight uvod",
-        text: "Istaknuti uvodni blok sa dubinom i kontrastom za bolji fokus na kljucni sadrzaj.",
+        kicker: "Ambijent",
+        title: "Topao enterijer i terasa",
+        text: "Fotografije prikazuju i unutrasnji karakter restorana i otvoreniji ton prostora tokom lepog vremena.",
       },
       {
-        kicker: "shadcn style",
-        title: "Kartice i badge",
-        text: "Jasna hijerarhija kroz kartice, oznake kategorija i CTA akcije.",
+        kicker: "Povod",
+        title: "Za svakodnevne i vazne obroke",
+        text: "Restoran je predstavljen tako da gost odmah razume da je podjednako prijatan za spontani dolazak i planirane susrete.",
       },
       {
-        kicker: "UX",
-        title: "Brzo filtriranje",
-        text: "Filter dugmad smanjuju vreme do pronalaska relevantnih fotografija.",
+        kicker: "Dozivljaj",
+        title: "Jasna slika pre dolaska",
+        text: "Vizuelni pregled olaksava odluku gostima koji zele da znaju kakva ih atmosfera ceka na licu mesta.",
       },
     ],
     ctaPrimary: { label: "Rezervisi sto", href: "/kontakt" },
@@ -183,24 +183,24 @@ export const pageShowcaseContent = {
   bazen: {
     sectionId: "bazen-gallery-immersive",
     eyebrow: "Bazen Galerija",
-    title: "Vizuelni pregled letnjeg bazena",
+    title: "Letnji ambijent koji Madera cini jos sirim i opustenijim izborom",
     description:
-      "Bazen je prilagodjen dnevnim terminima za opustanje, porodicne posete i letnja okupljanja u mirnom ambijentu.",
+      "Galerija letnjeg bazena prikazuje kako izgledaju zona za odmor, opustena dnevna atmosfera i sezonski karakter Madera kompleksa.",
     highlights: [
       {
         kicker: "Ambijent",
-        title: "Prirodno okruzenje",
-        text: "Kombinacija zelenila i prostora za odmor pravi prijatnu letnju atmosferu.",
+        title: "Priroda i mirniji tempo",
+        text: "Zelenilo, uredjena zona za odmor i otvoren prostor daju osecaj letnjeg predaha daleko od gradske guzve.",
       },
       {
-        kicker: "Pregled",
-        title: "Jasni kadrovi",
-        text: "Fotografije prikazuju raspored bazena, lezaljki i prostora oko vode.",
+        kicker: "Dozivljaj",
+        title: "Vizuelno cista prica",
+        text: "Kadrovi pomazu da se odmah razume kako je organizovan prostor i kakav ton boravka mozete da ocekujete.",
       },
       {
         kicker: "Kontakt",
-        title: "Brza informacija",
-        text: "Jednim klikom mozete poslati upit za dostupnost termina.",
+        title: "Jednostavan upit",
+        text: "Ako zelite vise informacija o sezoni ili dostupnosti, kontakt forma i poziv su odmah pri ruci.",
       },
     ],
     ctaPrimary: { label: "Posalji upit", href: "/kontakt" },
@@ -333,24 +333,24 @@ export const pageShowcaseContent = {
   svecanasala: {
     sectionId: "sala-gallery-immersive",
     eyebrow: "Svecana Sala",
-    title: "Galerija svih scenarija za dogadjaje",
+    title: "Galerija koja pokazuje kako Madera izgleda kada je dan za slavlje",
     description:
-      "U ovoj prosirenoj galeriji prikazane su razlicite postavke sale za vencanja, rodjendane i korporativne dogadjaje.",
+      "Razlicite postavke velike i male sale pomazu da lakse zamislite vencanje, rodjendan, krstenje ili poslovni dogadjaj u prostoru Madera.",
     highlights: [
       {
         kicker: "Fleksibilnost",
-        title: "Vise tipova postavki",
-        text: "Sedenje, podijum i dekor se prilagodjavaju tipu i broju gostiju.",
+        title: "Velika i mala sala",
+        text: "Galerija jasno odvaja scenarije za veca slavlja i one trenutke kada je potrebnija bliza, intimnija atmosfera.",
       },
       {
         kicker: "Planiranje",
-        title: "Jasna vizuelna priprema",
-        text: "Fotografije olaksavaju dogovor oko rasporeda i toka veceri.",
+        title: "Lakse zamisljanje vase postavke",
+        text: "Kadrovi pomazu da se vec pri prvom razgovoru razgovara konkretnije o rasporedu, dekoraciji i ritmu veceri.",
       },
       {
-        kicker: "Kvalitet",
-        title: "Konzistentna estetika",
-        text: "Svi kadrovi prate isti standard osvetljenja i uredjenja.",
+        kicker: "Utisak",
+        title: "Prostor koji trpi fotografiju i uzivo izgleda lepo",
+        text: "Svecani ton, uredan raspored i svetlo daju sali karakter koji gosti pamte, a domacini sa ponosom prikazuju.",
       },
     ],
     ctaPrimary: { label: "Zakazi termin", href: "/kontakt" },
@@ -423,24 +423,24 @@ export const pageShowcaseContent = {
   kontakt: {
     sectionId: "kontakt-gallery-immersive",
     eyebrow: "Kontakt i Lokacija",
-    title: "Brza odluka kroz pregled prostora",
+    title: "Pre upita pogledajte sta sve Madera moze da ponudi vasim gostima",
     description:
-      "Na kontakt stranici je dodat mini showcase kako bi korisnik, pre slanja upita, imao jasan pregled lokacije i tipa prostora.",
+      "Kontakt strana zadrzava pregled kljucnih prostora kako biste pre poruke lakse procenili da li vam je potrebna sala, restoran ili siri Madera ambijent.",
     highlights: [
       {
-        kicker: "Lead quality",
-        title: "Bolje informisani upiti",
-        text: "Korisnik pre slanja poruke vidi relevantne scene i preciznije opisuje potrebe.",
+        kicker: "Jasan izbor",
+        title: "Laksa odluka o prostoru",
+        text: "Vizuelni pregled pomaze da u upitu odmah napisete da li planirate proslavu, rucak, veceru ili obilazak prostora.",
       },
       {
-        kicker: "UX",
-        title: "Kontekst pre forme",
-        text: "Vizuelni blok smanjuje napustanje stranice i pomaze odluci o rezervaciji.",
+        kicker: "Poverenje",
+        title: "Pre poruke vec znate sta vas ceka",
+        text: "Fotografije uklanjaju neizvesnost i daju realniji osecaj kakav je ambijent Madera kompleksa.",
       },
       {
-        kicker: "Mobile-first",
-        title: "Jasan pregled na telefonu",
-        text: "Kartice i akcije su prilagodjene jednoj koloni i touch interakciji.",
+        kicker: "Brz odgovor",
+        title: "Precizniji upit za efikasniji dogovor",
+        text: "Kada su potrebe jasnije opisane, lakse je odmah predloziti adekvatan prostor i sledeci korak.",
       },
     ],
     ctaPrimary: { label: "Pozovi odmah", href: "tel:+381607180659" },
@@ -467,9 +467,9 @@ export const pageShowcaseContent = {
       },
       {
         src: "/sobe/IMG_20230906_180646.jpg",
-        title: "Smestaj za goste",
-        text: "Opcija nocenja nakon dogadjaja.",
-        category: "Sobe",
+        title: "Relax zona u okviru kompleksa",
+        text: "Dodatni kadar koji prikazuje mirniju stranu Madera ambijenta.",
+        category: "Kompleks",
       },
       {
         src: "/restoran/IMG_20250919_173541.jpg",

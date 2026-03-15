@@ -34,7 +34,7 @@ export default function TemplateHeader() {
 
                 <div className="enquiry-element">
                   <a href="/kontakt" className="button">
-                    Upit
+                    Rezervacija
                   </a>
                 </div>
               </div>
@@ -78,6 +78,9 @@ export default function TemplateHeader() {
                     <p>Lokacija</p>
                   </li>
                   <li>
+                    <p>Okolina Nisa, Srbija</p>
+                  </li>
+                  <li>
                     <a href="https://maps.app.goo.gl/52x387CwuJdTroXb7" target="_blank" rel="noreferrer">
                       Otvori mapu
                     </a>
@@ -91,4 +94,3 @@ export default function TemplateHeader() {
     </>
   );
 }
-
