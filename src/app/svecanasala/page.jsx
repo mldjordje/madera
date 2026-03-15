@@ -3,7 +3,7 @@ import TemplateFooter from "@/components/TemplateFooter";
 import ImmersiveGallery from "@/components/ImmersiveGallery";
 import StructuredData from "@components/StructuredData";
 import { getHallBookingEnabled, getShowcaseForPage } from "@library/site-content";
-import { buildEventVenueSchema, buildMetadata } from "../_lib/seo";
+import { buildEventVenueSchema, buildFaqSchema, buildMetadata } from "../_lib/seo";
 
 export const metadata = buildMetadata({
   title: "Svecane sale za vencanja, rodjendane i poslovne dogadjaje",
@@ -28,6 +28,29 @@ const pageSchema = buildEventVenueSchema({
   image: "/svecanasala/IMG_20250919_161505.jpg",
 });
 
+const saleFaqs = [
+  {
+    question: "Za koje proslave su pogodne svecane sale Madera?",
+    answer:
+      "Velika i mala sala Madera prilagodjene su vencanjima, rodjendanima, krstenjima, jubilejima i poslovnim okupljanjima, u zavisnosti od broja gostiju i formata dogadjaja.",
+  },
+  {
+    question: "Kako se proverava dostupnost termina?",
+    answer:
+      "Najbrzi nacin je telefonski poziv, kada odmah mozete proveriti okvirnu dostupnost termina i dobiti smernice za sledeci korak.",
+  },
+  {
+    question: "Da li Madera pomaze oko organizacije sale i rasporeda?",
+    answer:
+      "Da. Tim Madera pomaze oko izbora sale, rasporeda gostiju, osnovnog toka veceri i uskladjivanja usluge sa tipom proslave.",
+  },
+];
+
+const pageGraph = {
+  "@context": "https://schema.org",
+  "@graph": [pageSchema, buildFaqSchema(saleFaqs)].filter(Boolean),
+};
+
 export default async function SvecanaSalaPage() {
   const [showcase, hallBookingEnabled] = await Promise.all([
     getShowcaseForPage("svecanasala"),
@@ -36,7 +59,7 @@ export default async function SvecanaSalaPage() {
 
   return (
     <>
-      <StructuredData id="madera-svecanasala-schema" data={pageSchema} />
+      <StructuredData id="madera-svecanasala-schema" data={pageGraph} />
       <TemplateHeader />
       <div id="svecanasala-page">
         <div className="hero-section">
@@ -135,6 +158,31 @@ export default async function SvecanaSalaPage() {
 
         <ImmersiveGallery {...showcase} />
 
+        <div className="faq-section">
+          <div className="pagewrapbig">
+            <div className="section-bottom">
+              <div className="faq-container">
+                {saleFaqs.map((item, idx) => (
+                  <div className="faq" key={`sale-faq-${idx}`}>
+                    <div className="faq-inside">
+                      <div className="faq-question">
+                        <h3>{item.question.toUpperCase()}</h3>
+                        <div className="faq-btn">
+                          <span></span>
+                          <span></span>
+                        </div>
+                      </div>
+                      <div className="faq-answer">
+                        <p>{item.answer}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="opportunity-section">
           <div className="opportunity-background" style={{ backgroundImage: "url('/svecanasala/IMG_20250918_165838.jpg')" }}></div>
           <div className="background-filter"></div>
@@ -145,9 +193,9 @@ export default async function SvecanaSalaPage() {
                 <h1>Sala koja izgleda svecano, a funkcionise <em>bez improvizacije</em></h1>
               </div>
               <div className="section-content">
-                <p>Javite datum i broj gostiju, a mi cemo predloziti prostor i nacin organizacije koji najbolje odgovara vasem dogadjaju.</p>
+                <p>Javite datum i broj gostiju, a najbrze cemo vas usmeriti telefonom ka sali i organizaciji koja vam najvise odgovara.</p>
               </div>
-              <a href="/kontakt" className="button">Posaljite upit</a>
+              <a href="tel:+381607180659" className="button">Pozovi za termin</a>
             </div>
           </div>
         </div>

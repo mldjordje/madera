@@ -8,6 +8,7 @@ import { pageShowcaseContent } from "@data/showcase-content";
 import {
   buildEventVenueSchema,
   buildFaqSchema,
+  buildLocalBusinessSchema,
   buildMetadata,
   buildPoolSchema,
   buildRestaurantSchema,
@@ -51,6 +52,11 @@ const pageSchema = {
   "@context": "https://schema.org",
   "@graph": [
     buildWebSiteSchema(),
+    buildLocalBusinessSchema({
+      path: "/",
+      description:
+        "Hotel-Restoran Madera kod Nisa za svecane sale, restoran, telefonske rezervacije i letnji bazen.",
+    }),
     buildEventVenueSchema({
       name: "Svecane sale Madera",
       description:
@@ -523,11 +529,11 @@ export default function HomePage() {
             <div className="cta-strip-inner" data-aos="fade-up">
               <div className="cta-copy">
                 <h3>Imate datum ili samo ideju od koje zelite da krenete?</h3>
-                <p>Posaljite upit i dobicete brz odgovor sa predlogom prostora i sledecih koraka.</p>
+                <p>Najbrzi dogovor je telefonom, a po potrebi mozete i poslati upit sa osnovnim informacijama.</p>
               </div>
               <div className="cta-actions">
-                <a href="/kontakt" className="button white">Posalji upit</a>
                 <a href="tel:+381607180659" className="button white">Pozovi odmah</a>
+                <a href="/kontakt" className="button white">Posalji upit</a>
               </div>
             </div>
           </div>

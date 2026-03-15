@@ -15,6 +15,7 @@ npm install
 
 Kopiraj `.env.example` u `.env.local` i popuni:
 
+- `NEXT_PUBLIC_SITE_URL` (npr. produkcioni domen sajta)
 - `DATABASE_URL` (Neon connection string)
 - `BLOB_READ_WRITE_TOKEN` (Vercel Blob RW token)
 - `ADMIN_TOKEN` (za buduci admin modul)

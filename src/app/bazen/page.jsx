@@ -3,7 +3,7 @@ import TemplateFooter from "@/components/TemplateFooter";
 import ImmersiveGallery from "@/components/ImmersiveGallery";
 import StructuredData from "@components/StructuredData";
 import { getShowcaseForPage } from "@library/site-content";
-import { buildMetadata, buildPoolSchema } from "../_lib/seo";
+import { buildFaqSchema, buildMetadata, buildPoolSchema } from "../_lib/seo";
 
 export const metadata = buildMetadata({
   title: "Letnji bazen i relax zona u okviru kompleksa Madera",
@@ -28,12 +28,35 @@ const pageSchema = buildPoolSchema({
   image: "/img/4.jpg",
 });
 
+const bazenFaqs = [
+  {
+    question: "Da li je bazen poseban sadrzaj u okviru Madera kompleksa?",
+    answer:
+      "Da. Letnji bazen je sezonski deo Madera ponude i dopunjuje restoran i svecane sale kao prostor za osvezenje i opusteniji boravak.",
+  },
+  {
+    question: "Kako mogu da dobijem informacije o sezoni i dostupnosti?",
+    answer:
+      "Najbrzi nacin je da pozovete telefonom i proverite aktuelne informacije, termine i nacin koriscenja letnjih sadrzaja.",
+  },
+  {
+    question: "Kakav je ambijent bazena?",
+    answer:
+      "Ambijent je miran i prirodan, sa uredjenom relax zonom i atmosferom koja vise odgovara odmoru i laganijem boravku nego gradskoj guzvi.",
+  },
+];
+
+const bazenGraph = {
+  "@context": "https://schema.org",
+  "@graph": [pageSchema, buildFaqSchema(bazenFaqs)].filter(Boolean),
+};
+
 export default async function BazenPage() {
   const showcase = await getShowcaseForPage("bazen");
 
   return (
     <>
-      <StructuredData id="madera-bazen-schema" data={pageSchema} />
+      <StructuredData id="madera-bazen-schema" data={bazenGraph} />
       <TemplateHeader />
       <div id="bazen-page">
         <div className="hero-section">
@@ -95,6 +118,31 @@ export default async function BazenPage() {
 
         <ImmersiveGallery {...showcase} />
 
+        <div className="faq-section">
+          <div className="pagewrapbig">
+            <div className="section-bottom">
+              <div className="faq-container">
+                {bazenFaqs.map((item, idx) => (
+                  <div className="faq" key={`bazen-faq-${idx}`}>
+                    <div className="faq-inside">
+                      <div className="faq-question">
+                        <h3>{item.question.toUpperCase()}</h3>
+                        <div className="faq-btn">
+                          <span></span>
+                          <span></span>
+                        </div>
+                      </div>
+                      <div className="faq-answer">
+                        <p>{item.answer}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="opportunity-section">
           <div className="opportunity-background" style={{ backgroundImage: "url('/img/4.jpg')" }}></div>
           <div className="background-filter"></div>
@@ -105,9 +153,9 @@ export default async function BazenPage() {
                 <h1>Mesto za predah koje uz restoran i sale zaokruzuje <em>Madera iskustvo</em></h1>
               </div>
               <div className="section-content">
-                <p>Kontaktirajte nas za informacije o sezoni, dostupnosti i nacinu koriscenja letnjih sadrzaja.</p>
+                <p>Pozovite za aktuelne informacije o sezoni, dostupnosti i nacinu koriscenja letnjih sadrzaja.</p>
               </div>
-              <a href="/kontakt" className="button">Posaljite upit</a>
+              <a href="tel:+381607180659" className="button">Pozovi za informacije</a>
             </div>
           </div>
         </div>

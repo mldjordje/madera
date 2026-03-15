@@ -3,7 +3,7 @@ import TemplateFooter from "@/components/TemplateFooter";
 import ImmersiveGallery from "@/components/ImmersiveGallery";
 import StructuredData from "@components/StructuredData";
 import { getShowcaseForPage } from "@library/site-content";
-import { buildMetadata, buildRestaurantSchema } from "../_lib/seo";
+import { buildFaqSchema, buildMetadata, buildRestaurantSchema } from "../_lib/seo";
 
 export const metadata = buildMetadata({
   title: "Restoran u prirodi za porodicna i poslovna okupljanja",
@@ -28,12 +28,35 @@ const pageSchema = buildRestaurantSchema({
   image: "/restoran/IMG_20250921_184124.jpg",
 });
 
+const restoranFaqs = [
+  {
+    question: "Da li restoran Madera radi samo za proslave?",
+    answer:
+      "Ne. Restoran Madera je namenjen i svakodnevnim gostima, porodicnim ruckovima, vecerama i poslovnim susretima, kao i dogovorenim okupljanjima.",
+  },
+  {
+    question: "Kako se rezervise sto ili termin za grupu?",
+    answer:
+      "Najjednostavnije je da pozovete telefonom, kako biste odmah proverili raspolozivost i dobili preporuku za termin ili prostor.",
+  },
+  {
+    question: "Po cemu se restoran Madera izdvaja?",
+    answer:
+      "Goste najcesce privlace mirna lokacija, topao ambijent, domaca kuhinja i mogucnost da se na istoj lokaciji povezu restoran, sale i letnji sadrzaji.",
+  },
+];
+
+const restoranGraph = {
+  "@context": "https://schema.org",
+  "@graph": [pageSchema, buildFaqSchema(restoranFaqs)].filter(Boolean),
+};
+
 export default async function RestoranPage() {
   const showcase = await getShowcaseForPage("restoran");
 
   return (
     <>
-      <StructuredData id="madera-restoran-schema" data={pageSchema} />
+      <StructuredData id="madera-restoran-schema" data={restoranGraph} />
       <TemplateHeader />
       <div id="restoran-page">
         <div className="hero-section">
@@ -130,6 +153,31 @@ export default async function RestoranPage() {
 
         <ImmersiveGallery {...showcase} />
 
+        <div className="faq-section">
+          <div className="pagewrapbig">
+            <div className="section-bottom">
+              <div className="faq-container">
+                {restoranFaqs.map((item, idx) => (
+                  <div className="faq" key={`restoran-faq-${idx}`}>
+                    <div className="faq-inside">
+                      <div className="faq-question">
+                        <h3>{item.question.toUpperCase()}</h3>
+                        <div className="faq-btn">
+                          <span></span>
+                          <span></span>
+                        </div>
+                      </div>
+                      <div className="faq-answer">
+                        <p>{item.answer}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="opportunity-section">
           <div className="opportunity-background" style={{ backgroundImage: "url('/restoran/IMG_20250921_184124.jpg')" }}></div>
           <div className="background-filter"></div>
@@ -140,9 +188,9 @@ export default async function RestoranPage() {
                 <h1>Mesto za rucak, veceru ili dogovor koji zelite da odrzi <em>dobar ton i meru</em></h1>
               </div>
               <div className="section-content">
-                <p>Kontaktirajte nas kada zelite siguran ambijent za goste, porodicu ili poslovni susret.</p>
+                <p>Pozovite kada zelite da brzo proverite termin za rucak, veceru ili dolazak vece grupe gostiju.</p>
               </div>
-              <a href="/kontakt" className="button">Kontaktirajte nas</a>
+              <a href="tel:+381607180659" className="button">Pozovi restoran</a>
             </div>
           </div>
         </div>

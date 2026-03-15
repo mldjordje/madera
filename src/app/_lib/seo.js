@@ -36,6 +36,8 @@ export const businessInfo = {
   heroImage: "/img/4.jpg",
 };
 
+export const siteUrlFallback = siteUrl || new URL("http://localhost:3000");
+
 function toAbsoluteUrl(path) {
   if (!path) {
     return null;
@@ -68,6 +70,12 @@ export function buildMetadata({
     title,
     description,
     keywords,
+    other: {
+      "geo.region": "RS-20",
+      "geo.placename": "Nis",
+      "contact:phone_number": businessInfo.phonePrimary,
+      "contact:locality": businessInfo.locality,
+    },
     openGraph: {
       title,
       description,
@@ -165,6 +173,16 @@ export function buildWebSiteSchema() {
     inLanguage: "sr",
     ...(url ? { url } : {}),
   };
+}
+
+export function buildLocalBusinessSchema({ path = "/", description, image = businessInfo.heroImage }) {
+  return buildBaseSchema({
+    type: "LocalBusiness",
+    name: businessInfo.name,
+    description: description || businessInfo.description,
+    path,
+    image,
+  });
 }
 
 export function buildRestaurantSchema({ name, description, path, image }) {

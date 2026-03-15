@@ -3,7 +3,7 @@ import TemplateFooter from "@/components/TemplateFooter";
 import ImmersiveGallery from "@/components/ImmersiveGallery";
 import StructuredData from "@components/StructuredData";
 import { pageShowcaseContent } from "@data/showcase-content";
-import { buildContactPageSchema, buildMetadata } from "../_lib/seo";
+import { buildContactPageSchema, buildFaqSchema, buildMetadata } from "../_lib/seo";
 
 export const metadata = buildMetadata({
   title: "Kontakt, rezervacije i upiti",
@@ -25,10 +25,33 @@ const pageSchema = buildContactPageSchema({
     "Kontakt stranica Madera kompleksa za rezervacije, provere termina i dogovor oko proslava, restorana i letnjih sadrzaja.",
 });
 
+const kontaktFaqs = [
+  {
+    question: "Koji je najbrzi nacin da rezervisem termin u Maderi?",
+    answer:
+      "Najbrzi nacin je telefonski poziv, jer tada odmah mozete proveriti raspolozivost termina i dobiti osnovnu preporuku za salu, restoran ili drugi sadrzaj.",
+  },
+  {
+    question: "Koje informacije treba da pripremim kada pozovem?",
+    answer:
+      "Dovoljno je da imate okviran datum, broj gostiju i povod. To je dovoljno da razgovor brzo krene u pravom smeru.",
+  },
+  {
+    question: "Da li mogu i da posaljem poruku umesto poziva?",
+    answer:
+      "Mozete, ali telefon je najefikasniji za brz dogovor. Kontakt forma ostaje kao dodatna opcija kada zelite da ostavite detaljniji upit.",
+  },
+];
+
+const kontaktGraph = {
+  "@context": "https://schema.org",
+  "@graph": [pageSchema, buildFaqSchema(kontaktFaqs)].filter(Boolean),
+};
+
 export default function KontaktPage() {
   return (
     <>
-      <StructuredData id="madera-kontakt-schema" data={pageSchema} />
+      <StructuredData id="madera-kontakt-schema" data={kontaktGraph} />
       <TemplateHeader />
       <div id="contactpage">
         <div className="contact-us-section">
@@ -37,8 +60,19 @@ export default function KontaktPage() {
             <div className="grid-2-elements">
               <div className="contact-us-grid-left">
                 <div className="section-content">
-                  <h1 data-aos="fade-up" data-aos-delay="200">Recite nam kakav trenutak planirate, a mi cemo predloziti kako da ga <em>Madera</em> iznese na pravi nacin.</h1>
-                  <h4 data-aos="fade-up" data-aos-delay="400">Posaljite datum, povod i okviran broj gostiju. Odgovor dobijate brzo, sa jasnim sledecim korakom za obilazak, rezervaciju ili dogovor.</h4>
+                  <h1 data-aos="fade-up" data-aos-delay="200">Najbrzi put do termina i dogovora u <em>Maderi</em> je telefonski poziv.</h1>
+                  <h4 data-aos="fade-up" data-aos-delay="400">Pripremite datum, povod i okviran broj gostiju, a mi cemo vas odmah usmeriti ka sali, restoranu ili drugom sadrzaju koji vam najvise odgovara.</h4>
+                  <div className="madera-service-strip__grid" style={{ marginTop: "2rem" }}>
+                    {[
+                      "Poziv za proveru termina",
+                      "Brza procena prostora prema broju gostiju",
+                      "Dogovor za obilazak ili dalji korak",
+                    ].map((item, idx) => (
+                      <article className="madera-service-strip__card" key={`kontakt-point-${idx}`} data-aos="fade-up" data-aos-delay={460 + idx * 90}>
+                        <p>{item}</p>
+                      </article>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -117,6 +151,31 @@ export default function KontaktPage() {
         </div>
 
         <ImmersiveGallery {...pageShowcaseContent.kontakt} />
+
+        <div className="faq-section">
+          <div className="pagewrapbig">
+            <div className="section-bottom">
+              <div className="faq-container">
+                {kontaktFaqs.map((item, idx) => (
+                  <div className="faq" key={`kontakt-faq-${idx}`}>
+                    <div className="faq-inside">
+                      <div className="faq-question">
+                        <h3>{item.question.toUpperCase()}</h3>
+                        <div className="faq-btn">
+                          <span></span>
+                          <span></span>
+                        </div>
+                      </div>
+                      <div className="faq-answer">
+                        <p>{item.answer}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <TemplateFooter />
     </>
