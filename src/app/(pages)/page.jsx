@@ -222,20 +222,20 @@ export default function HomePage() {
         <div className="scroll-section">
           <div className="pagewrap">
             <div className="element-top">
-              <Image src="/img/ui/madera-logo.png" alt="Madera" width={230} height={88} />
+              <Image src="/img/ui/madera-logo.png" alt="Madera" width={230} height={88} unoptimized />
             </div>
             <div className="element-bottom">
               <div className="element-bottom-left">
                 <div className="image-element parallax">
-                  <Image src="/restoran/IMG_20250921_184124.jpg" alt="Restoran Madera" width={1600} height={1100} />
+                  <Image src="/restoran/IMG_20250921_184124.jpg" alt="Restoran Madera" width={1600} height={1100} unoptimized />
                 </div>
               </div>
               <div className="element-bottom-right">
                 <div className="image-element parallax">
-                  <Image src="/svecanasala/IMG_20250919_161505.jpg" alt="Svecana sala Madera" width={1600} height={1100} />
+                  <Image src="/svecanasala/IMG_20250919_161505.jpg" alt="Svecana sala Madera" width={1600} height={1100} unoptimized />
                 </div>
                 <div className="image-element parallax">
-                  <Image src="/img/gallery/3.jpg" alt="Letnji ambijent Madera" width={1400} height={960} />
+                  <Image src="/img/4.jpg" alt="Letnji ambijent Madera" width={1400} height={960} unoptimized />
                 </div>
               </div>
             </div>
@@ -381,7 +381,7 @@ export default function HomePage() {
             <div className="section-top">
               <div className="flex-elements">
                 <div className="flex-element-left">
-                  <Image src="/img/ui/madera-logo.png" alt="Madera" width={328} height={126} />
+                  <Image src="/img/ui/madera-logo.png" alt="Madera" width={328} height={126} unoptimized />
                 </div>
                 <div className="flex-element-right">
                   <a href="/kontakt" className="button white">Posalji upit</a>
@@ -435,7 +435,7 @@ export default function HomePage() {
               <div className="location-content">
                 <div className="section-title" data-aos="fade-up">
                   <p>LOKACIJA</p>
-                  <Image src="/img/ui/madera-logo.png" alt="Madera" width={120} height={46} />
+                  <Image src="/img/ui/madera-logo.png" alt="Madera" width={120} height={46} unoptimized />
                 </div>
                 <div className="section-bigtitle">
                   <h1>Mirno okruzenje koje gostima daje <em>osecaj izdvojenosti</em></h1>
@@ -450,10 +450,10 @@ export default function HomePage() {
             <div className="section-elements-bottom">
               <div className="grid-2-elements">
                 <div className="grid-element-left parallax" data-aos="fade-up">
-                  <Image src="/restoran/IMG_20250919_173541.jpg" alt="Okruzenje Madera restorana" width={1500} height={1000} />
+                  <Image src="/restoran/IMG_20250919_173541.jpg" alt="Okruzenje Madera restorana" width={1500} height={1000} unoptimized />
                 </div>
                 <div className="grid-element-right parallax" data-aos="fade-up">
-                  <Image src="/img/gallery/6.jpg" alt="Letnji ambijent Madera kompleksa" width={1500} height={1000} />
+                  <Image src="/img/4.jpg" alt="Letnji ambijent Madera kompleksa" width={1500} height={1000} unoptimized />
                 </div>
               </div>
             </div>

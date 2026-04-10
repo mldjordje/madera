@@ -16,7 +16,7 @@ const showcaseCards = [
     title: "Restoran za rucak, veceru i dogovorene susrete",
     text: "Topao enterijer, prijatan servis i kuhinja koja odgovara i porodicnim gostima i poslovnim okupljanjima.",
     tag: "A la carte",
-    image: "/restoran/IMG_20250921_184124.jpg",
+    image: "/restoran/IMG_20231024_175715.jpg",
   },
   {
     eyebrow: "Mala sala",
@@ -37,7 +37,7 @@ const showcaseCards = [
     title: "Letnji ritam koji zaokruzuje boravak",
     text: "Sezonski sadrzaj koji Maderi daje jos jednu dimenziju za osvezenje, odmor i prijatnu letnju atmosferu.",
     tag: "Sezonski",
-    image: "/img/gallery/11.jpg",
+    image: "/img/4.jpg",
   },
 ];
 
@@ -62,6 +62,17 @@ export default function MobileFirstShowcase() {
       return undefined;
     }
 
+    const revealAll = () => {
+      items.forEach((item) => item.classList.add("is-visible"));
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      revealAll();
+      return undefined;
+    }
+
+    const fallbackTimer = window.setTimeout(revealAll, 1600);
+
     const observer = new IntersectionObserver(
       (entries, currentObserver) => {
         entries.forEach((entry) => {
@@ -74,14 +85,15 @@ export default function MobileFirstShowcase() {
         });
       },
       {
-        threshold: 0.2,
-        rootMargin: "0px 0px -12% 0px",
+        threshold: 0.08,
+        rootMargin: "0px 0px 14% 0px",
       }
     );
 
     items.forEach((item) => observer.observe(item));
 
     return () => {
+      window.clearTimeout(fallbackTimer);
       observer.disconnect();
     };
   }, []);
