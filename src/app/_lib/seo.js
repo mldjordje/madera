@@ -64,7 +64,6 @@ export function buildMetadata({
 }) {
   const absolutePath = toAbsoluteUrl(path);
   const imageUrl = toAbsoluteUrl(image) || image;
-  const hasAbsoluteImage = Boolean(toAbsoluteUrl(image));
 
   const metadata = {
     title,
@@ -90,17 +89,15 @@ export function buildMetadata({
     },
   };
 
-  if (hasAbsoluteImage) {
-    metadata.openGraph.images = [
-      {
-        url: imageUrl,
-        width: 1200,
-        height: 630,
-        alt: title,
-      },
-    ];
-    metadata.twitter.images = [imageUrl];
-  }
+  metadata.openGraph.images = [
+    {
+      url: imageUrl,
+      width: 1200,
+      height: 630,
+      alt: title,
+    },
+  ];
+  metadata.twitter.images = [imageUrl];
 
   if (absolutePath) {
     metadata.alternates = { canonical: absolutePath };
@@ -108,6 +105,30 @@ export function buildMetadata({
   }
 
   return metadata;
+}
+
+export function buildWebPageSchema({ name, description, path = "/", image = businessInfo.heroImage }) {
+  const url = toAbsoluteUrl(path);
+  const imageUrl = toAbsoluteUrl(image) || image;
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name,
+    description,
+    inLanguage: "sr",
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: imageUrl,
+    },
+    isPartOf: buildWebSiteSchema(),
+  };
+
+  if (url) {
+    schema.url = url;
+  }
+
+  return schema;
 }
 
 function buildBaseSchema({

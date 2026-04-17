@@ -5,7 +5,7 @@ export default function robots() {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/svecanasala", "/restoran", "/bazen", "/kontakt"],
+        allow: ["/", "/svecanasala", "/restoran", "/cenovnik", "/bazen", "/kontakt"],
         disallow: ["/admin", "/api/"],
       },
     ],

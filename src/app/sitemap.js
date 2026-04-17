@@ -1,6 +1,6 @@
 import { siteUrlFallback } from "./_lib/seo";
 
-const routes = ["/", "/svecanasala", "/restoran", "/bazen", "/kontakt"];
+const routes = ["/", "/svecanasala", "/restoran", "/cenovnik", "/bazen", "/kontakt"];
 
 export default function sitemap() {
   const now = new Date();

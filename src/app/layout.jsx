@@ -1,10 +1,10 @@
 import Script from "next/script";
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { businessInfo, siteUrl } from "./_lib/seo";
+import { businessInfo, siteUrl, siteUrlFallback } from "./_lib/seo";
 
 export const metadata = {
-  metadataBase: siteUrl || undefined,
+  metadataBase: siteUrl || siteUrlFallback,
   title: {
     default: "Hotel-Restoran Madera | Svecane sale, restoran i bazen kod Nisa",
     template: "%s | Hotel-Restoran Madera",
