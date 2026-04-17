@@ -5,5 +5,7 @@ node_modules
 .env.*.local
 npm-debug.log*
 yarn-error.log*
+.next-dev.log
+.next-dev.err.log
 # Ignore template source folder
 the8project.com/

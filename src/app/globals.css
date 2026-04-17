@@ -1215,3 +1215,96 @@ body {
 .sb-admin-booking.is-disabled .sb-toggle-label {
   color: #6b6b6b;
 }
+
+/* Price list (cenovnik) */
+.madera-pricelist {
+  padding: 70px 0 60px;
+  background: var(--madera-bg);
+}
+
+.madera-pricelist__top {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.madera-pricelist__switch {
+  display: inline-flex;
+  gap: 10px;
+  padding: 6px;
+  border-radius: 999px;
+  border: 1px solid var(--madera-border);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+}
+
+.madera-pricelist__tab {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--madera-text);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.madera-pricelist__tab:hover {
+  transform: translateY(-1px);
+  border-color: var(--madera-border);
+}
+
+.madera-pricelist__tab.is-active {
+  background: var(--madera-accent);
+  border-color: var(--madera-accent);
+  color: var(--madera-surface);
+}
+
+.madera-pricelist__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--madera-border);
+  background: var(--madera-surface);
+  color: var(--madera-text);
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.madera-pricelist__open:hover {
+  transform: translateY(-1px);
+  border-color: var(--madera-accent);
+  box-shadow: 0 14px 28px rgba(43, 26, 18, 0.12);
+}
+
+.madera-pricelist__frame {
+  margin-top: 18px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--madera-border);
+  background: var(--madera-surface);
+  box-shadow: 0 24px 60px rgba(43, 26, 18, 0.12);
+}
+
+.madera-pricelist__object,
+.madera-pricelist__iframe {
+  width: 100%;
+  height: min(1100px, 86vh);
+  border: 0;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .madera-pricelist__object,
+  .madera-pricelist__iframe {
+    height: 78vh;
+  }
+}

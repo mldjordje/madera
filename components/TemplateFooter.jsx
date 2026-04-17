@@ -2,6 +2,7 @@ const FOOTER_ITEMS = [
   { href: "/", label: "Pocetna" },
   { href: "/svecanasala", label: "Svecane sale" },
   { href: "/restoran", label: "Restoran" },
+  { href: "/cenovnik", label: "Cenovnik" },
   { href: "/bazen", label: "Bazen" },
   { href: "/kontakt", label: "Kontakt" },
 ];
