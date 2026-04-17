@@ -1275,7 +1275,7 @@ body {
   background: var(--madera-surface);
   color: var(--madera-text);
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: none !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
@@ -1292,6 +1292,9 @@ body {
   border: 1px solid var(--madera-border);
   background: var(--madera-surface);
   box-shadow: 0 24px 60px rgba(43, 26, 18, 0.12);
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .madera-pricelist__object,
@@ -1303,6 +1306,9 @@ body {
 }
 
 @media (max-width: 768px) {
+  .madera-pricelist__top {
+    justify-content: center;
+  }
   .madera-pricelist__object,
   .madera-pricelist__iframe {
     height: 78vh;

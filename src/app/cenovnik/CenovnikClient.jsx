@@ -22,7 +22,7 @@ export default function CenovnikClient() {
 
   return (
     <section className="madera-pricelist">
-      <div className="pagewrap">
+      <div className="pagewrapbig">
         <div className="section-title" data-aos="fade-up">
           <p>CENOVNIK</p>
         </div>
@@ -49,14 +49,25 @@ export default function CenovnikClient() {
             ))}
           </div>
 
-          <a className="madera-pricelist__open" href={active.src} target="_blank" rel="noreferrer">
+          <a className="button white madera-pricelist__open" href={active.src} target="_blank" rel="noreferrer">
             Otvori u novom tabu
           </a>
         </div>
 
         <div className="madera-pricelist__frame" data-aos="fade-up" data-aos-delay="220">
-          <object data={active.src} type="application/pdf" className="madera-pricelist__object" aria-label={`Cenovnik (${active.label})`}>
-            <iframe title={`Cenovnik (${active.label})`} src={active.src} className="madera-pricelist__iframe" />
+          <object
+            data={active.src}
+            type="application/pdf"
+            className="madera-pricelist__object"
+            aria-label={`Cenovnik (${active.label})`}
+            style={{ width: "100%", height: "85vh", minHeight: 620 }}
+          >
+            <iframe
+              title={`Cenovnik (${active.label})`}
+              src={active.src}
+              className="madera-pricelist__iframe"
+              style={{ width: "100%", height: "85vh", minHeight: 620, border: 0, display: "block" }}
+            />
           </object>
         </div>
       </div>
